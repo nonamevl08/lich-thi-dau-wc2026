@@ -345,12 +345,12 @@
                         <span id="modal-home-flag" class="text-4xl shadow-sm rounded-lg">🇲🇽</span>
                         <span id="modal-home-name" class="font-extrabold text-xs tracking-tight truncate w-full text-gray-800 dark:text-white">Mexico</span>
                     </div>
-                    <!-- Score / VS Display / Manual Inputs -->
+                    <!-- Score / VS Display -->
                     <div class="flex flex-col items-center">
                         <div class="flex items-center space-x-1">
-                            <input type="number" id="input-home-score" min="0" placeholder="-" class="w-12 h-12 text-center text-xl font-black bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <div id="modal-home-score" class="w-12 h-12 flex items-center justify-center text-xl font-black bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">-</div>
                             <span class="text-gray-400 text-xl font-bold">:</span>
-                            <input type="number" id="input-away-score" min="0" placeholder="-" class="w-12 h-12 text-center text-xl font-black bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <div id="modal-away-score" class="w-12 h-12 flex items-center justify-center text-xl font-black bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">-</div>
                         </div>
                         <span id="modal-status" class="text-[9px] text-gray-400 font-bold uppercase mt-2.5 tracking-wider px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800">Chưa diễn ra</span>
                     </div>
@@ -360,22 +360,6 @@
                         <span id="modal-away-name" class="font-extrabold text-xs tracking-tight truncate w-full text-gray-800 dark:text-white">Nam Phi</span>
                     </div>
                 </div>
-            </div>
-
-            <!-- UPDATE BUTTONS PANEL -->
-            <div class="grid grid-cols-2 gap-2 my-2">
-                <button onclick="saveManualScore()" class="py-2.5 px-3 bg-green-600 hover:bg-green-700 text-white font-extrabold rounded-xl transition-all shadow-md flex items-center justify-center space-x-1.5">
-                    <i class="fa-solid fa-floppy-disk"></i>
-                    <span>Lưu Tỉ Số Thủ Công</span>
-                </button>
-                <button id="btn-sync-ai" onclick="syncScoreFromAPI()" class="py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl transition-all shadow-md flex items-center justify-center space-x-1.5">
-                    <i class="fa-solid fa-globe"></i>
-                    <span>Đồng Bộ Từ API</span>
-                </button>
-            </div>
-            
-            <div id="sync-status" class="hidden text-center text-[10px] font-bold text-indigo-500 bg-indigo-500/10 rounded-lg py-1.5 border border-indigo-500/20 mb-2">
-                <!-- Sync status message -->
             </div>
 
             <!-- Info list -->
@@ -1005,91 +989,6 @@
             syncText.innerText = "Cập nhật kết quả các trận đã thi đấu";
         }
 
-        async function syncScoreFromAPI() {
-            if (!selectedMatchId) return;
-            const localMatch = getMatchState(selectedMatchId);
-            if (!localMatch) return;
-
-            const syncStatusEl = document.getElementById('sync-status');
-            const syncBtn = document.getElementById('btn-sync-ai');
-
-            syncStatusEl.innerText = "🔍 Đang kết nối tải tỷ số trận đấu...";
-            syncStatusEl.classList.remove('hidden', 'bg-red-500/10', 'text-red-500', 'border-red-500/20');
-            syncStatusEl.classList.add('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-            syncStatusEl.classList.remove('hidden');
-            syncBtn.disabled = true;
-
-            const nowTime = getActiveTime();
-            let foundInApi = false;
-
-            try {
-                const targetUrl = 'https://fixturedownload.com/feed/json/fifa-world-cup-2026';
-                const data = await robustFetch(targetUrl);
-                
-                if (data && Array.isArray(data)) {
-                    const apiMatch = data.find(apiM => {
-                        const mappedH = teamTranslationMap[apiM.HomeTeam] || apiM.HomeTeam;
-                        const mappedA = teamTranslationMap[apiM.AwayTeam] || apiM.AwayTeam;
-                        return (mappedH === localMatch.homeTeam.name && mappedA === localMatch.awayTeam.name) ||
-                               (mappedH === localMatch.awayTeam.name && mappedA === localMatch.homeTeam.name);
-                    });
-
-                    if (apiMatch) {
-                        const apiMatchTime = apiMatch.DateUtc ? new Date(apiMatch.DateUtc) : parseMatchTime(localMatch.time);
-                        
-                        // CHỈ cho phép cập nhật khi trận đấu đã/đang đá
-                        if (nowTime >= apiMatchTime) {
-                            let hScore = apiMatch.HomeTeamScore;
-                            let aScore = apiMatch.AwayTeamScore;
-
-                            if (hScore !== undefined && hScore !== null && aScore !== undefined && aScore !== null) {
-                                const isGroup = selectedMatchId <= 72;
-                                const list = isGroup ? matchesData : knockoutMatchesData;
-                                const target = list.find(m => m.id === selectedMatchId);
-                                
-                                if (target) {
-                                    const isReversed = (target.home !== (teamTranslationMap[apiMatch.HomeTeam] || apiMatch.HomeTeam));
-                                    target.homeScore = isReversed ? parseInt(aScore) : parseInt(hScore);
-                                    target.awayScore = isReversed ? parseInt(hScore) : parseInt(aScore);
-
-                                    if (isGroup) {
-                                        localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
-                                    } else {
-                                        localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
-                                    }
-
-                                    document.getElementById('input-home-score').value = target.homeScore;
-                                    document.getElementById('input-away-score').value = target.awayScore;
-
-                                    syncStatusEl.innerText = `✅ Đã đồng bộ: ${target.homeScore} - ${target.awayScore}`;
-                                    syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-                                    syncStatusEl.classList.add('bg-green-500/10', 'text-green-500', 'border-green-500/20');
-                                    runDataUpdateCycle();
-                                    foundInApi = true;
-                                }
-                            }
-                        } else {
-                            syncStatusEl.innerText = "ℹ️ Trận đấu này chưa diễn ra ở mốc thời gian hiện tại.";
-                            syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-                            syncStatusEl.classList.add('bg-amber-500/10', 'text-amber-500', 'border-amber-500/20');
-                            foundInApi = true;
-                        }
-                    }
-                }
-            } catch (err) {
-                console.error("Lỗi cập nhật đơn trận", err);
-            }
-
-            // Nếu API lỗi hoặc không tìm thấy dữ liệu (Không dùng local fallback)
-            if (!foundInApi) {
-                syncStatusEl.innerText = "❌ Lỗi: Không thể lấy dữ liệu trận đấu này từ API. Hãy tự nhập tỉ số thủ công bên trên.";
-                syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-                syncStatusEl.classList.add('bg-red-500/10', 'text-red-500', 'border-red-500/20');
-            }
-
-            syncBtn.disabled = false;
-        }
-
         function parseMatchTime(timeStr) {
             const [datePart, timePart] = timeStr.split(' ');
             const [day, month] = datePart.split('/');
@@ -1592,45 +1491,6 @@
             updateModalIfOpen();
         }
 
-        function saveManualScore() {
-            if (!selectedMatchId) return;
-
-            const homeInpVal = document.getElementById('input-home-score').value;
-            const awayInpVal = document.getElementById('input-away-score').value;
-
-            const isGroup = selectedMatchId <= 72;
-            const list = isGroup ? matchesData : knockoutMatchesData;
-            const match = list.find(m => m.id === selectedMatchId);
-
-            if (match) {
-                if (homeInpVal === "" || awayInpVal === "") {
-                    match.homeScore = null;
-                    match.awayScore = null;
-                } else {
-                    match.homeScore = parseInt(homeInpVal);
-                    match.awayScore = parseInt(awayInpVal);
-                }
-
-                if (isGroup) {
-                    localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
-                } else {
-                    localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
-                }
-
-                showToastStatus("Đã lưu tỷ số thực tế!");
-                runDataUpdateCycle();
-                closeMatchModal();
-            }
-        }
-
-        function showToastStatus(msg, isErr = false) {
-            const statusEl = document.getElementById('sync-status');
-            statusEl.innerText = msg;
-            statusEl.classList.remove('hidden', 'bg-red-500/10', 'text-red-500', 'border-red-500/20', 'bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-            statusEl.classList.add(isErr ? 'bg-red-500/10' : 'bg-green-500/10', isErr ? 'text-red-500' : 'text-green-500', isErr ? 'border-red-500/20' : 'border-green-500/20');
-            statusEl.classList.remove('hidden');
-        }
-
         function startCountdown() {
             const kickoffTime = new Date('2026-06-12T02:00:00+07:00').getTime();
             const now = getActiveTime().getTime();
@@ -1739,7 +1599,6 @@
 
         function openMatchModal(matchId) {
             selectedMatchId = matchId;
-            document.getElementById('sync-status').classList.add('hidden');
             updateModalIfOpen();
             document.getElementById('match-modal').classList.remove('hidden');
         }
@@ -1760,8 +1619,8 @@
             document.getElementById('modal-away-flag').innerText = match.awayTeam.flag || "🏳️";
             document.getElementById('modal-away-name').innerText = match.awayTeam.name || "Chưa xác định";
 
-            document.getElementById('input-home-score').value = match.homeScore !== null ? match.homeScore : '';
-            document.getElementById('input-away-score').value = match.awayScore !== null ? match.awayScore : '';
+            document.getElementById('modal-home-score').innerText = match.homeScore !== null ? match.homeScore : '-';
+            document.getElementById('modal-away-score').innerText = match.awayScore !== null ? match.awayScore : '-';
 
             const statusEl = document.getElementById('modal-status');
             if (match.status === 'live') {
