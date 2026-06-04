@@ -86,7 +86,7 @@
             <span class="text-2xl">🏆</span>
             <div>
                 <h1 class="text-sm font-extrabold tracking-tight leading-none text-green-600 dark:text-green-500">WORLD CUP 2026</h1>
-                <p class="text-[9px] text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase">Dữ liệu Báo Nhân Dân - Thực Tế</p>
+                <p class="text-[9px] text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase">Kênh Kết nối Đa Tần Số Cực Mạnh</p>
             </div>
         </div>
         
@@ -115,7 +115,7 @@
             <div id="countdown-banner" class="bg-gradient-to-br from-green-700 to-emerald-950 rounded-2xl p-4 text-white shadow-xl relative overflow-hidden transition-all duration-300">
                 <div class="absolute right-[-15px] top-[-15px] opacity-10 text-9xl">⚽</div>
                 <div class="relative z-10">
-                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Đếm ngược Khai mạc</span>
+                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Đếm ngoại Khai mạc</span>
                     <h3 class="text-sm font-black mt-2 tracking-tight">MEXICO vs NAM PHI</h3>
                     <p class="text-[11px] text-green-200 font-semibold">02:00 • 12/06/2026 (Giờ Việt Nam - Sân Estadio Azteca)</p>
                     
@@ -142,12 +142,18 @@
 
             <!-- GLOBAL REST API SYNC BUTTON SECTION -->
             <div class="space-y-2">
-                <button id="btn-global-sync" onclick="syncAllScoresFromAPI()" class="w-full py-3 px-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-750 text-white font-extrabold rounded-2xl transition-all shadow-md flex items-center justify-center space-x-2 active:scale-95 text-xs">
-                    <i id="global-sync-icon" class="fa-solid fa-cloud-arrow-down animate-bounce text-sm"></i>
-                    <span id="global-sync-text">Đồng bộ tất cả tỉ số thực tế (API)</span>
-                </button>
-                <div id="global-sync-status" class="hidden text-center text-[10px] font-bold text-indigo-500 bg-indigo-500/10 rounded-xl py-2.5 px-3 border border-indigo-500/20 transition-all duration-350">
-                    Sẵn sàng cập nhật từ máy chủ...
+                <div class="bg-white dark:bg-darkCard border border-gray-150 dark:border-gray-800 p-3 rounded-2xl shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-[10px] font-extrabold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
+                        <span>Đồng bộ nguồn mở bảo mật</span>
+                        <span id="selected-source-label" class="text-green-500 font-bold">Kênh tự động</span>
+                    </div>
+                    <button id="btn-global-sync" onclick="syncAllScoresFromAPI()" class="w-full py-3 px-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-750 text-white font-extrabold rounded-xl transition-all shadow-md flex items-center justify-center space-x-2 active:scale-95 text-xs">
+                        <i id="global-sync-icon" class="fa-solid fa-arrows-rotate text-sm"></i>
+                        <span id="global-sync-text">Kích hoạt Đồng bộ Đa Proxy API</span>
+                    </button>
+                    <div id="global-sync-status" class="hidden text-center text-[10px] font-bold text-indigo-500 bg-indigo-500/10 rounded-xl py-2.5 px-3 border border-indigo-500/20 transition-all duration-350">
+                        Sẵn sàng quét qua các máy chủ trung gian...
+                    </div>
                 </div>
             </div>
 
@@ -388,7 +394,7 @@
             <div class="grid grid-cols-2 gap-2 my-2">
                 <button onclick="saveManualScore()" class="py-2.5 px-3 bg-green-600 hover:bg-green-700 text-white font-extrabold rounded-xl transition-all shadow-md flex items-center justify-center space-x-1.5">
                     <i class="fa-solid fa-floppy-disk"></i>
-                    <span>Lưu Tỉ Số Thực Tế</span>
+                    <span>Lưu Tỉ Số Thủ Công</span>
                 </button>
                 <button id="btn-sync-ai" onclick="syncScoreFromAPI()" class="py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl transition-all shadow-md flex items-center justify-center space-x-1.5">
                     <i class="fa-solid fa-globe"></i>
@@ -612,6 +618,20 @@
             }
         }
 
+        // Ánh xạ ngôn ngữ tự động cho API Fixture toàn cầu
+        const teamTranslationMap = {
+            "Mexico": "Mexico", "South Africa": "Nam Phi", "South Korea": "Hàn Quốc", "Czechia": "CH Séc", "Czech Republic": "CH Séc",
+            "Canada": "Canada", "Bosnia and Herzegovina": "Bosnia", "Bosnia": "Bosnia", "Qatar": "Qatar", "Switzerland": "Thụy Sỹ",
+            "Brazil": "Brazil", "Morocco": "Maroc", "Haiti": "Haiti", "Scotland": "Scotland", "United States": "Mỹ", "USA": "Mỹ",
+            "Paraguay": "Paraguay", "Australia": "Australia", "Turkey": "Thổ Nhĩ Kỳ", "Germany": "Đức", "Curaçao": "Curacao", "Curacao": "Curacao",
+            "Ivory Coast": "Bờ Biển Ngà", "Ecuador": "Ecuador", "Netherlands": "Hà Lan", "Japan": "Nhật Bản", "Sweden": "Thụy Điển",
+            "Tunisia": "Tunisia", "Belgium": "Bỉ", "Egypt": "Ai Cập", "Iran": "Iran", "New Zealand": "New Zealand", "Spain": "Tây Ban Nha",
+            "Cape Verde": "Cabo Verde", "Cabo Verde": "Cabo Verde", "Saudi Arabia": "Saudi Arabia", "Uruguay": "Uruguay", "France": "Pháp",
+            "Senegal": "Senegal", "Iraq": "Iraq", "Norway": "Na Uy", "Argentina": "Argentina", "Algeria": "Algeria", "Austria": "Áo",
+            "Jordan": "Jordan", "Portugal": "Bồ Đào Nha", "DR Congo": "CHDC Congo", "Uzbekistan": "Uzbekistan", "Colombia": "Colombia",
+            "England": "Anh", "Croatia": "Croatia", "Ghana": "Ghana", "Panama": "Panama"
+        };
+
         const groupsData = {
             A: [
                 { name: "Mexico", flag: "🇲🇽" }, { name: "Nam Phi", flag: "🇿🇦" },
@@ -672,7 +692,7 @@
             { id: 4, home: "Mỹ", homeFlag: "🇺🇸", away: "Paraguay", awayFlag: "🇵🇾", group: "D", time: "13/06 08:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3" },
             // Day 14/06
             { id: 5, home: "Qatar", homeFlag: "🇶🇦", away: "Thụy Sỹ", awayFlag: "🇨🇭", group: "B", time: "14/06 02:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV2" },
-            { id: 6, home: "Brazil", homeFlag: "🇧🇷", away: "Maroc", awayFlag: "🇲🇦", group: "C", time: "14/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
+            { id: 6, home: "Brazil", homeFlag: "🇧🇷", away: "Maroc", homeFlag: "🇲🇦", awayFlag: "🇲🇦", group: "C", time: "14/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
             { id: 7, home: "Haiti", homeFlag: "🇭🇹", away: "Scotland", awayFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", group: "C", time: "14/06 08:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV2" },
             { id: 8, home: "Australia", homeFlag: "🇦🇺", away: "Thổ Nhĩ Kỳ", awayFlag: "🇹🇷", group: "D", time: "14/06 11:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV5" },
             // Day 15/06
@@ -748,7 +768,7 @@
             { id: 66, home: "New Zealand", homeFlag: "🇳🇿", away: "Bỉ", awayFlag: "🇧🇪", group: "G", time: "27/06 10:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV5" },
             // Day 28/06
             { id: 67, home: "Croatia", homeFlag: "🇭🇷", away: "Ghana", awayFlag: "🇬🇭", group: "L", time: "28/06 04:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV2" },
-            { id: 68, home: "Panama", homeFlag: "🇵🇦", away: "Anh", awayFlag: "🏴󠁧󠁢󠁥󠁮fg", group: "L", time: "28/06 04:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
+            { id: 68, home: "Panama", homeFlag: "🇵🇦", away: "Anh", awayFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", group: "L", time: "28/06 04:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
             { id: 70, home: "Colombia", homeFlag: "🇨🇴", away: "Bồ Đào Nha", awayFlag: "🇵🇹", group: "K", time: "28/06 06:30", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
             { id: 69, home: "CHDC Congo", homeFlag: "🇨🇩", away: "Uzbekistan", awayFlag: "🇺🇿", group: "K", time: "28/06 06:30", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV5" },
             { id: 71, home: "Algeria", homeFlag: "🇩🇿", away: "Áo", awayFlag: "🇦🇹", group: "J", time: "28/06 09:00", stage: "Vòng bảng", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV2" },
@@ -842,6 +862,56 @@
             return isSimTimeActive ? simulatedTime : new Date();
         }
 
+        // Khớp cặp đấu dựa trên tên đội (Anh - Việt)
+        function findLocalMatchByTeamNames(engHome, engAway) {
+            const vnHome = teamTranslationMap[engHome] || engHome;
+            const vnAway = teamTranslationMap[engAway] || engAway;
+
+            let found = matchesData.find(m => 
+                (m.home === vnHome && m.away === vnAway) || 
+                (m.home === vnAway && m.away === vnHome)
+            );
+
+            if (!found) {
+                found = knockoutMatchesData.find(m => 
+                    (m.home === vnHome && m.away === vnAway) || 
+                    (m.home === vnAway && m.away === vnHome)
+                );
+            }
+            return found;
+        }
+
+        // Hệ thống Fetch qua proxy mạng chống chặn CORS
+        async function robustFetch(targetUrl) {
+            const proxies = [
+                (url) => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
+                (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+                (url) => `https://thingproxy.freeboard.io/fetch/${url}`,
+                (url) => url // Thử trực tiếp
+            ];
+
+            for (let i = 0; i < proxies.length; i++) {
+                try {
+                    const proxiedUrl = proxies[i](targetUrl);
+                    console.log(`Đang kết nối qua cổng proxy ${i + 1}: ${proxiedUrl}`);
+                    
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s timeout
+                    
+                    const response = await fetch(proxiedUrl, { signal: controller.signal });
+                    clearTimeout(timeoutId);
+
+                    if (response.ok) {
+                        const rawText = await response.text();
+                        return JSON.parse(rawText);
+                    }
+                } catch (e) {
+                    console.warn(`Cổng proxy ${i + 1} không phản hồi...`, e);
+                }
+            }
+            throw new Error("Tất cả máy chủ trung gian (Proxy) đều lỗi hoặc bị từ chối kết nối.");
+        }
+
         async function syncAllScoresFromAPI() {
             const syncBtn = document.getElementById('btn-global-sync');
             const syncIcon = document.getElementById('global-sync-icon');
@@ -849,160 +919,199 @@
             const syncStatusEl = document.getElementById('global-sync-status');
 
             syncBtn.disabled = true;
-            syncBtn.classList.add('opacity-75', 'cursor-not-allowed');
-            syncIcon.className = "fa-solid fa-circle-notch animate-spin text-sm";
-            syncText.innerText = "Đang đồng bộ từ World Cup API...";
-            syncStatusEl.innerText = "🔍 Đang lấy dữ liệu từ hệ thống API worldcup26.ir (qua Proxy)...";
+            syncIcon.className = "fa-solid fa-spinner animate-spin text-sm";
+            syncText.innerText = "Đang kiểm tra kết nối API...";
+            
+            syncStatusEl.innerText = "🔍 Đang gửi tín hiệu và tải dữ liệu từ máy chủ API thế giới...";
             syncStatusEl.classList.remove('hidden', 'bg-green-500/10', 'text-green-500', 'border-green-500/20', 'bg-red-500/10', 'text-red-500', 'border-red-500/20');
             syncStatusEl.classList.add('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
             syncStatusEl.classList.remove('hidden');
 
-            try {
-                // Sử dụng CORS Proxy để khắc phục lỗi "Failed to fetch" trên trình duyệt
-                const targetUrl = 'https://worldcup26.ir/get/games';
-                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
-                const response = await fetch(proxyUrl);
-                
-                if (!response.ok) throw new Error("API_ERROR");
-                let data = await response.json();
-                
-                // Hỗ trợ nhiều định dạng trả về khác nhau từ API REST
-                let games = Array.isArray(data) ? data : (data.data || data.games);
-                
-                if (!games || !Array.isArray(games)) {
-                    throw new Error("INVALID_FORMAT");
-                }
+            const nowTime = getActiveTime();
+            let success = false;
+            let updatedCount = 0;
+            let skippedCount = 0;
 
-                let updatedCount = 0;
-                const now = getActiveTime();
+            // Kênh 1: Fixture Download FIFA World Cup 2026 JSON feed
+            try {
+                const targetUrl = 'https://fixturedownload.com/feed/json/fifa-world-cup-2026';
+                const data = await robustFetch(targetUrl);
                 
-                games.forEach(apiGame => {
-                    const matchId = apiGame.id || apiGame.match_id || apiGame.matchId;
-                    
-                    if (matchId) {
-                        let target = matchesData.find(m => m.id == matchId) || knockoutMatchesData.find(m => m.id == matchId);
-                        
-                        if (target) {
-                            // CHỈ CẬP NHẬT NẾU TRẬN ĐẤU ĐÃ BẮT ĐẦU HOẶC KẾT THÚC DỰA TRÊN THỜI GIAN
-                            const matchTime = parseMatchTime(target.time);
+                if (data && Array.isArray(data)) {
+                    data.forEach(apiMatch => {
+                        const localMatch = findLocalMatchByTeamNames(apiMatch.HomeTeam, apiMatch.AwayTeam);
+                        if (localMatch) {
+                            const apiMatchTime = apiMatch.DateUtc ? new Date(apiMatch.DateUtc) : parseMatchTime(localMatch.time);
                             
-                            if (now >= matchTime) {
-                                let hScore = apiGame.home_score ?? apiGame.homeTeamScore ?? apiGame.homeScore ?? apiGame.home_team?.goals;
-                                let aScore = apiGame.away_score ?? apiGame.awayTeamScore ?? apiGame.awayScore ?? apiGame.away_team?.goals;
+                            // CHỈ cập nhật những trận đấu đã/đang diễn ra dựa trên thời gian hệ thống/giả lập
+                            if (nowTime >= apiMatchTime) {
+                                let hScore = apiMatch.HomeTeamScore;
+                                let aScore = apiMatch.AwayTeamScore;
 
                                 if (hScore !== undefined && hScore !== null && aScore !== undefined && aScore !== null) {
-                                    target.homeScore = parseInt(hScore);
-                                    target.awayScore = parseInt(aScore);
+                                    const isReversed = (localMatch.home !== (teamTranslationMap[apiMatch.HomeTeam] || apiMatch.HomeTeam));
+                                    localMatch.homeScore = isReversed ? parseInt(aScore) : parseInt(hScore);
+                                    localMatch.awayScore = isReversed ? parseInt(hScore) : parseInt(aScore);
                                     updatedCount++;
                                 }
+                            } else {
+                                skippedCount++;
                             }
                         }
-                    }
-                });
+                    });
+                    success = true;
+                    document.getElementById('selected-source-label').innerText = "FixtureDownload API";
+                }
+            } catch (err) {
+                console.error("Kênh 1 (FixtureDownload) thất bại, thử chuyển sang kênh 2...", err);
+            }
 
+            // Kênh 2: Nếu Kênh 1 lỗi, thử kênh API dự phòng từ lsv/fifa-worldcup-2026
+            if (!success) {
+                try {
+                    const targetUrl = 'https://raw.githubusercontent.com/lsv/fifa-worldcup-2026/master/data.json';
+                    const data = await robustFetch(targetUrl);
+                    
+                    if (data && data.matches) {
+                        data.matches.forEach(apiMatch => {
+                            const engHome = apiMatch.homeTeamName || apiMatch.home_team_name;
+                            const engAway = apiMatch.awayTeamName || apiMatch.away_team_name;
+                            
+                            if (engHome && engAway) {
+                                const localMatch = findLocalMatchByTeamNames(engHome, engAway);
+                                if (localMatch) {
+                                    const apiMatchTime = apiMatch.date ? new Date(apiMatch.date) : parseMatchTime(localMatch.time);
+                                    
+                                    if (nowTime >= apiMatchTime) {
+                                        let hScore = apiMatch.home_result ?? apiMatch.home_score;
+                                        let aScore = apiMatch.away_result ?? apiMatch.away_score;
+
+                                        if (hScore !== undefined && hScore !== null && aScore !== undefined && aScore !== null) {
+                                            const isReversed = (localMatch.home !== (teamTranslationMap[engHome] || engHome));
+                                            localMatch.homeScore = isReversed ? parseInt(aScore) : parseInt(hScore);
+                                            localMatch.awayScore = isReversed ? parseInt(hScore) : parseInt(aScore);
+                                            updatedCount++;
+                                        }
+                                    } else {
+                                        skippedCount++;
+                                    }
+                                }
+                            }
+                        });
+                        success = true;
+                        document.getElementById('selected-source-label').innerText = "GitHub LSV API";
+                    }
+                } catch (err) {
+                    console.error("Kênh 2 (LSV API) thất bại.", err);
+                }
+            }
+
+            // Xử lý khi kết nối API lỗi/mất mạng (Không dùng local giả lập)
+            if (success) {
                 localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
                 localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
 
-                syncStatusEl.innerText = `✅ Đã đồng bộ thành công kết quả ${updatedCount} trận đấu đã diễn ra từ máy chủ!`;
+                const sourceName = document.getElementById('selected-source-label').innerText;
+                syncStatusEl.innerText = `✅ [${sourceName}] Đồng bộ thành công ${updatedCount} trận đã đá! (Bỏ qua ${skippedCount} trận chưa diễn ra)`;
                 syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
                 syncStatusEl.classList.add('bg-green-500/10', 'text-green-500', 'border-green-500/20');
                 
                 runDataUpdateCycle();
-                
-            } catch (err) {
-                console.error(err);
-                syncStatusEl.innerText = "❌ Lỗi kết nối đến World Cup API (CORS/Máy chủ). Vui lòng thử lại sau!";
+            } else {
+                document.getElementById('selected-source-label').innerText = "Mất kết nối";
+                syncStatusEl.innerText = "❌ Lỗi: Không thể kết nối tới các máy chủ API World Cup. Hãy thử kiểm tra lại mạng internet của bạn hoặc cập nhật tỷ số thủ công.";
                 syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
                 syncStatusEl.classList.add('bg-red-500/10', 'text-red-500', 'border-red-500/20');
-            } finally {
-                syncBtn.disabled = false;
-                syncBtn.classList.remove('opacity-75', 'cursor-not-allowed');
-                syncIcon.className = "fa-solid fa-cloud-arrow-down animate-bounce text-sm";
-                syncText.innerText = "Đồng bộ tất cả tỉ số thực tế (API)";
             }
+
+            syncBtn.disabled = false;
+            syncIcon.className = "fa-solid fa-arrows-rotate text-sm";
+            syncText.innerText = "Kích hoạt Đồng bộ Đa Proxy API";
         }
 
         async function syncScoreFromAPI() {
             if (!selectedMatchId) return;
-            const match = getMatchState(selectedMatchId);
-            if (!match) return;
+            const localMatch = getMatchState(selectedMatchId);
+            if (!localMatch) return;
 
             const syncStatusEl = document.getElementById('sync-status');
             const syncBtn = document.getElementById('btn-sync-ai');
 
-            syncStatusEl.innerText = "🔍 Đang lấy kết quả trận đấu từ API (qua Proxy)...";
+            syncStatusEl.innerText = "🔍 Đang kết nối tải tỷ số trận đấu...";
             syncStatusEl.classList.remove('hidden', 'bg-red-500/10', 'text-red-500', 'border-red-500/20');
             syncStatusEl.classList.add('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
             syncStatusEl.classList.remove('hidden');
             syncBtn.disabled = true;
 
+            const nowTime = getActiveTime();
+            let foundInApi = false;
+
             try {
-                // Sử dụng CORS Proxy để khắc phục lỗi "Failed to fetch" trên trình duyệt
-                const targetUrl = 'https://worldcup26.ir/get/games';
-                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
-                const response = await fetch(proxyUrl);
+                const targetUrl = 'https://fixturedownload.com/feed/json/fifa-world-cup-2026';
+                const data = await robustFetch(targetUrl);
                 
-                if (!response.ok) throw new Error("API_ERROR");
-                let data = await response.json();
-                
-                let games = Array.isArray(data) ? data : (data.data || data.games);
-                if (!games || !Array.isArray(games)) throw new Error("INVALID_FORMAT");
+                if (data && Array.isArray(data)) {
+                    const apiMatch = data.find(apiM => {
+                        const mappedH = teamTranslationMap[apiM.HomeTeam] || apiM.HomeTeam;
+                        const mappedA = teamTranslationMap[apiM.AwayTeam] || apiM.AwayTeam;
+                        return (mappedH === localMatch.homeTeam.name && mappedA === localMatch.awayTeam.name) ||
+                               (mappedH === localMatch.awayTeam.name && mappedA === localMatch.homeTeam.name);
+                    });
 
-                const apiGame = games.find(g => (g.id == selectedMatchId || g.match_id == selectedMatchId || g.matchId == selectedMatchId));
+                    if (apiMatch) {
+                        const apiMatchTime = apiMatch.DateUtc ? new Date(apiMatch.DateUtc) : parseMatchTime(localMatch.time);
+                        
+                        // CHỈ cho phép cập nhật khi trận đấu đã/đang đá
+                        if (nowTime >= apiMatchTime) {
+                            let hScore = apiMatch.HomeTeamScore;
+                            let aScore = apiMatch.AwayTeamScore;
 
-                if (apiGame) {
-                    const now = getActiveTime();
-                    const matchTime = parseMatchTime(match.time);
-                    
-                    if (now < matchTime) {
-                         syncStatusEl.innerText = "ℹ️ Trận đấu này chưa diễn ra nên không thể lấy tỉ số!";
-                         syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-                         syncStatusEl.classList.add('bg-amber-500/10', 'text-amber-500', 'border-amber-500/20');
-                    } else {
-                        let hScore = apiGame.home_score ?? apiGame.homeTeamScore ?? apiGame.homeScore ?? apiGame.home_team?.goals;
-                        let aScore = apiGame.away_score ?? apiGame.awayTeamScore ?? apiGame.awayScore ?? apiGame.away_team?.goals;
+                            if (hScore !== undefined && hScore !== null && aScore !== undefined && aScore !== null) {
+                                const isGroup = selectedMatchId <= 72;
+                                const list = isGroup ? matchesData : knockoutMatchesData;
+                                const target = list.find(m => m.id === selectedMatchId);
+                                
+                                if (target) {
+                                    const isReversed = (target.home !== (teamTranslationMap[apiMatch.HomeTeam] || apiMatch.HomeTeam));
+                                    target.homeScore = isReversed ? parseInt(aScore) : parseInt(hScore);
+                                    target.awayScore = isReversed ? parseInt(hScore) : parseInt(aScore);
 
-                        if (hScore !== undefined && hScore !== null && aScore !== undefined && aScore !== null) {
-                            const isGroup = selectedMatchId <= 72;
-                            const list = isGroup ? matchesData : knockoutMatchesData;
-                            const target = list.find(m => m.id === selectedMatchId);
-                            if (target) {
-                                target.homeScore = parseInt(hScore);
-                                target.awayScore = parseInt(aScore);
+                                    if (isGroup) {
+                                        localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
+                                    } else {
+                                        localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
+                                    }
 
-                                if (isGroup) {
-                                    localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
-                                } else {
-                                    localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
+                                    document.getElementById('input-home-score').value = target.homeScore;
+                                    document.getElementById('input-away-score').value = target.awayScore;
+
+                                    syncStatusEl.innerText = `✅ Đã đồng bộ: ${target.homeScore} - ${target.awayScore}`;
+                                    syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                                    syncStatusEl.classList.add('bg-green-500/10', 'text-green-500', 'border-green-500/20');
+                                    runDataUpdateCycle();
+                                    foundInApi = true;
                                 }
-
-                                document.getElementById('input-home-score').value = target.homeScore;
-                                document.getElementById('input-away-score').value = target.awayScore;
-
-                                syncStatusEl.innerText = `✅ Đã đồng bộ tỉ số trực tiếp: ${target.homeScore} - ${target.awayScore}`;
-                                syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-                                syncStatusEl.classList.add('bg-green-500/10', 'text-green-500', 'border-green-500/20');
-                                runDataUpdateCycle();
                             }
                         } else {
-                             syncStatusEl.innerText = "ℹ️ Trận đấu này chưa có tỉ số trên máy chủ API!";
-                             syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-                             syncStatusEl.classList.add('bg-amber-500/10', 'text-amber-500', 'border-amber-500/20');
+                            syncStatusEl.innerText = "ℹ️ Trận đấu này chưa diễn ra ở mốc thời gian của bạn.";
+                            syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                            syncStatusEl.classList.add('bg-amber-500/10', 'text-amber-500', 'border-amber-500/20');
+                            foundInApi = true;
                         }
                     }
-                } else {
-                    syncStatusEl.innerText = "ℹ️ Không tìm thấy ID trận đấu trong hệ thống API!";
-                    syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-                    syncStatusEl.classList.add('bg-amber-500/10', 'text-amber-500', 'border-amber-500/20');
                 }
             } catch (err) {
-                console.error(err);
-                syncStatusEl.innerText = "❌ Lỗi kết nối máy chủ API (CORS). Hãy nhập tỉ số thủ công!";
+                console.error("Lỗi cập nhật đơn trận", err);
+            }
+
+            // Nếu API lỗi hoặc không tìm thấy dữ liệu (Không dùng local fallback)
+            if (!foundInApi) {
+                syncStatusEl.innerText = "❌ Lỗi: Không thể lấy dữ liệu trận đấu này từ API. Hãy tự nhập tỉ số thủ công bên trên.";
                 syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
                 syncStatusEl.classList.add('bg-red-500/10', 'text-red-500', 'border-red-500/20');
-            } finally {
-                syncBtn.disabled = false;
             }
+
+            syncBtn.disabled = false;
         }
 
         function parseMatchTime(timeStr) {
@@ -1723,7 +1832,7 @@
             document.getElementById('modal-tv').innerText = match.tv;
         }
 
-        // Initialize and setup view updates
+        // Khởi động hệ thống
         resetSimTimePickerUI();
         runDataUpdateCycle();
 
