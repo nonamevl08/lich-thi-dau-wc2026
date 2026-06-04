@@ -590,17 +590,17 @@
             }
         }
 
-        // Ánh xạ ngôn ngữ tự động cho API Fixture toàn cầu
+        // Ánh xạ ngôn ngữ tự động cho API Fixture toàn cầu (Bổ sung chuẩn tên FIFA)
         const teamTranslationMap = {
-            "Mexico": "Mexico", "South Africa": "Nam Phi", "South Korea": "Hàn Quốc", "Czechia": "CH Séc", "Czech Republic": "CH Séc",
+            "Mexico": "Mexico", "South Africa": "Nam Phi", "South Korea": "Hàn Quốc", "Korea Republic": "Hàn Quốc", "Czechia": "CH Séc", "Czech Republic": "CH Séc",
             "Canada": "Canada", "Bosnia and Herzegovina": "Bosnia", "Bosnia": "Bosnia", "Qatar": "Qatar", "Switzerland": "Thụy Sỹ",
             "Brazil": "Brazil", "Morocco": "Maroc", "Haiti": "Haiti", "Scotland": "Scotland", "United States": "Mỹ", "USA": "Mỹ",
-            "Paraguay": "Paraguay", "Australia": "Australia", "Turkey": "Thổ Nhĩ Kỳ", "Germany": "Đức", "Curaçao": "Curacao", "Curacao": "Curacao",
-            "Ivory Coast": "Bờ Biển Ngà", "Ecuador": "Ecuador", "Netherlands": "Hà Lan", "Japan": "Nhật Bản", "Sweden": "Thụy Điển",
-            "Tunisia": "Tunisia", "Belgium": "Bỉ", "Egypt": "Ai Cập", "Iran": "Iran", "New Zealand": "New Zealand", "Spain": "Tây Ban Nha",
+            "Paraguay": "Paraguay", "Australia": "Australia", "Turkey": "Thổ Nhĩ Kỳ", "Germany": "Đức", "Curaçao": "Curacao", "Curacao": "Curacao", "Curazao": "Curacao",
+            "Ivory Coast": "Bờ Biển Ngà", "Côte d'Ivoire": "Bờ Biển Ngà", "Cote-d'Ivoire": "Bờ Biển Ngà", "Ecuador": "Ecuador", "Netherlands": "Hà Lan", "Japan": "Nhật Bản", "Sweden": "Thụy Điển",
+            "Tunisia": "Tunisia", "Belgium": "Bỉ", "Egypt": "Ai Cập", "Iran": "Iran", "IR Iran": "Iran", "New Zealand": "New Zealand", "Spain": "Tây Ban Nha",
             "Cape Verde": "Cabo Verde", "Cabo Verde": "Cabo Verde", "Saudi Arabia": "Saudi Arabia", "Uruguay": "Uruguay", "France": "Pháp",
             "Senegal": "Senegal", "Iraq": "Iraq", "Norway": "Na Uy", "Argentina": "Argentina", "Algeria": "Algeria", "Austria": "Áo",
-            "Jordan": "Jordan", "Portugal": "Bồ Đào Nha", "DR Congo": "CHDC Congo", "Uzbekistan": "Uzbekistan", "Colombia": "Colombia",
+            "Jordan": "Jordan", "Portugal": "Bồ Đào Nha", "DR Congo": "CHDC Congo", "Congo DR": "CHDC Congo", "Uzbekistan": "Uzbekistan", "Colombia": "Colombia",
             "England": "Anh", "Croatia": "Croatia", "Ghana": "Ghana", "Panama": "Panama"
         };
 
@@ -919,7 +919,7 @@
             syncIcon.className = "fa-solid fa-spinner animate-spin text-sm";
             syncText.innerText = "Đang kiểm tra kết nối API...";
             
-            syncStatusEl.innerText = "🔍 Đang gửi tín hiệu và tải dữ liệu từ máy chủ API thế giới...";
+            syncStatusEl.innerText = "🔍 Đang gửi tín hiệu và quét toàn bộ 104 trận đấu...";
             syncStatusEl.classList.remove('hidden', 'bg-green-500/10', 'text-green-500', 'border-green-500/20', 'bg-red-500/10', 'text-red-500', 'border-red-500/20');
             syncStatusEl.classList.add('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
             syncStatusEl.classList.remove('hidden');
@@ -928,48 +928,63 @@
             let success = false;
             let updatedCount = 0;
             let skippedCount = 0;
+            let missingDataCount = 0;
 
-            // Truy vấn trực tiếp nguồn API mở FixtureDownload duy nhất cực kỳ ổn định
             try {
                 const targetUrl = 'https://fixturedownload.com/feed/json/fifa-world-cup-2026';
                 const data = await robustFetch(targetUrl);
                 
                 if (data && Array.isArray(data)) {
-                    data.forEach(apiMatch => {
-                        const localMatch = findLocalMatchByTeamNames(apiMatch.HomeTeam, apiMatch.AwayTeam);
-                        if (localMatch) {
-                            const apiMatchTime = apiMatch.DateUtc ? new Date(apiMatch.DateUtc) : parseMatchTime(localMatch.time);
-                            
-                            // CHỈ cập nhật những trận đấu đã/đang diễn ra dựa trên thời gian hệ thống/giả lập
-                            if (nowTime >= apiMatchTime) {
-                                let hScore = apiMatch.HomeTeamScore;
-                                let aScore = apiMatch.AwayTeamScore;
+                    // Gộp tất cả 104 trận đấu để quét (72 vòng bảng + 32 knockout)
+                    const allLocalMatches = [...matchesData, ...knockoutMatchesData];
 
-                                if (hScore !== undefined && hScore !== null && aScore !== undefined && aScore !== null) {
-                                    const isReversed = (localMatch.home !== (teamTranslationMap[apiMatch.HomeTeam] || apiMatch.HomeTeam));
-                                    localMatch.homeScore = isReversed ? parseInt(aScore) : parseInt(hScore);
-                                    localMatch.awayScore = isReversed ? parseInt(hScore) : parseInt(aScore);
-                                    updatedCount++;
-                                }
+                    allLocalMatches.forEach(localMatch => {
+                        const matchTime = parseMatchTime(localMatch.time);
+                        
+                        // Kiểm tra thời gian: Bỏ qua nếu trận đấu chưa đến giờ lăn bóng
+                        if (nowTime < matchTime) {
+                            skippedCount++;
+                        } else {
+                            // Trận đấu đã/đang diễn ra: Bỏ qua nếu là nhánh đấu Knockout mà chưa xác định được đội
+                            if (!localMatch.home || !localMatch.away || localMatch.home.includes("Nhất") || localMatch.home.includes("Nhì") || localMatch.home.includes("Thắng") || localMatch.home.includes("Thua")) {
+                                missingDataCount++;
+                                return;
+                            }
+
+                            // Tìm trận tương ứng trong cục dữ liệu của API
+                            const apiMatch = data.find(apiM => {
+                                const mappedH = teamTranslationMap[apiM.HomeTeam] || apiM.HomeTeam;
+                                const mappedA = teamTranslationMap[apiM.AwayTeam] || apiM.AwayTeam;
+                                return (mappedH === localMatch.home && mappedA === localMatch.away) ||
+                                       (mappedH === localMatch.away && mappedA === localMatch.home);
+                            });
+
+                            // Nếu tìm thấy và có tỉ số thì cập nhật
+                            if (apiMatch && apiMatch.HomeTeamScore !== null && apiMatch.AwayTeamScore !== null && apiMatch.HomeTeamScore !== undefined) {
+                                const isReversed = (localMatch.home !== (teamTranslationMap[apiMatch.HomeTeam] || apiMatch.HomeTeam));
+                                localMatch.homeScore = isReversed ? parseInt(apiMatch.AwayTeamScore) : parseInt(apiMatch.HomeTeamScore);
+                                localMatch.awayScore = isReversed ? parseInt(apiMatch.HomeTeamScore) : parseInt(apiMatch.AwayTeamScore);
+                                updatedCount++;
                             } else {
-                                skippedCount++;
+                                missingDataCount++; // Tìm thấy trận nhưng API chưa update điểm số
                             }
                         }
                     });
+
                     success = true;
                     document.getElementById('selected-source-label').innerText = "FixtureDownload API";
                 }
             } catch (err) {
-                console.error("Truy xuất dữ liệu FixtureDownload thất bại qua tất cả proxy", err);
+                console.error("Truy xuất dữ liệu FixtureDownload thất bại", err);
             }
 
-            // Xử lý khi kết nối API lỗi/mất mạng (Không dùng local giả lập)
             if (success) {
                 localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
                 localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
 
                 const sourceName = document.getElementById('selected-source-label').innerText;
-                syncStatusEl.innerText = `✅ [${sourceName}] Đồng bộ thành công ${updatedCount} trận đã đá! (Bỏ qua ${skippedCount} trận chưa diễn ra)`;
+                // Hiển thị đếm số thông minh: Tổng (Skipped + Updated + Missing) luôn bằng 104 trận
+                syncStatusEl.innerText = `✅ Đã quét 104 trận: Cập nhật thành công ${updatedCount} trận! (Bỏ qua ${skippedCount} trận chưa tới giờ lăn bóng)`;
                 syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
                 syncStatusEl.classList.add('bg-green-500/10', 'text-green-500', 'border-green-500/20');
                 
