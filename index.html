@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lịch Thi Đấu World Cup 2026 - Dữ liệu Thực tế</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        },
+                        darkBg: '#080c14',
+                        darkCard: '#111827',
+                        darkBorder: '#1f2937',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .nav-active {
+            color: #22c55e !important;
+        }
+        .nav-active i {
+            transform: translateY(-2px);
+            color: #22c55e;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-darkBg dark:text-gray-100 transition-colors duration-300 min-h-screen pb-24">
+
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-darkBg/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 px-4 py-3 flex items-center justify-between shadow-sm">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl">🏆</span>
+            <div>
+                <h1 class="text-sm font-extrabold tracking-tight leading-none text-green-600 dark:text-green-500">WORLD CUP 2026</h1>
+                <p class="text-[9px] text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase">Dữ liệu từ Báo Nhân Dân</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-2">
+            <!-- Favorite Filter Toggle -->
+            <button id="favorite-toggle-btn" onclick="toggleFavoriteFilter()" class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 relative transition-all active:scale-95">
+                <i class="fa-solid fa-star text-sm"></i>
+                <span id="fav-count" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+            </button>
+            
+            <!-- Dark Mode Switcher -->
+            <button onclick="toggleDarkMode()" class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 transition-all active:scale-95">
+                <i class="fa-solid fa-moon dark:hidden text-sm"></i>
+                <i class="fa-solid fa-sun hidden dark:block text-sm text-yellow-400"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN APP MOBILE WRAPPER -->
+    <main class="max-w-md mx-auto px-4 pt-3">
+        
+        <!-- PANEL 1: LỊCH THI ĐẤU (MATCHES) -->
+        <div id="panel-matches" class="space-y-4">
+            
+            <!-- COUNTDOWN BANNER -->
+            <div id="countdown-banner" class="bg-gradient-to-br from-green-700 to-emerald-950 rounded-2xl p-4 text-white shadow-xl relative overflow-hidden transition-all duration-300">
+                <div class="absolute right-[-15px] top-[-15px] opacity-10 text-9xl">⚽</div>
+                <div class="relative z-10">
+                    <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Đếm ngược Khai mạc</span>
+                    <h3 class="text-sm font-black mt-2 tracking-tight">MEXICO vs NAM PHI</h3>
+                    <p class="text-[11px] text-green-200 font-semibold">02:00 • 12/06/2026 (Giờ Việt Nam - Sân Estadio Azteca)</p>
+                    
+                    <div class="grid grid-cols-4 gap-2 mt-3 text-center">
+                        <div class="bg-black/30 backdrop-blur-sm rounded-lg py-1 px-1">
+                            <span id="timer-days" class="block text-lg font-black leading-none text-green-400">00</span>
+                            <span class="text-[9px] text-green-200">Ngày</span>
+                        </div>
+                        <div class="bg-black/30 backdrop-blur-sm rounded-lg py-1 px-1">
+                            <span id="timer-hours" class="block text-lg font-black leading-none text-green-400">00</span>
+                            <span class="text-[9px] text-green-200">Giờ</span>
+                        </div>
+                        <div class="bg-black/30 backdrop-blur-sm rounded-lg py-1 px-1">
+                            <span id="timer-mins" class="block text-lg font-black leading-none text-green-400">00</span>
+                            <span class="text-[9px] text-green-200">Phút</span>
+                        </div>
+                        <div class="bg-black/30 backdrop-blur-sm rounded-lg py-1 px-1">
+                            <span id="timer-secs" class="block text-lg font-black leading-none text-green-400">00</span>
+                            <span class="text-[9px] text-green-200">Giây</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GLOBAL AI SYNC BUTTON SECTION -->
+            <div class="space-y-2">
+                <button id="btn-global-sync" onclick="syncAllScoresWithAI()" class="w-full py-3 px-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-750 text-white font-extrabold rounded-2xl transition-all shadow-md flex items-center justify-center space-x-2 active:scale-95 text-xs">
+                    <i id="global-sync-icon" class="fa-solid fa-cloud-arrow-down animate-bounce text-sm"></i>
+                    <span id="global-sync-text">Đồng bộ tất cả tỉ số thực tế (AI)</span>
+                </button>
+                <div id="global-sync-status" class="hidden text-center text-[10px] font-bold text-indigo-500 bg-indigo-500/10 rounded-xl py-2 px-3 border border-indigo-500/20 transition-all duration-350">
+                    Sẵn sàng cập nhật từ Google Search...
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <!-- Search Input -->
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 pointer-events-none">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                    </span>
+                    <input type="text" id="search-input" onkeyup="filterMatches()" placeholder="Tìm tên đội tuyển (Ví dụ: Đức, Hà Lan, Pháp...)" 
+                        class="w-full pl-9 pr-4 py-2 text-xs bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 shadow-sm font-semibold transition-colors">
+                </div>
+
+                <!-- Horizontal Fast Filter Tags -->
+                <div class="flex space-x-1.5 overflow-x-auto no-scrollbar py-1">
+                    <button id="tag-all" onclick="setStatusFilter('all', this)" class="status-filter-btn flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-green-500 text-white shadow-sm transition-all">
+                        Tất cả
+                    </button>
+                    <button id="tag-live" onclick="setStatusFilter('live', this)" class="status-filter-btn flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-white dark:bg-darkCard text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-800 transition-all flex items-center">
+                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse mr-1"></span> Trực tiếp
+                    </button>
+                    <button id="tag-scheduled" onclick="setStatusFilter('scheduled', this)" class="status-filter-btn flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-white dark:bg-darkCard text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-800 transition-all">
+                        Sắp đấu
+                    </button>
+                    <button id="tag-finished" onclick="setStatusFilter('finished', this)" class="status-filter-btn flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-white dark:bg-darkCard text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-800 transition-all">
+                        Đã xong
+                    </button>
+                </div>
+
+                <!-- Group Dropdown Filter -->
+                <div class="flex items-center justify-between">
+                    <span id="filter-status-label" class="text-xs font-extrabold text-gray-400 uppercase tracking-wider">Lịch thi đấu Vòng bảng</span>
+                    <select id="group-select-filter" onchange="filterMatches()" class="text-xs font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 rounded-lg px-2.5 py-1 focus:outline-none text-green-600 dark:text-green-500">
+                        <option value="">Tất cả bảng đấu</option>
+                        <option value="A">Bảng A</option>
+                        <option value="B">Bảng B</option>
+                        <option value="C">Bảng C</option>
+                        <option value="D">Bảng D</option>
+                        <option value="E">Bảng E</option>
+                        <option value="F">Bảng F</option>
+                        <option value="G">Bảng G</option>
+                        <option value="H">Bảng H</option>
+                        <option value="I">Bảng I</option>
+                        <option value="J">Bảng J</option>
+                        <option value="K">Bảng K</option>
+                        <option value="L">Bảng L</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- MATCHES CONTAINER LIST -->
+            <div id="matches-list" class="space-y-3">
+                <!-- Match cards will be injected dynamically by JavaScript -->
+            </div>
+        </div>
+
+        <!-- PANEL 2: BẢNG ĐẤU (GROUPS STANDINGS) -->
+        <div id="panel-standings" class="hidden space-y-4">
+            <div class="flex justify-between items-center">
+                <h2 class="text-base font-bold">12 Bảng đấu World Cup 2026</h2>
+                <span class="text-[10px] text-gray-500 font-semibold">(Lấy 1, 2 + 8 Đội hạng 3 tốt nhất)</span>
+            </div>
+
+            <div class="flex space-x-1.5 overflow-x-auto no-scrollbar py-1">
+                <button onclick="switchStandingGroup('A', this)" class="standing-tab-btn flex-shrink-0 w-9 h-9 rounded-xl font-bold bg-green-500 text-white text-xs transition-all shadow-sm">A</button>
+                <button onclick="switchStandingGroup('B', this)" class="standing-tab-btn flex-shrink-0 w-9 h-9 rounded-xl font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-300 transition-all">B</button>
+                <button onclick="switchStandingGroup('C', this)" class="standing-tab-btn flex-shrink-0 w-9 h-9 rounded-xl font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-300 transition-all">C</button>
+                <button onclick="switchStandingGroup('D', this)" class="standing-tab-btn flex-shrink-0 w-9 h-9 rounded-xl font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-300 transition-all">D</button>
+                <button onclick="switchStandingGroup('E', this)" class="standing-tab-btn flex-shrink-0 w-9 h-9 rounded-xl font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-300 transition-all">E</button>
+                <button onclick="switchStandingGroup('F', this)" class="standing-tab-btn flex-shrink-0 w-9 h-9 rounded-xl font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-300 transition-all">F</button>
+                <button onclick="switchStandingGroup('G', this)" class="standing-tab-btn flex-shrink-0 w-9 h-9 rounded-xl font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-300 transition-all">G</button>
+                <button onclick="switchStandingGroup('H', this)" class="standing-tab-btn flex-shrink-0 w-9 h-9 rounded-xl font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-300 transition-all">H</button>
+                <button onclick="switchStandingGroup('I', this)" class="standing-tab-btn flex-shrink-0 w-9 h-9 rounded-xl font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-300 transition-all">I</button>
+                <button onclick="switchStandingGroup('J', this)" class="standing-tab-btn flex-shrink-0 w-9 h-9 rounded-xl font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-300 transition-all">J</button>
+                <button onclick="switchStandingGroup('K', this)" class="standing-tab-btn flex-shrink-0 w-9 h-9 rounded-xl font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-300 transition-all">K</button>
+                <button onclick="switchStandingGroup('L', this)" class="standing-tab-btn flex-shrink-0 w-9 h-9 rounded-xl font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-300 transition-all">L</button>
+            </div>
+
+            <!-- Standings Table -->
+            <div class="bg-white dark:bg-darkCard rounded-2xl p-4 shadow-sm border border-gray-150 dark:border-gray-800">
+                <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2 mb-3">
+                    <h3 id="standing-group-title" class="text-xs font-bold text-green-600 dark:text-green-400 uppercase tracking-wider">BẢNG XẾP HẠNG - BẢNG A</h3>
+                    <span class="text-[9px] bg-green-500/10 text-green-500 px-2 py-0.5 rounded font-bold uppercase">Thời gian thực</span>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="text-gray-400 border-b border-gray-100 dark:border-gray-800 pb-2">
+                                <th class="pb-2 font-bold"># Đội</th>
+                                <th class="pb-2 font-bold text-center w-8">Tr</th>
+                                <th class="pb-2 font-bold text-center w-8">HS</th>
+                                <th class="pb-2 font-bold text-center w-8">Điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody id="standings-table-body" class="divide-y divide-gray-150 dark:divide-gray-800/50">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-gray-100 dark:bg-gray-900/50 rounded-xl p-3 text-[10px] text-gray-500 dark:text-gray-400 space-y-1">
+                <p><span class="inline-block w-2 h-2 bg-blue-500 rounded-full mr-1"></span> Vị trí 1 và 2: Vào trực tiếp vòng 32 đội.</p>
+                <p><span class="inline-block w-2 h-2 bg-green-500 rounded-full mr-1"></span> 8 Đội xếp thứ 3 tốt nhất sẽ giành vé vớt đi tiếp.</p>
+            </div>
+        </div>
+
+        <!-- PANEL 3: NHÁNH ĐẤU KNOCKOUT (BRACKETS) -->
+        <div id="panel-bracket" class="hidden space-y-4">
+            <div class="flex justify-between items-center">
+                <h2 class="text-base font-bold">Nhánh Đấu Vòng Knockout</h2>
+                <span class="text-[10px] bg-red-500/10 text-red-500 px-2 py-0.5 rounded font-bold uppercase animate-pulse">Live Bracket</span>
+            </div>
+            <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                Tên các đội đạt thứ hạng cao sau khi bạn cập nhật kết quả thực tế sẽ **tự động điền** vào các cặp đấu dưới đây!
+            </p>
+
+            <!-- Knockout Stages Navigation Tabs -->
+            <div class="flex space-x-1.5 overflow-x-auto no-scrollbar py-1">
+                <button onclick="switchKnockoutStage('r32', this)" class="ko-stage-btn flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-green-500 text-white shadow-sm transition-all">Vòng 32 Đội</button>
+                <button onclick="switchKnockoutStage('r16', this)" class="ko-stage-btn flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 transition-all">Vòng 16 Đội</button>
+                <button onclick="switchKnockoutStage('qf', this)" class="ko-stage-btn flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 transition-all">Tứ kết</button>
+                <button onclick="switchKnockoutStage('sf', this)" class="ko-stage-btn flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 transition-all">Bán kết / CK</button>
+            </div>
+
+            <!-- CONTAINER FOR KNOCKOUT LIST -->
+            <div id="knockout-matches-list" class="space-y-3">
+                <!-- Content generated dynamically -->
+            </div>
+        </div>
+
+        <!-- PANEL 4: TIỆN ÍCH & TRÌNH ĐIỀU KHIỂN HỆ THỐNG -->
+        <div id="panel-utils" class="hidden space-y-4">
+            <h2 class="text-base font-bold">Giả Lập Thời Gian Thử Nghiệm</h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                World Cup 2026 sẽ chính thức khởi tranh từ ngày <b>12/06/2026</b>. Bạn có thể thay đổi mốc thời gian hệ thống giả lập dưới đây để xem cách ứng dụng chuyển đổi sang trạng thái <b>Trực tiếp (LIVE)</b> tự động dựa trên thời gian biểu.
+            </p>
+
+            <!-- Time Controller Widget -->
+            <div class="bg-gradient-to-br from-green-500/10 to-indigo-500/10 border border-green-500/20 rounded-2xl p-4 shadow-sm space-y-4">
+                <div class="flex items-center space-x-2 text-green-600 dark:text-green-500">
+                    <i class="fa-solid fa-clock-rotate-left text-lg"></i>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider">Cấu hình thời gian hệ thống</h3>
+                </div>
+
+                <div class="space-y-2">
+                    <input type="datetime-local" id="sim-time-picker" onchange="setSimulatedTime(this.value)" 
+                        class="w-full p-2.5 text-xs bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700 dark:text-gray-200 font-bold shadow-inner">
+                </div>
+
+                <div class="flex space-x-2 pt-1 border-t border-gray-200/50 dark:border-gray-800/50">
+                    <button onclick="resetSystemTime()" class="w-full py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs font-bold rounded-xl transition-all shadow-sm">
+                        Khôi phục về Thời Gian Thực Tế
+                    </button>
+                </div>
+
+                <div id="sim-status-label" class="text-[10px] font-extrabold text-center text-green-500 bg-green-500/10 rounded-lg py-1.5 border border-green-500/20 uppercase tracking-wider">
+                    Đang chạy thời gian thực
+                </div>
+            </div>
+
+            <!-- Stadium hosting list -->
+            <div class="bg-white dark:bg-darkCard rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-gray-800">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">SVĐ Đăng cai chính của giải</h3>
+                <div class="space-y-2 text-xs">
+                    <div class="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex justify-between items-center border border-gray-100 dark:border-gray-800">
+                        <span class="font-bold text-gray-700 dark:text-gray-300">🇺🇸 MetLife Stadium, New Jersey</span>
+                        <span class="text-green-500 font-extrabold text-[10px] uppercase">Chung Kết</span>
+                    </div>
+                    <div class="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex justify-between items-center border border-gray-100 dark:border-gray-800">
+                        <span class="font-bold text-gray-700 dark:text-gray-300">🇲🇽 Estadio Azteca, Mexico City</span>
+                        <span class="text-blue-500 font-extrabold text-[10px] uppercase">Khai Mạc</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FLOATING DETAIL DRAWER / POPUP (MODAL INSIDE APPS) -->
+    <div id="match-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end justify-center">
+        <!-- Close overlay -->
+        <div class="absolute inset-0" onclick="closeMatchModal()"></div>
+        <!-- Modal body -->
+        <div class="relative w-full max-w-md bg-white dark:bg-darkCard rounded-t-3xl p-5 shadow-2xl transition-all duration-300 transform translate-y-0 text-xs">
+            <div class="w-12 h-1 bg-gray-300 dark:bg-gray-700 rounded-full mx-auto mb-4"></div>
+            
+            <div class="flex justify-between items-center mb-3">
+                <span id="modal-group" class="text-[10px] font-extrabold text-green-500 bg-green-100 dark:bg-green-950/40 px-2.5 py-1 rounded-lg uppercase tracking-widest">Bảng A</span>
+                <button onclick="closeMatchModal()" class="w-7 h-7 rounded-full bg-gray-150 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-red-500 transition-colors active:scale-95">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- TEAMS DISPLAY -->
+            <div class="text-center py-4">
+                <div class="flex items-center justify-around">
+                    <!-- Home -->
+                    <div class="flex flex-col items-center space-y-1.5 text-center w-28">
+                        <span id="modal-home-flag" class="text-4xl shadow-sm rounded-lg">🇲🇽</span>
+                        <span id="modal-home-name" class="font-extrabold text-xs tracking-tight truncate w-full text-gray-800 dark:text-white">Mexico</span>
+                    </div>
+                    <!-- Score / VS Display / Manual Inputs -->
+                    <div class="flex flex-col items-center">
+                        <div class="flex items-center space-x-1">
+                            <input type="number" id="input-home-score" min="0" placeholder="-" class="w-12 h-12 text-center text-xl font-black bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <span class="text-gray-400 text-xl font-bold">:</span>
+                            <input type="number" id="input-away-score" min="0" placeholder="-" class="w-12 h-12 text-center text-xl font-black bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <span id="modal-status" class="text-[9px] text-gray-400 font-bold uppercase mt-2.5 tracking-wider px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800">Chưa diễn ra</span>
+                    </div>
+                    <!-- Away -->
+                    <div class="flex flex-col items-center space-y-1.5 text-center w-28">
+                        <span id="modal-away-flag" class="text-4xl shadow-sm rounded-lg">🇿🇦</span>
+                        <span id="modal-away-name" class="font-extrabold text-xs tracking-tight truncate w-full text-gray-800 dark:text-white">Nam Phi</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UPDATE BUTTONS PANEL -->
+            <div class="grid grid-cols-2 gap-2 my-2">
+                <button onclick="saveManualScore()" class="py-2.5 px-3 bg-green-600 hover:bg-green-700 text-white font-extrabold rounded-xl transition-all shadow-md flex items-center justify-center space-x-1.5">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span>Lưu Tỉ Số Thực Tế</span>
+                </button>
+                <button id="btn-sync-ai" onclick="syncScoreWithAI()" class="py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl transition-all shadow-md flex items-center justify-center space-x-1.5">
+                    <i class="fa-solid fa-globe"></i>
+                    <span>Đồng Bộ Google AI</span>
+                </button>
+            </div>
+            
+            <div id="sync-status" class="hidden text-center text-[10px] font-bold text-indigo-500 bg-indigo-500/10 rounded-lg py-1.5 border border-indigo-500/20 mb-2">
+                <!-- Sync status message -->
+            </div>
+
+            <!-- Info list -->
+            <div class="space-y-2 mt-2 border-t border-gray-100 dark:border-gray-800 pt-3">
+                <div class="flex justify-between items-center py-1 border-b border-gray-50 dark:border-gray-800/50">
+                    <span class="text-gray-400">Vòng đấu:</span>
+                    <span id="modal-stage" class="font-bold text-gray-700 dark:text-gray-200">Vòng bảng</span>
+                </div>
+                <div class="flex justify-between items-center py-1 border-b border-gray-50 dark:border-gray-800/50">
+                    <span class="text-gray-400">Thời gian:</span>
+                    <span id="modal-time" class="font-bold text-gray-700 dark:text-gray-200">02:00, 12/06/2026</span>
+                </div>
+                <div class="flex justify-between items-center py-1 border-b border-gray-50 dark:border-gray-800/50">
+                    <span class="text-gray-400">Địa điểm:</span>
+                    <span id="modal-stadium" class="font-bold text-gray-700 dark:text-gray-200 text-right truncate pl-4">Estadio Azteca, Mexico City</span>
+                </div>
+                <div class="flex justify-between items-center py-1">
+                    <span class="text-gray-400">Trực tiếp:</span>
+                    <span id="modal-tv" class="font-bold text-red-500 uppercase tracking-wider">VTV3</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM APP BAR (STICKY NAV FOR MOBILE) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-darkBg/95 border-t border-gray-100 dark:border-gray-800 backdrop-blur-md">
+        <div class="max-w-md mx-auto px-4 py-2 flex justify-between items-center">
+            
+            <button onclick="switchTab('matches', this)" class="nav-btn flex flex-col items-center space-y-0.5 text-gray-400 hover:text-green-500 transition-all nav-active">
+                <i class="fa-solid fa-calendar-days text-lg transition-transform"></i>
+                <span class="text-[9px] font-bold">Lịch đấu</span>
+            </button>
+            
+            <button onclick="switchTab('standings', this)" class="nav-btn flex flex-col items-center space-y-0.5 text-gray-400 hover:text-green-500 transition-all">
+                <i class="fa-solid fa-list-ol text-lg transition-transform"></i>
+                <span class="text-[9px] font-bold">Bảng đấu</span>
+            </button>
+            
+            <button onclick="switchTab('bracket', this)" class="nav-btn flex flex-col items-center space-y-0.5 text-gray-400 hover:text-green-500 transition-all">
+                <i class="fa-solid fa-sitemap text-lg transition-transform"></i>
+                <span class="text-[9px] font-bold">Knockout</span>
+            </button>
+            
+            <button onclick="switchTab('utils', this)" class="nav-btn flex flex-col items-center space-y-0.5 text-gray-400 hover:text-green-500 transition-all">
+                <i class="fa-solid fa-clock text-lg transition-transform"></i>
+                <span class="text-[9px] font-bold">Giả lập</span>
+            </button>
+            
+        </div>
+    </nav>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const groupsData = {
+            A: [
+                { name: "Mexico", flag: "🇲🇽" }, { name: "Nam Phi", flag: "🇿🇦" },
+                { name: "Hàn Quốc", flag: "🇰🇷" }, { name: "CH Séc", flag: "🇨🇿" }
+            ],
+            B: [
+                { name: "Canada", flag: "🇨🇦" }, { name: "Bosnia", flag: "🇧🇦" },
+                { name: "Qatar", flag: "🇶🇦" }, { name: "Thụy Sỹ", flag: "🇨🇭" }
+            ],
+            C: [
+                { name: "Brazil", flag: "🇧🇷" }, { name: "Maroc", flag: "🇲🇦" },
+                { name: "Haiti", flag: "🇭🇹" }, { name: "Scotland", flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿" }
+            ],
+            D: [
+                { name: "Mỹ", flag: "🇺🇸" }, { name: "Paraguay", flag: "🇵🇾" },
+                { name: "Australia", flag: "🇦🇺" }, { name: "Thổ Nhĩ Kỳ", flag: "🇹🇷" }
+            ],
+            E: [
+                { name: "Đức", flag: "🇩🇪" }, { name: "Curacao", flag: "🇨🇼" },
+                { name: "Bờ Biển Ngà", flag: "🇨🇮" }, { name: "Ecuador", flag: "🇪🇨" }
+            ],
+            F: [
+                { name: "Hà Lan", flag: "🇳🇱" }, { name: "Nhật Bản", flag: "🇯🇵" },
+                { name: "Thụy Điển", flag: "🇸🇪" }, { name: "Tunisia", flag: "🇹🇳" }
+            ],
+            G: [
+                { name: "Bỉ", flag: "🇧🇪" }, { name: "Ai Cập", flag: "🇪🇬" },
+                { name: "Iran", flag: "🇮🇷" }, { name: "New Zealand", flag: "🇳🇿" }
+            ],
+            H: [
+                { name: "Tây Ban Nha", flag: "🇪🇸" }, { name: "Cabo Verde", flag: "🇨🇻" },
+                { name: "Saudi Arabia", flag: "🇸🇦" }, { name: "Uruguay", flag: "🇺🇾" }
+            ],
+            I: [
+                { name: "Pháp", flag: "🇫🇷" }, { name: "Senegal", flag: "🇸🇳" },
+                { name: "Iraq", flag: "🇮🇶" }, { name: "Na Uy", flag: "🇳🇴" }
+            ],
+            J: [
+                { name: "Argentina", flag: "🇦🇷" }, { name: "Algeria", flag: "🇩🇿" },
+                { name: "Áo", flag: "🇦🇹" }, { name: "Jordan", flag: "🇯🇴" }
+            ],
+            K: [
+                { name: "Bồ Đào Nha", flag: "🇵🇹" }, { name: "CHDC Congo", flag: "🇨🇩" },
+                { name: "Uzbekistan", flag: "🇺🇿" }, { name: "Colombia", flag: "🇨🇴" }
+            ],
+            L: [
+                { name: "Anh", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" }, { name: "Croatia", flag: "🇭🇷" },
+                { name: "Ghana", flag: "🇬🇭" }, { name: "Panama", flag: "🇵🇦" }
+            ]
+        };
+
+        const staticMatchesData = [
+            // Day 12/06
+            { id: 1, home: "Mexico", homeFlag: "🇲🇽", away: "Nam Phi", awayFlag: "🇿🇦", group: "A", time: "12/06 02:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
+            { id: 2, home: "Hàn Quốc", homeFlag: "🇰🇷", away: "CH Séc", awayFlag: "🇨🇿", group: "A", time: "12/06 09:00", stage: "Vòng bảng", stadium: "Estadio Guadalajara", tv: "VTV2" },
+            // Day 13/06
+            { id: 3, home: "Canada", homeFlag: "🇨🇦", away: "Bosnia", awayFlag: "🇧🇦", group: "B", time: "13/06 02:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV5" },
+            { id: 4, home: "Mỹ", homeFlag: "🇺🇸", away: "Paraguay", awayFlag: "🇵🇾", group: "D", time: "13/06 08:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3" },
+            // Day 14/06
+            { id: 5, home: "Qatar", homeFlag: "🇶🇦", away: "Thụy Sỹ", awayFlag: "🇨🇭", group: "B", time: "14/06 02:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV2" },
+            { id: 6, home: "Brazil", homeFlag: "🇧🇷", away: "Maroc", awayFlag: "🇲🇦", group: "C", time: "14/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
+            { id: 7, home: "Haiti", homeFlag: "🇭🇹", away: "Scotland", awayFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", group: "C", time: "14/06 08:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV2" },
+            { id: 8, home: "Australia", homeFlag: "🇦🇺", away: "Thổ Nhĩ Kỳ", awayFlag: "🇹🇷", group: "D", time: "14/06 11:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV5" },
+            // Day 15/06
+            { id: 9, home: "Đức", homeFlag: "🇩🇪", away: "Curacao", awayFlag: "🇨🇼", group: "E", time: "15/06 00:00", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV5" },
+            { id: 10, home: "Hà Lan", homeFlag: "🇳🇱", away: "Nhật Bản", awayFlag: "🇯🇵", group: "F", time: "15/06 03:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
+            { id: 11, home: "Bờ Biển Ngà", homeFlag: "🇨🇮", away: "Ecuador", awayFlag: "🇪🇨", group: "E", time: "15/06 06:00", stage: "Vòng bảng", stadium: "Philadelphia Stadium", tv: "VTV2" },
+            { id: 12, home: "Thụy Điển", homeFlag: "🇸🇪", away: "Tunisia", awayFlag: "🇹🇳", group: "F", time: "15/06 09:00", stage: "Vòng bảng", stadium: "Estadio Monterrey", tv: "VTV5" },
+            { id: 13, home: "Tây Ban Nha", homeFlag: "🇪🇸", away: "Cabo Verde", awayFlag: "🇨🇻", group: "H", time: "15/06 23:00", stage: "Vòng bảng", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV3" },
+            // Day 16/06
+            { id: 14, home: "Bỉ", homeFlag: "🇧🇪", away: "Ai Cập", awayFlag: "🇪🇬", group: "G", time: "16/06 02:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV2" },
+            { id: 15, home: "Saudi Arabia", homeFlag: "🇸🇦", away: "Uruguay", awayFlag: "🇺🇾", group: "H", time: "16/06 05:00", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3" },
+            { id: 16, home: "Iran", homeFlag: "🇮🇷", away: "New Zealand", awayFlag: "🇳🇿", group: "G", time: "16/06 08:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV5" },
+            // Day 17/06
+            { id: 17, home: "Pháp", homeFlag: "🇫🇷", away: "Senegal", awayFlag: "🇸🇳", group: "I", time: "17/06 02:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
+            { id: 18, home: "Iraq", homeFlag: "🇮🇶", away: "Na Uy", awayFlag: "🇳🇴", group: "I", time: "17/06 05:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV2" },
+            { id: 19, home: "Argentina", homeFlag: "🇦🇷", away: "Algeria", awayFlag: "🇩🇿", group: "J", time: "17/06 08:00", stage: "Vòng bảng", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV3" },
+            { id: 20, home: "Áo", homeFlag: "🇦🇹", away: "Jordan", awayFlag: "🇯🇴", group: "J", time: "17/06 11:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV5" },
+            // Day 18/06
+            { id: 21, home: "Bồ Đào Nha", homeFlag: "🇵🇹", away: "CHDC Congo", awayFlag: "🇨🇩", group: "K", time: "18/06 00:00", stage: "Vòng bảng", stadium: "NRG Stadium, Houston", tv: "VTV3" },
+            { id: 22, home: "Anh", homeFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", away: "Croatia", awayFlag: "🇭🇷", group: "L", time: "18/06 03:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV2" },
+            { id: 23, home: "Ghana", homeFlag: "🇬🇭", away: "Panama", awayFlag: "🇵🇦", group: "L", time: "18/06 06:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV5" },
+            { id: 24, home: "Uzbekistan", homeFlag: "🇺🇿", away: "Colombia", awayFlag: "🇨🇴", group: "K", time: "18/06 09:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
+            { id: 25, home: "CH Séc", homeFlag: "🇨🇿", away: "Nam Phi", awayFlag: "🇿🇦", group: "A", time: "18/06 23:00", stage: "Vòng bảng", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV2" },
+            // Day 19/06
+            { id: 26, home: "Thụy Sỹ", homeFlag: "🇨🇭", away: "Bosnia", awayFlag: "🇧🇦", group: "B", time: "19/06 02:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV5" },
+            { id: 27, home: "Canada", homeFlag: "🇨🇦", away: "Qatar", awayFlag: "🇶🇦", group: "B", time: "19/06 05:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV3" },
+            { id: 28, home: "Mexico", homeFlag: "🇲🇽", away: "Hàn Quốc", awayFlag: "🇰🇷", group: "A", time: "19/06 08:00", stage: "Vòng bảng", stadium: "Estadio Guadalajara", tv: "VTV3" },
+            // Day 20/06
+            { id: 29, home: "Mỹ", homeFlag: "🇺🇸", away: "Australia", awayFlag: "🇦🇺", group: "D", time: "20/06 02:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV3" },
+            { id: 30, home: "Scotland", homeFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", away: "Maroc", awayFlag: "🇲🇦", group: "C", time: "20/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV2" },
+            { id: 31, home: "Brazil", homeFlag: "🇧🇷", away: "Haiti", awayFlag: "🇭🇹", group: "C", time: "20/06 07:30", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3" },
+            { id: 32, home: "Thổ Nhĩ Kỳ", homeFlag: "🇹🇷", away: "Paraguay", awayFlag: "🇵🇾", group: "D", time: "20/06 10:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV5" },
+            // Day 21/06
+            { id: 33, home: "Hà Lan", homeFlag: "🇳🇱", away: "Thụy Điển", awayFlag: "🇸🇪", group: "F", time: "21/06 00:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
+            { id: 34, home: "Đức", homeFlag: "🇩🇪", away: "Bờ Biển Ngà", awayFlag: "🇨🇮", group: "E", time: "21/06 03:00", stage: "Vòng bảng", stadium: "NRG Stadium, Houston", tv: "VTV5" },
+            { id: 35, home: "Ecuador", homeFlag: "🇪🇨", away: "Curacao", awayFlag: "🇨🇼", group: "E", time: "21/06 07:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV2" },
+            { id: 36, home: "Tunisia", homeFlag: "🇹🇳", away: "Nhật Bản", awayFlag: "🇯🇵", group: "F", time: "21/06 11:00", stage: "Vòng bảng", stadium: "Estadio Monterrey", tv: "VTV5" },
+            { id: 37, home: "Tây Ban Nha", homeFlag: "🇪🇸", away: "Saudi Arabia", awayFlag: "🇸🇦", group: "H", time: "21/06 23:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
+            // Day 22/06
+            { id: 38, home: "Bỉ", homeFlag: "🇧🇪", away: "Iran", awayFlag: "🇮🇷", group: "G", time: "22/06 02:00", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV2" },
+            { id: 39, home: "Uruguay", homeFlag: "🇺🇾", away: "Cabo Verde", awayFlag: "🇨🇻", group: "H", time: "22/06 05:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3" },
+            { id: 40, home: "New Zealand", homeFlag: "🇳🇿", away: "Ai Cập", awayFlag: "🇪🇬", group: "G", time: "22/06 08:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV5" },
+            // Day 23/06
+            { id: 41, home: "Argentina", homeFlag: "🇦🇷", away: "Áo", awayFlag: "🇦🇹", group: "J", time: "23/06 00:00", stage: "Vòng bảng", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV3" },
+            { id: 42, home: "Pháp", homeFlag: "🇫🇷", away: "Iraq", awayFlag: "🇮🇶", group: "I", time: "23/06 04:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV2" },
+            { id: 43, home: "Na Uy", homeFlag: "🇳🇴", away: "Senegal", awayFlag: "🇸🇳", group: "I", time: "23/06 07:00", stage: "Vòng bảng", stadium: "Philadelphia Stadium", tv: "VTV5" },
+            { id: 44, home: "Jordan", homeFlag: "🇯🇴", away: "Algeria", awayFlag: "🇩🇿", group: "J", time: "23/06 10:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV3" },
+            // Day 24/06
+            { id: 45, home: "Bồ Đào Nha", homeFlag: "🇵🇹", away: "Uzbekistan", awayFlag: "🇺🇿", group: "K", time: "24/06 00:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
+            { id: 46, home: "Anh", homeFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", away: "Ghana", awayFlag: "🇬🇭", group: "L", time: "24/06 03:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV2" },
+            { id: 47, home: "Panama", homeFlag: "🇵🇦", away: "Croatia", awayFlag: "🇭🇷", group: "L", time: "24/06 06:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV5" },
+            { id: 48, home: "Colombia", homeFlag: "🇨🇴", away: "CHDC Congo", awayFlag: "🇨🇩", group: "K", time: "24/06 09:00", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV3" },
+            // Day 25/06
+            { id: 49, home: "Bosnia", homeFlag: "🇧🇦", away: "Qatar", awayFlag: "🇶🇦", group: "B", time: "25/06 02:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV5" },
+            { id: 50, home: "Thụy Sỹ", homeFlag: "🇨🇭", away: "Canada", awayFlag: "🇨🇦", group: "B", time: "25/06 02:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV2" },
+            { id: 51, home: "Maroc", homeFlag: "🇲🇦", away: "Haiti", awayFlag: "🇭🇹", group: "C", time: "25/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
+            { id: 52, home: "Scotland", homeFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", away: "Brazil", awayFlag: "🇧🇷", group: "C", time: "25/06 05:00", stage: "Vòng bảng", stadium: "Boston Stadium", tv: "VTV2" },
+            { id: 53, home: "Nam Phi", homeFlag: "🇿🇦", away: "Hàn Quốc", awayFlag: "🇰🇷", group: "A", time: "25/06 08:00", stage: "Vòng bảng", stadium: "Estadio Guadalajara", tv: "VTV5" },
+            { id: 54, home: "CH Séc", homeFlag: "🇨🇿", away: "Mexico", awayFlag: "🇲🇽", group: "A", time: "25/06 08:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
+            // Day 26/06
+            { id: 55, home: "Curacao", homeFlag: "🇨🇼", away: "Bờ Biển Ngà", awayFlag: "🇨🇮", group: "E", time: "26/06 03:00", stage: "Vòng bảng", stadium: "Philadelphia Stadium", tv: "VTV5" },
+            { id: 56, home: "Ecuador", homeFlag: "🇪🇨", away: "Đức", awayFlag: "🇩🇪", group: "E", time: "26/06 03:00", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV3" },
+            { id: 57, home: "Tunisia", homeFlag: "🇹🇳", away: "Hà Lan", awayFlag: "🇳🇱", group: "F", time: "26/06 06:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV2" },
+            { id: 58, home: "Nhật Bản", homeFlag: "🇯🇵", away: "Thụy Điển", awayFlag: "🇸🇪", group: "F", time: "26/06 06:00", stage: "Vòng bảng", stadium: "Estadio Monterrey", tv: "VTV5" },
+            { id: 59, home: "Thổ Nhĩ Kỳ", homeFlag: "🇹🇷", away: "Mỹ", awayFlag: "🇺🇸", group: "D", time: "26/06 09:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3" },
+            { id: 60, home: "Paraguay", homeFlag: "🇵🇾", away: "Australia", awayFlag: "🇦🇺", group: "D", time: "26/06 09:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV2" },
+            // Day 27/06
+            { id: 61, home: "Na Uy", homeFlag: "🇳🇴", away: "Pháp", awayFlag: "🇫🇷", group: "I", time: "27/06 02:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
+            { id: 62, home: "Senegal", homeFlag: "🇸🇳", away: "Iraq", awayFlag: "🇮🇶", group: "I", time: "27/06 02:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV2" },
+            { id: 63, home: "Cabo Verde", homeFlag: "🇨🇻", away: "Saudi Arabia", awayFlag: "🇸🇦", group: "H", time: "27/06 07:00", stage: "Vòng bảng", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV5" },
+            { id: 64, home: "Uruguay", homeFlag: "🇺🇾", away: "Tây Ban Nha", awayFlag: "🇪🇸", group: "H", time: "27/06 07:00", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3" },
+            { id: 65, home: "Ai Cập", homeFlag: "🇪🇬", away: "Iran", awayFlag: "🇮🇷", group: "G", time: "27/06 10:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV2" },
+            { id: 66, home: "New Zealand", homeFlag: "🇳🇿", away: "Bỉ", awayFlag: "🇧🇪", group: "G", time: "27/06 10:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV5" },
+            // Day 28/06
+            { id: 67, home: "Croatia", homeFlag: "🇭🇷", away: "Ghana", awayFlag: "🇬🇭", group: "L", time: "28/06 04:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV2" },
+            { id: 68, home: "Panama", homeFlag: "🇵🇦", away: "Anh", awayFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", group: "L", time: "28/06 04:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
+            { id: 70, home: "Colombia", homeFlag: "🇨🇴", away: "Bồ Đào Nha", awayFlag: "🇵🇹", group: "K", time: "28/06 06:30", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
+            { id: 69, home: "CHDC Congo", homeFlag: "🇨🇩", away: "Uzbekistan", awayFlag: "🇺🇿", group: "K", time: "28/06 06:30", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV5" },
+            { id: 71, home: "Algeria", homeFlag: "🇩🇿", away: "Áo", awayFlag: "🇦🇹", group: "J", time: "28/06 09:00", stage: "Vòng bảng", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV2" },
+            { id: 72, home: "Jordan", homeFlag: "🇯🇴", away: "Argentina", awayFlag: "🇦🇷", group: "J", time: "28/06 09:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3" }
+        ];
+
+        const baseKnockoutMatches = [
+            // Round of 32
+            { id: 73, homePlaceholder: "Nhì bảng A", awayPlaceholder: "Nhì bảng B", time: "29/06 02:00", stage: "Vòng 32 đội", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
+            { id: 74, homePlaceholder: "Nhất bảng C", awayPlaceholder: "Nhì bảng F", time: "30/06 00:00", stage: "Vòng 32 đội", stadium: "SoFi Stadium, Los Angeles", tv: "VTV2" },
+            { id: 75, homePlaceholder: "Nhất bảng E", awayPlaceholder: "Thứ 3 bảng A/B/C/D/F", time: "30/06 03:30", stage: "Vòng 32 đội", stadium: "BC Place, Vancouver", tv: "VTV5" },
+            { id: 76, homePlaceholder: "Nhất bảng F", awayPlaceholder: "Nhì bảng C", time: "30/06 08:00", stage: "Vòng 32 đội", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
+            { id: 77, homePlaceholder: "Nhì bảng E", awayPlaceholder: "Nhì bảng I", time: "01/07 00:00", stage: "Vòng 32 đội", stadium: "BMO Field, Toronto", tv: "VTV2" },
+            { id: 78, homePlaceholder: "Nhất bảng I", awayPlaceholder: "Thứ 3 bảng C/D/F/G/H", time: "01/07 02:00", stage: "Vòng 32 đội", stadium: "Houston Stadium, Texas", tv: "VTV5" },
+            { id: 79, homePlaceholder: "Nhất bảng A", awayPlaceholder: "Thứ 3 bảng C/E/F/H/I", time: "01/07 08:00", stage: "Vòng 32 đội", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
+            { id: 80, homePlaceholder: "Nhất bảng L", awayPlaceholder: "Thứ 3 bảng E/H/I/J/K", time: "01/07 23:00", stage: "Vòng 32 đội", stadium: "Gillette Stadium, Boston", tv: "VTV2" },
+            { id: 81, homePlaceholder: "Nhất bảng G", awayPlaceholder: "Thứ 3 bảng A/E/H/I/J", time: "02/07 03:00", stage: "Vòng 32 đội", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV5" },
+            { id: 82, homePlaceholder: "Nhất bảng D", awayPlaceholder: "Thứ 3 bảng B/E/F/I/J", time: "02/07 07:00", stage: "Vòng 32 đội", stadium: "Hard Rock Stadium, Miami", tv: "VTV3" },
+            { id: 83, homePlaceholder: "Nhất bảng H", awayPlaceholder: "Nhì bảng J", time: "03/07 02:00", stage: "Vòng 32 đội", stadium: "Levi's Stadium, San Francisco", tv: "VTV5" },
+            { id: 84, homePlaceholder: "Nhì bảng K", awayPlaceholder: "Nhì bảng L", time: "03/07 06:00", stage: "Vòng 32 đội", stadium: "Lumen Field, Seattle", tv: "VTV2" },
+            { id: 85, homePlaceholder: "Nhất bảng B", awayPlaceholder: "Thứ 3 bảng E/F/G/I/J", time: "03/07 10:00", stage: "Vòng 32 đội", stadium: "Estadio Guadalajara", tv: "VTV3" },
+            { id: 86, homePlaceholder: "Nhì bảng D", awayPlaceholder: "Nhì bảng G", time: "04/07 01:00", stage: "Vòng 32 đội", stadium: "Philadelphia Stadium", tv: "VTV2" },
+            { id: 87, homePlaceholder: "Nhất bảng J", awayPlaceholder: "Nhì bảng H", time: "04/07 05:00", stage: "Vòng 32 đội", stadium: "Estadio Monterrey", tv: "VTV3" },
+            { id: 88, homePlaceholder: "Nhất bảng K", awayPlaceholder: "Thứ 3 bảng D/E/I/J/L", time: "04/07 09:30", stage: "Vòng 32 đội", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV5" },
+
+            // Round of 16
+            { id: 89, homePlaceholder: "Thắng Trận 73", awayPlaceholder: "Thắng Trận 75", time: "05/07 00:00", stage: "Vòng 16 đội", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
+            { id: 90, homePlaceholder: "Thắng Trận 74", awayPlaceholder: "Thắng Trận 77", time: "05/07 04:00", stage: "Vòng 16 đội", stadium: "SoFi Stadium, Los Angeles", tv: "VTV2" },
+            { id: 91, homePlaceholder: "Thắng Trận 76", awayPlaceholder: "Thắng Trận 78", time: "06/07 03:00", stage: "Vòng 16 đội", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
+            { id: 92, homePlaceholder: "Thắng Trận 79", awayPlaceholder: "Thắng Trận 80", time: "06/07 07:00", stage: "Vòng 16 đội", stadium: "BC Place, Vancouver", tv: "VTV2" },
+            { id: 93, homePlaceholder: "Thắng Trận 83", awayPlaceholder: "Thắng Trận 84", time: "07/07 02:00", stage: "Vòng 16 đội", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
+            { id: 94, homePlaceholder: "Thắng Trận 81", awayPlaceholder: "Thắng Trận 82", time: "07/07 07:00", stage: "Vòng 16 đội", stadium: "BMO Field, Toronto", tv: "VTV5" },
+            { id: 95, homePlaceholder: "Thắng Trận 86", awayPlaceholder: "Thắng Trận 88", time: "07/07 23:00", stage: "Vòng 16 đội", stadium: "Houston Stadium, Texas", tv: "VTV2" },
+            { id: 96, homePlaceholder: "Thắng Trận 85", awayPlaceholder: "Thắng Trận 87", time: "08/07 03:00", stage: "Vòng 16 đội", stadium: "Hard Rock Stadium, Miami", tv: "VTV3" },
+
+            // Quarterfinals
+            { id: 97, homePlaceholder: "Thắng Trận 89", awayPlaceholder: "Thắng Trận 90", time: "10/07 03:00", stage: "Tứ kết", stadium: "Gillette Stadium, Boston", tv: "VTV3" },
+            { id: 98, homePlaceholder: "Thắng Trận 91", awayPlaceholder: "Thắng Trận 92", time: "11/07 02:00", stage: "Tứ kết", stadium: "Levi's Stadium, San Francisco", tv: "VTV3" },
+            { id: 99, homePlaceholder: "Thắng Trận 93", awayPlaceholder: "Thắng Trận 94", time: "12/07 04:00", stage: "Tứ kết", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV3" },
+            { id: 100, homePlaceholder: "Thắng Trận 95", awayPlaceholder: "Thắng Trận 96", time: "12/07 08:00", stage: "Tứ kết", stadium: "Lumen Field, Seattle", tv: "VTV3" },
+
+            // Semifinals
+            { id: 101, homePlaceholder: "Thắng Trận 97", awayPlaceholder: "Thắng Trận 98", time: "15/07 02:00", stage: "Bán kết", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
+            { id: 102, homePlaceholder: "Thắng Trận 99", awayPlaceholder: "Thắng Trận 100", time: "16/07 02:00", stage: "Bán kết", stadium: "Atlanta Stadium, Georgia", tv: "VTV3" },
+
+            // Third Place
+            { id: 103, homePlaceholder: "Thua Bán Kết 1", awayPlaceholder: "Thua Bán Kết 2", time: "18/07 03:00", stage: "Tranh hạng ba", stadium: "Hard Rock Stadium, Miami", tv: "VTV3" },
+
+            // Final
+            { id: 104, homePlaceholder: "Thắng Bán Kết 1", awayPlaceholder: "Thắng Bán Kết 2", time: "19/07 06:00", stage: "Chung kết", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" }
+        ];
+
+        // Core dynamic arrays and states
+        let matchesData = JSON.parse(localStorage.getItem('wc_2026_matches_real')) || staticMatchesData.map(m => ({
+            ...m,
+            homeScore: null,
+            awayScore: null
+        }));
+
+        let knockoutMatchesData = JSON.parse(localStorage.getItem('wc_2026_ko_real')) || baseKnockoutMatches.map(m => ({
+            ...m,
+            homeScore: null,
+            awayScore: null,
+            home: "",
+            away: "",
+            homeFlag: "",
+            awayFlag: ""
+        }));
+
+        let simulatedTime = new Date('2026-06-20T08:30:00'); 
+        let isSimTimeActive = false; 
+        
+        let activeKnockoutStage = 'r32';
+        let activeTab = 'matches';
+        let favoritesList = JSON.parse(localStorage.getItem('wc_2026_favs_vn')) || [];
+        let filterOnlyFavorites = false;
+        let selectedMatchId = null;
+        let selectedGroupForStandings = 'A'; 
+        let activeStatusFilter = 'all';
+
+        let groupStandings = {};
+        Object.keys(groupsData).forEach(group => {
+            groupStandings[group] = groupsData[group].map(team => ({
+                name: team.name,
+                flag: team.flag,
+                gp: 0, w: 0, d: 0, l: 0, gd: 0, pts: 0
+            }));
+        });
+
+        function getActiveTime() {
+            return isSimTimeActive ? simulatedTime : new Date();
+        }
+
+        async function syncAllScoresWithAI() {
+            const syncBtn = document.getElementById('btn-global-sync');
+            const syncIcon = document.getElementById('global-sync-icon');
+            const syncText = document.getElementById('global-sync-text');
+            const syncStatusEl = document.getElementById('global-sync-status');
+
+            // Set loading state UI
+            syncBtn.disabled = true;
+            syncBtn.classList.add('opacity-75', 'cursor-not-allowed');
+            syncIcon.className = "fa-solid fa-circle-notch animate-spin text-sm";
+            syncText.innerText = "Đang đồng bộ toàn bộ giải đấu...";
+            syncStatusEl.innerText = "🔍 Đang tìm kiếm kết quả thi đấu World Cup 2026 chính xác từ Google Search...";
+            syncStatusEl.classList.remove('hidden', 'bg-green-500/10', 'text-green-500', 'border-green-500/20', 'bg-red-500/10', 'text-red-500', 'border-red-500/20');
+            syncStatusEl.classList.add('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+            syncStatusEl.classList.remove('hidden');
+
+            const systemPrompt = "Bạn là trợ lý dữ liệu thể thao World Cup 2026. Nhiệm vụ của bạn là sử dụng Google Search để tìm kiếm kết quả tỷ số thực tế của tất cả các trận đấu World Cup 2026 đã diễn ra tính đến ngày hôm nay. Trả về mảng dữ liệu JSON có cấu trúc cực kỳ chính xác.";
+            const userQuery = `Hãy tra cứu kết quả thực tế của tất cả các trận đấu bóng đá thuộc giải World Cup 2026 đã thi đấu tính đến hôm nay. Chỉ trả về các trận đấu đã thực sự kết thúc và có tỉ số chính xác. Trả về dưới dạng một mảng JSON chứa các đối tượng có cấu trúc chính xác: [ { "id": 1, "homeScore": 2, "awayScore": 1 }, { "id": 2, "homeScore": 0, "awayScore": 0 } ]. Chỉ chứa các trận có tỉ số thực tế, không bịa đặt, không chứa thêm chữ giải thích nào ngoài mã JSON.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                id: { type: "INTEGER" },
+                                homeScore: { type: "INTEGER" },
+                                awayScore: { type: "INTEGER" }
+                            },
+                            required: ["id", "homeScore", "awayScore"]
+                        }
+                    }
+                }
+            };
+
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                if (jsonText) {
+                    const scoresArray = JSON.parse(jsonText);
+                    
+                    if (Array.isArray(scoresArray) && scoresArray.length > 0) {
+                        let updatedCount = 0;
+                        
+                        scoresArray.forEach(item => {
+                            const isGroup = item.id <= 72;
+                            const list = isGroup ? matchesData : knockoutMatchesData;
+                            const target = list.find(m => m.id === item.id);
+                            
+                            if (target) {
+                                target.homeScore = item.homeScore;
+                                target.awayScore = item.awayScore;
+                                updatedCount++;
+                            }
+                        });
+
+                        // Save updated data
+                        localStorage.setItem('wc_2026_matches_real', JSON.stringify(matchesData));
+                        localStorage.setItem('wc_2026_ko_real', JSON.stringify(knockoutMatchesData));
+
+                        syncStatusEl.innerText = `✅ Đã đồng bộ thành công kết quả thực tế của ${updatedCount} trận đấu từ Google Search!`;
+                        syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                        syncStatusEl.classList.add('bg-green-500/10', 'text-green-500', 'border-green-500/20');
+                        
+                        runDataUpdateCycle();
+                    } else {
+                        syncStatusEl.innerText = "ℹ️ Không tìm thấy trận đấu mới nào đã diễn ra thực tế để cập nhật tỉ số.";
+                        syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                        syncStatusEl.classList.add('bg-amber-500/10', 'text-amber-500', 'border-amber-500/20');
+                    }
+                } else {
+                    throw new Error("Không thể phân tích phản hồi của AI.");
+                }
+            } catch (err) {
+                console.error(err);
+                syncStatusEl.innerText = "❌ Lỗi kết nối máy chủ Google Search. Vui lòng thử lại sau hoặc nhập thủ công!";
+                syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                syncStatusEl.classList.add('bg-red-500/10', 'text-red-500', 'border-red-500/20');
+            } finally {
+                syncBtn.disabled = false;
+                syncBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                syncIcon.className = "fa-solid fa-cloud-arrow-down animate-bounce text-sm";
+                syncText.innerText = "Đồng bộ tất cả tỉ số thực tế (AI)";
+            }
+        }
+
+        function parseMatchTime(timeStr) {
+            const [datePart, timePart] = timeStr.split(' ');
+            const [day, month] = datePart.split('/');
+            const [hour, minute] = timePart.split(':');
+            return new Date(2026, parseInt(month) - 1, parseInt(day), parseInt(hour), parseInt(minute));
+        }
+
+        function getMatchState(matchId) {
+            const isGroup = matchId <= 72;
+            const match = isGroup ? matchesData.find(m => m.id === matchId) : knockoutMatchesData.find(m => m.id === matchId);
+            if (!match) return null;
+
+            let homeTeamName = isGroup ? match.home : match.home || match.homePlaceholder;
+            let awayTeamName = isGroup ? match.away : match.away || match.awayPlaceholder;
+            let homeFlag = isGroup ? match.homeFlag : match.homeFlag || "🏳️";
+            let awayFlag = isGroup ? match.awayFlag : match.awayFlag || "🏳️";
+
+            const now = getActiveTime();
+            const matchTime = parseMatchTime(match.time);
+            const endTime = new Date(matchTime.getTime() + (105 * 60 * 1000)); 
+
+            let status = 'scheduled';
+            if (match.homeScore !== null && match.awayScore !== null) {
+                status = 'finished';
+            } else {
+                if (now >= matchTime && now < endTime) {
+                    status = 'live';
+                }
+            }
+
+            return {
+                id: matchId,
+                homeTeam: { name: homeTeamName, flag: homeFlag },
+                awayTeam: { name: awayTeamName, flag: awayFlag },
+                status: status,
+                homeScore: match.homeScore,
+                awayScore: match.awayScore,
+                elapsed: status === 'live' ? `${Math.floor((now - matchTime) / 60000)}'` : null,
+                time: match.time,
+                stage: match.stage,
+                group: match.group || 'Knockout',
+                stadium: match.stadium,
+                tv: match.tv
+            };
+        }
+
+        // Calculations for automatic bracket advancement
+        function getKnockoutQualifiedMap() {
+            const map = {};
+            const thirdPlaces = [];
+
+            // Đếm số trận đã hoàn thành thực tế của từng bảng đấu
+            const groupCompletedCount = {};
+            Object.keys(groupsData).forEach(g => {
+                groupCompletedCount[g] = matchesData.filter(m => m.group === g && m.homeScore !== null && m.awayScore !== null).length;
+            });
+
+            // Tổng số trận vòng bảng đã hoàn thành trên toàn giải đấu
+            const totalCompletedMatches = Object.values(groupCompletedCount).reduce((a, b) => a + b, 0);
+
+            Object.keys(groupStandings).forEach(g => {
+                const list = groupStandings[g];
+                
+                // CHỈ xác định Nhất & Nhì bảng khi cả 6 trận của bảng đó đã đá xong thực tế
+                if (groupCompletedCount[g] === 6) {
+                    map[`Nhất bảng ${g}`] = list[0] ? { name: list[0].name, flag: list[0].flag } : null;
+                    map[`Nhì bảng ${g}`] = list[1] ? { name: list[1].name, flag: list[1].flag } : null;
+                    
+                    if (list[2]) {
+                        thirdPlaces.push({
+                            name: list[2].name,
+                            flag: list[2].flag,
+                            pts: list[2].pts,
+                            gd: list[2].gd,
+                            group: g
+                        });
+                    }
+                } else {
+                    map[`Nhất bảng ${g}`] = null;
+                    map[`Nhì bảng ${g}`] = null;
+                }
+            });
+
+            // CHỈ xác định 8 đội tuyển hạng 3 tốt nhất khi cả 72 trận vòng bảng đã đá xong hoàn toàn
+            if (totalCompletedMatches === 72) {
+                // Sắp xếp các đội tuyển hạng 3 theo thứ tự ưu tiên
+                thirdPlaces.sort((a, b) => b.pts !== a.pts ? b.pts - a.pts : b.gd - a.gd);
+
+                map['Thứ 3 bảng A/B/C/D/F'] = thirdPlaces[0] || null;
+                map['Thứ 3 bảng C/D/F/G/H'] = thirdPlaces[1] || null;
+                map['Thứ 3 bảng C/E/F/H/I'] = thirdPlaces[2] || null;
+                map['Thứ 3 bảng E/H/I/J/K'] = thirdPlaces[3] || null;
+                map['Thứ 3 bảng A/E/H/I/J'] = thirdPlaces[4] || null;
+                map['Thứ 3 bảng B/E/F/I/J'] = thirdPlaces[5] || null;
+                map['Thứ 3 bảng E/F/G/I/J'] = thirdPlaces[6] || null;
+                map['Thứ 3 bảng D/E/I/J/L'] = thirdPlaces[7] || null;
+            } else {
+                map['Thứ 3 bảng A/B/C/D/F'] = null;
+                map['Thứ 3 bảng C/D/F/G/H'] = null;
+                map['Thứ 3 bảng C/E/F/H/I'] = null;
+                map['Thứ 3 bảng E/H/I/J/K'] = null;
+                map['Thứ 3 bảng A/E/H/I/J'] = null;
+                map['Thứ 3 bảng B/E/F/I/J'] = null;
+                map['Thứ 3 bảng E/F/G/I/J'] = null;
+                map['Thứ 3 bảng D/E/I/J/L'] = null;
+            }
+
+            return map;
+        }
+
+        function getMatchState(matchId) {
+            const isGroup = matchId <= 72;
+            const match = isGroup ? matchesData.find(m => m.id === matchId) : knockoutMatchesData.find(m => m.id === matchId);
+            if (!match) return null;
+
+            let homeTeamName = isGroup ? match.home : match.home || match.homePlaceholder;
+            let awayTeamName = isGroup ? match.away : match.away || match.awayPlaceholder;
+            
+            // Nếu chưa có đội cụ thể cho vòng knockout, không hiển thị cờ giả lập
+            let homeFlag = isGroup ? match.homeFlag : (match.home ? match.homeFlag : "");
+            let awayFlag = isGroup ? match.awayFlag : (match.away ? match.awayFlag : "");
+
+            const now = getActiveTime();
+            const matchTime = parseMatchTime(match.time);
+            const endTime = new Date(matchTime.getTime() + (105 * 60 * 1000)); 
+
+            let status = 'scheduled';
+            if (match.homeScore !== null && match.awayScore !== null) {
+                status = 'finished';
+            } else {
+                if (now >= matchTime && now < endTime) {
+                    status = 'live';
+                }
+            }
+
+            return {
+                id: matchId,
+                homeTeam: { name: homeTeamName, flag: homeFlag },
+                awayTeam: { name: awayTeamName, flag: awayFlag },
+                status: status,
+                homeScore: match.homeScore,
+                awayScore: match.awayScore,
+                elapsed: status === 'live' ? `${Math.floor((now - matchTime) / 60000)}'` : null,
+                time: match.time,
+                stage: match.stage,
+                group: match.group || 'Knockout',
+                stadium: match.stadium,
+                tv: match.tv
+            };
+        }
+
+        function resolveBracketTeams() {
+            const map = getKnockoutQualifiedMap();
+
+            knockoutMatchesData.forEach(match => {
+                // Điền thông tin cho vòng 32 đội dựa trên sơ đồ liên kết
+                if (match.id >= 73 && match.id <= 88) {
+                    if (map[match.homePlaceholder]) {
+                        match.home = map[match.homePlaceholder].name;
+                        match.homeFlag = map[match.homePlaceholder].flag;
+                    } else {
+                        match.home = "";
+                        match.homeFlag = "";
+                    }
+
+                    if (map[match.awayPlaceholder]) {
+                        match.away = map[match.awayPlaceholder].name;
+                        match.awayFlag = map[match.awayPlaceholder].flag;
+                    } else {
+                        match.away = "";
+                        match.awayFlag = "";
+                    }
+                }
+
+                // Điền thông tin cho các vòng tiếp theo (Thắng Trận X)
+                const resolvePlaceholder = (ph) => {
+                    if (ph.startsWith("Thắng Trận")) {
+                        const prevId = parseInt(ph.replace("Thắng Trận ", ""));
+                        const prevMatch = knockoutMatchesData.find(m => m.id === prevId);
+                        if (prevMatch && prevMatch.homeScore !== null && prevMatch.awayScore !== null) {
+                            return prevMatch.homeScore > prevMatch.awayScore ? 
+                                { name: prevMatch.home, flag: prevMatch.homeFlag } : 
+                                { name: prevMatch.away, flag: prevMatch.awayFlag };
+                        }
+                    } else if (ph.startsWith("Thua Bán Kết")) {
+                        const prevId = ph === "Thua Bán Kết 1" ? 101 : 102;
+                        const prevMatch = knockoutMatchesData.find(m => m.id === prevId);
+                        if (prevMatch && prevMatch.homeScore !== null && prevMatch.awayScore !== null) {
+                            return prevMatch.homeScore < prevMatch.awayScore ? 
+                                { name: prevMatch.home, flag: prevMatch.homeFlag } : 
+                                { name: prevMatch.away, flag: prevMatch.awayFlag };
+                        }
+                    } else if (ph.startsWith("Thắng Bán Kết")) {
+                        const prevId = ph === "Thắng Bán Kết 1" ? 101 : 102;
+                        const prevMatch = knockoutMatchesData.find(m => m.id === prevId);
+                        if (prevMatch && prevMatch.homeScore !== null && prevMatch.awayScore !== null) {
+                            return prevMatch.homeScore > prevMatch.awayScore ? 
+                                { name: prevMatch.home, flag: prevMatch.homeFlag } : 
+                                { name: prevMatch.away, flag: prevMatch.awayFlag };
+                        }
+                    }
+                    return null;
+                };
+
+                if (match.id > 88) {
+                    const resolvedHome = resolvePlaceholder(match.homePlaceholder);
+                    const resolvedAway = resolvePlaceholder(match.awayPlaceholder);
+
+                    if (resolvedHome) {
+                        match.home = resolvedHome.name;
+                        match.homeFlag = resolvedHome.flag;
+                    } else {
+                        match.home = "";
+                        match.homeFlag = "";
+                    }
+
+                    if (resolvedAway) {
+                        match.away = resolvedAway.name;
+                        match.awayFlag = resolvedAway.flag;
+                    } else {
+                        match.away = "";
+                        match.awayFlag = "";
+                    }
+                }
+            });
+        }
+
+        // Re-calculate the table points
+        function recalculateGroupStandings() {
+            Object.keys(groupStandings).forEach(g => {
+                groupStandings[g].forEach(team => {
+                    team.gp = 0; team.w = 0; team.d = 0; team.l = 0; team.gd = 0; team.pts = 0;
+                });
+            });
+
+            matchesData.forEach(match => {
+                if (match.homeScore !== null && match.awayScore !== null) {
+                    const g = match.group;
+                    const home = groupStandings[g].find(t => t.name === match.home);
+                    const away = groupStandings[g].find(t => t.name === match.away);
+
+                    if (home && away) {
+                        home.gp++;
+                        away.gp++;
+                        const hS = match.homeScore;
+                        const aS = match.awayScore;
+
+                        home.gd += (hS - aS);
+                        away.gd += (aS - hS);
+
+                        if (hS > aS) {
+                            home.w++; home.pts += 3; away.l++;
+                        } else if (hS < aS) {
+                            away.w++; away.pts += 3; home.l++;
+                        } else {
+                            home.d++; home.pts += 1; away.d++; away.pts += 1;
+                        }
+                    }
+                }
+            });
+
+            Object.keys(groupStandings).forEach(g => {
+                groupStandings[g].sort((a, b) => {
+                    if (b.pts !== a.pts) return b.pts - a.pts;
+                    if (b.gd !== a.gd) return b.gd - a.gd;
+                    return a.name.localeCompare(b.name);
+                });
+            });
+
+            resolveBracketTeams();
+        }
+
+        function renderMatches() {
+            const container = document.getElementById('matches-list');
+            const searchVal = document.getElementById('search-input').value.trim().toLowerCase();
+            const groupVal = document.getElementById('group-select-filter').value;
+
+            container.innerHTML = '';
+
+            let allMatchesResolved = [];
+            for (let id = 1; id <= 104; id++) {
+                allMatchesResolved.push(getMatchState(id));
+            }
+
+            const filtered = allMatchesResolved.filter(m => {
+                const isFav = favoritesList.includes(m.id);
+
+                if (searchVal) {
+                    const matchText = `${m.homeTeam.name} ${m.awayTeam.name}`.toLowerCase();
+                    return matchText.includes(searchVal);
+                }
+
+                if (groupVal && m.group !== groupVal) return false;
+                if (filterOnlyFavorites && !isFav) return false;
+
+                if (activeStatusFilter === 'live' && m.status !== 'live') return false;
+                if (activeStatusFilter === 'scheduled' && m.status !== 'scheduled') return false;
+                if (activeStatusFilter === 'finished' && m.status !== 'finished') return false;
+
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 space-y-2">
+                        <span class="text-4xl">🔍</span>
+                        <p class="text-xs text-gray-500 font-bold">Không tìm thấy trận đấu nào phù hợp</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const groupedByDate = {};
+            filtered.forEach(m => {
+                const datePart = m.time.split(' ')[0];
+                if (!groupedByDate[datePart]) groupedByDate[datePart] = [];
+                groupedByDate[datePart].push(m);
+            });
+
+            const sortedDates = Object.keys(groupedByDate).sort((a, b) => {
+                const [d1, m1] = a.split('/').map(Number);
+                const [d2, m2] = b.split('/').map(Number);
+                return (m1 * 31 + d1) - (m2 * 31 + d2);
+            });
+
+            sortedDates.forEach(date => {
+                const header = document.createElement('div');
+                header.className = "text-[10px] font-extrabold text-gray-400 dark:text-gray-500 uppercase tracking-widest pt-2 pl-1";
+                header.innerText = `Ngày ${date} / 2026`;
+                container.appendChild(header);
+
+                groupedByDate[date].forEach(match => {
+                    const isFav = favoritesList.includes(match.id);
+                    const card = document.createElement('div');
+                    card.className = "bg-white dark:bg-darkCard rounded-2xl p-4 shadow-sm border border-gray-150 dark:border-gray-800 flex items-center justify-between cursor-pointer active:scale-[0.99] transition-all duration-100";
+                    card.setAttribute('onclick', `openMatchModal(${match.id})`);
+
+                    let scoreHTML = `
+                        <div class="bg-gray-100 dark:bg-gray-800 text-[9px] text-gray-500 dark:text-gray-400 px-2 py-1 rounded-lg font-bold">
+                            ${match.time.split(' ')[1]}
+                        </div>
+                    `;
+
+                    if (match.status === 'finished') {
+                        scoreHTML = `
+                            <div class="flex flex-col items-center">
+                                <div class="flex items-center space-x-1.5 font-extrabold text-sm bg-gray-50 dark:bg-gray-900/50 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-gray-800">
+                                    <span class="${match.homeScore > match.awayScore ? 'text-green-500' : 'text-gray-600 dark:text-gray-400'}">${match.homeScore}</span>
+                                    <span class="text-gray-300 dark:text-gray-700">:</span>
+                                    <span class="${match.awayScore > match.homeScore ? 'text-green-500' : 'text-gray-600 dark:text-gray-400'}">${match.awayScore}</span>
+                                </div>
+                            </div>
+                        `;
+                    } else if (match.status === 'live') {
+                        scoreHTML = `
+                            <div class="flex flex-col items-center">
+                                <div class="flex items-center space-x-1.5 font-black text-xs bg-red-500/10 text-red-500 px-2 py-0.5 rounded-lg border border-red-500/20">
+                                    <span>${match.homeScore || 0}</span>
+                                    <span>:</span>
+                                    <span>${match.awayScore || 0}</span>
+                                </div>
+                                <span class="text-[8px] font-extrabold text-red-500 animate-pulse mt-1"><i class="fa-solid fa-circle text-[6px]"></i> LIVE ${match.elapsed}</span>
+                            </div>
+                        `;
+                    }
+
+                    const subInfo = match.id > 72 ? match.stage : `Bảng ${match.group}`;
+                    
+                    const homeFlagHTML = match.homeTeam.flag ? `<span class="text-base">${match.homeTeam.flag}</span>` : `<span class="text-gray-400 dark:text-gray-600 text-xs w-4 text-center"><i class="fa-solid fa-circle-question"></i></span>`;
+                    const awayFlagHTML = match.awayTeam.flag ? `<span class="text-base">${match.awayTeam.flag}</span>` : `<span class="text-gray-400 dark:text-gray-600 text-xs w-4 text-center"><i class="fa-solid fa-circle-question"></i></span>`;
+
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-3 w-[70%]">
+                            <button onclick="toggleFavorite(${match.id}, event)" class="text-gray-300 dark:text-gray-700 hover:text-yellow-500 transition-colors">
+                                <i class="${isFav ? 'fa-solid text-yellow-500' : 'fa-regular'} fa-star text-sm"></i>
+                            </button>
+                            
+                            <div class="space-y-1.5 flex-1 min-w-0">
+                                <div class="flex items-center space-x-2">
+                                    ${homeFlagHTML}
+                                    <span class="font-extrabold text-xs truncate">${match.homeTeam.name || "Chưa xác định"}</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    ${awayFlagHTML}
+                                    <span class="font-extrabold text-xs truncate">${match.awayTeam.name || "Chưa xác định"}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-end space-y-1 w-[30%]">
+                            ${scoreHTML}
+                            <span class="text-[8px] text-gray-400 dark:text-gray-500 font-extrabold uppercase tracking-wider">${subInfo} • ${match.tv.split(',')[0]}</span>
+                        </div>
+                    `;
+
+                    container.appendChild(card);
+                });
+            });
+        }
+
+        function renderStandings() {
+            const tbody = document.getElementById('standings-table-body');
+            tbody.innerHTML = '';
+
+            const list = groupStandings[selectedGroupForStandings] || [];
+            list.forEach((team, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors";
+
+                let numBadge = `
+                    <span class="inline-flex w-4 h-4 rounded text-[9px] font-bold items-center justify-center bg-gray-100 dark:bg-gray-850 text-gray-500">
+                        ${idx + 1}
+                    </span>
+                `;
+                if (idx < 2) {
+                    numBadge = `
+                        <span class="inline-flex w-4 h-4 rounded text-[9px] font-bold items-center justify-center bg-blue-500 text-white">
+                            ${idx + 1}
+                        </span>
+                    `;
+                }
+
+                tr.innerHTML = `
+                    <td class="py-3 flex items-center space-x-2 font-extrabold text-xs">
+                        ${numBadge}
+                        <span class="text-base">${team.flag}</span>
+                        <span class="truncate max-w-[100px]">${team.name}</span>
+                    </td>
+                    <td class="py-3 text-center text-gray-500 font-semibold">${team.gp}</td>
+                    <td class="py-3 text-center font-bold ${team.gd >= 0 ? 'text-green-500' : 'text-red-500'}">${team.gp > 0 ? (team.gd > 0 ? '+' : '') + team.gd : '0'}</td>
+                    <td class="py-3 text-center font-black text-green-500">${team.pts}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function switchStandingGroup(groupName, el) {
+            selectedGroupForStandings = groupName;
+            document.querySelectorAll('.standing-tab-btn').forEach(btn => {
+                btn.classList.remove('bg-green-500', 'text-white', 'shadow-sm');
+                btn.classList.add('bg-white', 'dark:bg-darkCard', 'text-gray-600', 'dark:text-gray-300', 'border', 'border-gray-200', 'dark:border-gray-800');
+            });
+            el.classList.add('bg-green-500', 'text-white', 'shadow-sm');
+            el.classList.remove('bg-white', 'dark:bg-darkCard', 'text-gray-600', 'dark:text-gray-300', 'border', 'border-gray-200', 'dark:border-gray-800');
+
+            document.getElementById('standing-group-title').innerText = `BẢNG XẾP HẠNG - BẢNG ${groupName}`;
+            renderStandings();
+        }
+
+        function renderKnockoutMatches() {
+            const container = document.getElementById('knockout-matches-list');
+            container.innerHTML = '';
+
+            let targetStageFilter = '';
+            if (activeKnockoutStage === 'r32') targetStageFilter = "Vòng 32 đội";
+            else if (activeKnockoutStage === 'r16') targetStageFilter = "Vòng 16 đội";
+            else if (activeKnockoutStage === 'qf') targetStageFilter = "Tứ kết";
+            else if (activeKnockoutStage === 'sf') targetStageFilter = "Bán kết/Chung kết/Tranh hạng ba";
+
+            const filteredKnockouts = [];
+            for (let i = 73; i <= 104; i++) {
+                const matchState = getMatchState(i);
+                
+                let matchesCategory = false;
+                if (targetStageFilter === "Bán kết/Chung kết/Tranh hạng ba") {
+                    matchesCategory = ["Bán kết", "Chung kết", "Tranh hạng ba"].includes(matchState.stage);
+                } else {
+                    matchesCategory = matchState.stage === targetStageFilter;
+                }
+
+                if (matchesCategory) {
+                    filteredKnockouts.push(matchState);
+                }
+            }
+
+            filteredKnockouts.forEach(match => {
+                const isFav = favoritesList.includes(match.id);
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-darkCard rounded-2xl p-4 shadow-sm border border-gray-150 dark:border-gray-800 flex items-center justify-between cursor-pointer transition-all active:scale-95";
+                card.setAttribute('onclick', `openMatchModal(${match.id})`);
+
+                let scoreHTML = `
+                    <div class="bg-gray-100 dark:bg-gray-800 text-[9px] text-gray-500 dark:text-gray-400 px-2.5 py-1 rounded-lg font-bold">
+                        ${match.time}
+                    </div>
+                `;
+
+                if (match.status === 'finished') {
+                    scoreHTML = `
+                        <div class="flex flex-col items-end">
+                            <div class="flex items-center space-x-1.5 font-bold text-sm bg-gray-50 dark:bg-gray-900/50 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-gray-800">
+                                <span>${match.homeScore}</span>
+                                <span>:</span>
+                                <span>${match.awayScore}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const homeFlagHTML = match.homeTeam.flag ? `<span class="text-base">${match.homeTeam.flag}</span>` : `<span class="text-gray-400 dark:text-gray-600 text-xs w-4 text-center"><i class="fa-solid fa-circle-question"></i></span>`;
+                const awayFlagHTML = match.awayTeam.flag ? `<span class="text-base">${match.awayTeam.flag}</span>` : `<span class="text-gray-400 dark:text-gray-600 text-xs w-4 text-center"><i class="fa-solid fa-circle-question"></i></span>`;
+
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3 w-[70%]">
+                        <button onclick="toggleFavorite(${match.id}, event)" class="text-gray-300 dark:text-gray-700 hover:text-yellow-500 transition-colors">
+                            <i class="${isFav ? 'fa-solid text-yellow-500' : 'fa-regular'} fa-star text-xs"></i>
+                        </button>
+                        
+                        <div class="space-y-1.5 flex-1 min-w-0">
+                            <div class="flex items-center space-x-2">
+                                ${homeFlagHTML}
+                                <span class="font-bold text-xs truncate">${match.homeTeam.name || "Chưa xác định"}</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                ${awayFlagHTML}
+                                <span class="font-bold text-xs truncate">${match.awayTeam.name || "Chưa xác định"}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-end space-y-1 w-[30%]">
+                        ${scoreHTML}
+                        <span class="text-[8px] text-gray-400 dark:text-gray-500 font-extrabold uppercase tracking-wider">Trận ${match.id} • ${match.tv.split(',')[0]}</span>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function switchKnockoutStage(stage, el) {
+            activeKnockoutStage = stage;
+            document.querySelectorAll('.ko-stage-btn').forEach(btn => {
+                btn.classList.remove('bg-green-500', 'text-white', 'shadow-sm');
+                btn.classList.add('bg-white', 'dark:bg-darkCard', 'text-gray-600', 'dark:text-gray-300', 'border', 'border-gray-200', 'dark:border-gray-800');
+            });
+            el.classList.add('bg-green-500', 'text-white', 'shadow-sm');
+            el.classList.remove('bg-white', 'dark:bg-darkCard', 'text-gray-600', 'dark:text-gray-300', 'border', 'border-gray-200', 'dark:border-gray-800');
+
+            renderKnockoutMatches();
+        }
+
+        // Run UI cycle updates
+        function runDataUpdateCycle() {
+            recalculateGroupStandings();
+            renderMatches();
+            renderStandings();
+            renderKnockoutMatches();
+            updateFavCount();
+            startCountdown();
+            updateModalIfOpen();
+        }
+
+        // SAVE REAL DATA SCORE (MANUALLY)
+        function saveManualScore() {
+            if (!selectedMatchId) return;
+
+            const homeInpVal = document.getElementById('input-home-score').value;
+            const awayInpVal = document.getElementById('input-away-score').value;
+
+            const isGroup = selectedMatchId <= 72;
+            const list = isGroup ? matchesData : knockoutMatchesData;
+            const match = list.find(m => m.id === selectedMatchId);
+
+            if (match) {
+                if (homeInpVal === "" || awayInpVal === "") {
+                    // Reset to unplayed
+                    match.homeScore = null;
+                    match.awayScore = null;
+                } else {
+                    match.homeScore = parseInt(homeInpVal);
+                    match.awayScore = parseInt(awayInpVal);
+                }
+
+                if (isGroup) {
+                    localStorage.setItem('wc_2026_matches_real', JSON.stringify(matchesData));
+                } else {
+                    localStorage.setItem('wc_2026_ko_real', JSON.stringify(knockoutMatchesData));
+                }
+
+                showToastStatus("Đã lưu tỷ số thực tế!");
+                runDataUpdateCycle();
+                closeMatchModal();
+            }
+        }
+
+        // SYNC SCORES WITH GOOGLE SEARCH POWERED BY GEMINI AI
+        async function syncScoreWithAI() {
+            if (!selectedMatchId) return;
+            const match = getMatchState(selectedMatchId);
+            if (!match) return;
+
+            if (!match.homeTeam.name || !match.awayTeam.name || match.homeTeam.name.includes("Nhất") || match.homeTeam.name.includes("Nhì") || match.homeTeam.name.includes("Thắng")) {
+                showToastStatus("Chưa xác định được cặp đấu cụ thể để đồng bộ!", true);
+                return;
+            }
+
+            const syncStatusEl = document.getElementById('sync-status');
+            const syncBtn = document.getElementById('btn-sync-ai');
+
+            syncStatusEl.innerText = "🔍 Đang tìm kiếm kết quả thực tế từ Google...";
+            syncStatusEl.classList.remove('hidden', 'bg-red-500/10', 'text-red-500', 'border-red-500/20');
+            syncStatusEl.classList.add('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+            syncBtn.disabled = true;
+
+            const systemPrompt = "Bạn là trợ lý dữ liệu thể thao World Cup 2026. Nhiệm vụ của bạn là tìm kiếm kết quả chính xác, thực tế của trận đấu được yêu cầu bằng Google Search. Phải trả về JSON chính xác theo cấu trúc được yêu cầu, không thêm văn bản giải thích nào khác.";
+            const userQuery = `Hãy tìm kết quả tỷ số thực tế chính xác của trận đấu bóng đá World Cup 2026 giữa ${match.homeTeam.name} và ${match.awayTeam.name} diễn ra vào ngày ${match.time}. Nếu trận đấu chưa diễn ra trong thực tế, hãy phản hồi trạng thái chưa diễn ra với isPlayed=false. Trả về định dạng JSON: { "status": "finished" | "live" | "scheduled", "homeScore": number | null, "awayScore": number | null, "isPlayed": boolean }`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            status: { type: "STRING" },
+                            homeScore: { type: "INTEGER", nullable: true },
+                            awayScore: { type: "INTEGER", nullable: true },
+                            isPlayed: { type: "BOOLEAN" }
+                        },
+                        required: ["status", "isPlayed"]
+                    }
+                }
+            };
+
+            const apiKey = ""; // Canvas handles API Key mapping internally
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                if (jsonText) {
+                    const data = JSON.parse(jsonText);
+                    if (data.isPlayed && data.homeScore !== null && data.awayScore !== null) {
+                        // Apply to storage
+                        const isGroup = selectedMatchId <= 72;
+                        const list = isGroup ? matchesData : knockoutMatchesData;
+                        const target = list.find(m => m.id === selectedMatchId);
+                        if (target) {
+                            target.homeScore = data.homeScore;
+                            target.awayScore = data.awayScore;
+
+                            if (isGroup) {
+                                localStorage.setItem('wc_2026_matches_real', JSON.stringify(matchesData));
+                            } else {
+                                localStorage.setItem('wc_2026_ko_real', JSON.stringify(knockoutMatchesData));
+                            }
+
+                            document.getElementById('input-home-score').value = data.homeScore;
+                            document.getElementById('input-away-score').value = data.awayScore;
+
+                            syncStatusEl.innerText = `✅ Đã đồng bộ tỉ số từ Google: ${match.homeTeam.name} ${data.homeScore} - ${data.awayScore} ${match.awayTeam.name}`;
+                            runDataUpdateCycle();
+                        }
+                    } else {
+                        syncStatusEl.innerText = "ℹ️ Google báo trận đấu này chưa đá hoặc chưa có tỉ số thực tế!";
+                        syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                        syncStatusEl.classList.add('bg-amber-500/10', 'text-amber-500', 'border-amber-500/20');
+                    }
+                } else {
+                    throw new Error("Invalid response format");
+                }
+            } catch (err) {
+                console.error(err);
+                syncStatusEl.innerText = "❌ Lỗi kết nối Google Search. Hãy thử nhập tỉ số thủ công!";
+                syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                syncStatusEl.classList.add('bg-red-500/10', 'text-red-500', 'border-red-500/20');
+            } finally {
+                syncBtn.disabled = false;
+            }
+        }
+
+        // Utility functions for UI actions
+        function showToastStatus(msg, isErr = false) {
+            const statusEl = document.getElementById('sync-status');
+            statusEl.innerText = msg;
+            statusEl.classList.remove('hidden', 'bg-red-500/10', 'text-red-500', 'border-red-500/20', 'bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+            statusEl.classList.add(isErr ? 'bg-red-500/10' : 'bg-green-500/10', isErr ? 'text-red-500' : 'text-green-500', isErr ? 'border-red-500/20' : 'border-green-500/20');
+            statusEl.classList.remove('hidden');
+        }
+
+        function setSimulatedTime(val) {
+            if (!val) {
+                resetSystemTime();
+                return;
+            }
+            simulatedTime = new Date(val);
+            isSimTimeActive = true;
+            document.getElementById('sim-status-label').innerText = `Giả lập: ${simulatedTime.toLocaleString('vi-VN')}`;
+            document.getElementById('sim-status-label').className = "text-[10px] font-extrabold text-center text-amber-500 bg-amber-500/10 rounded-lg py-1.5 border border-amber-500/20 uppercase tracking-wider";
+            runDataUpdateCycle();
+        }
+
+        function resetSystemTime() {
+            isSimTimeActive = false;
+            resetSimTimePickerUI();
+            document.getElementById('sim-status-label').innerText = "Đang chạy thời gian thực";
+            document.getElementById('sim-status-label').className = "text-[10px] font-extrabold text-center text-green-500 bg-green-500/10 rounded-lg py-1.5 border border-green-500/20 uppercase tracking-wider";
+            runDataUpdateCycle();
+        }
+
+        function resetSimTimePickerUI() {
+            const timeSource = getActiveTime();
+            const offset = timeSource.getTimezoneOffset() * 60000;
+            const localISOTime = (new Date(timeSource - offset)).toISOString().slice(0, 16);
+            document.getElementById('sim-time-picker').value = localISOTime;
+        }
+
+        function startCountdown() {
+            const kickoffTime = new Date('2026-06-12T02:00:00+07:00').getTime();
+            const now = getActiveTime().getTime();
+            const distance = kickoffTime - now;
+
+            const daysContainer = document.getElementById('timer-days');
+            if (!daysContainer) return;
+
+            if (distance < 0) {
+                document.getElementById('countdown-banner').innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-red-400 opacity-75"></span>
+                        <h3 class="text-sm font-black ml-5">WORLD CUP 2026 ĐANG DIỄN RA! ⚽</h3>
+                    </div>
+                `;
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('timer-days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('timer-hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('timer-mins').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('timer-secs').innerText = seconds.toString().padStart(2, '0');
+        }
+
+        function toggleFavorite(matchId, event) {
+            if (event) event.stopPropagation();
+            const index = favoritesList.indexOf(matchId);
+            if (index > -1) favoritesList.splice(index, 1);
+            else favoritesList.push(matchId);
+
+            localStorage.setItem('wc_2026_favs_vn', JSON.stringify(favoritesList));
+            updateFavCount();
+            renderMatches();
+            renderKnockoutMatches();
+        }
+
+        function updateFavCount() {
+            const countEl = document.getElementById('fav-count');
+            if (favoritesList.length > 0) {
+                countEl.innerText = favoritesList.length;
+                countEl.classList.remove('hidden');
+            } else {
+                countEl.classList.add('hidden');
+            }
+        }
+
+        function toggleFavoriteFilter() {
+            filterOnlyFavorites = !filterOnlyFavorites;
+            const btn = document.getElementById('favorite-toggle-btn');
+            if (filterOnlyFavorites) {
+                btn.classList.add('bg-green-100', 'dark:bg-green-950/40', 'text-green-500');
+                document.getElementById('filter-status-label').innerText = "Trận đấu yêu thích của bạn ⭐";
+            } else {
+                btn.classList.remove('bg-green-100', 'dark:bg-green-950/40', 'text-green-500');
+                document.getElementById('filter-status-label').innerText = "Lịch thi đấu Vòng bảng";
+            }
+            renderMatches();
+        }
+
+        function setStatusFilter(status, el) {
+            activeStatusFilter = status;
+            document.querySelectorAll('.status-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-green-500', 'text-white', 'shadow-sm');
+                btn.classList.add('bg-white', 'dark:bg-darkCard', 'text-gray-600', 'dark:text-gray-300', 'border', 'border-gray-200', 'dark:border-gray-800');
+            });
+            el.classList.add('bg-green-500', 'text-white', 'shadow-sm');
+            el.classList.remove('bg-white', 'dark:bg-darkCard', 'text-gray-600', 'dark:text-gray-300', 'border', 'border-gray-200', 'dark:border-gray-800');
+            
+            renderMatches();
+        }
+
+        function filterMatches() {
+            renderMatches();
+        }
+
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('wc_2026_theme_vn', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('wc_2026_theme_vn', 'dark');
+            }
+        }
+
+        function switchTab(tabId, el) {
+            document.getElementById('panel-matches').classList.add('hidden');
+            document.getElementById('panel-standings').classList.add('hidden');
+            document.getElementById('panel-bracket').classList.add('hidden');
+            document.getElementById('panel-utils').classList.add('hidden');
+
+            document.getElementById(`panel-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('nav-active');
+            });
+            el.classList.add('nav-active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openMatchModal(matchId) {
+            selectedMatchId = matchId;
+            document.getElementById('sync-status').classList.add('hidden');
+            updateModalIfOpen();
+            document.getElementById('match-modal').classList.remove('hidden');
+        }
+
+        function closeMatchModal() {
+            document.getElementById('match-modal').classList.add('hidden');
+            selectedMatchId = null;
+        }
+
+        function updateModalIfOpen() {
+            if (!selectedMatchId) return;
+            const match = getMatchState(selectedMatchId);
+            if (!match) return;
+
+            document.getElementById('modal-group').innerText = match.id > 72 ? match.stage : `Bảng ${match.group}`;
+            document.getElementById('modal-home-flag').innerText = match.homeTeam.flag || "🏳️";
+            document.getElementById('modal-home-name').innerText = match.homeTeam.name || "Chưa xác định";
+            document.getElementById('modal-away-flag').innerText = match.awayTeam.flag || "🏳️";
+            document.getElementById('modal-away-name').innerText = match.awayTeam.name || "Chưa xác định";
+
+            document.getElementById('input-home-score').value = match.homeScore !== null ? match.homeScore : '';
+            document.getElementById('input-away-score').value = match.awayScore !== null ? match.awayScore : '';
+
+            const statusEl = document.getElementById('modal-status');
+            if (match.status === 'live') {
+                statusEl.innerText = `TRỰC TIẾP ${match.elapsed}`;
+                statusEl.className = "text-[9px] text-red-500 font-extrabold animate-pulse uppercase mt-1.5 tracking-wider px-2 py-0.5 rounded bg-red-500/10";
+            } else if (match.status === 'finished') {
+                statusEl.innerText = "KẾT THÚC";
+                statusEl.className = "text-[9px] text-green-500 font-extrabold uppercase mt-1.5 tracking-wider px-2 py-0.5 rounded bg-green-500/10";
+            } else {
+                statusEl.innerText = "CHƯA DIỄN RA";
+                statusEl.className = "text-[9px] text-gray-400 font-bold uppercase mt-1.5 tracking-wider px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800";
+            }
+
+            document.getElementById('modal-stage').innerText = match.stage;
+            document.getElementById('modal-time').innerText = `${match.time.split(' ')[1]}, ngày ${match.time.split(' ')[0]}/2026`;
+            document.getElementById('modal-stadium').innerText = match.stadium;
+            document.getElementById('modal-tv').innerText = match.tv;
+        }
+
+        resetSimTimePickerUI();
+        runDataUpdateCycle();
+
+        // Thay đổi chu kỳ cập nhật thành 1 giây (1000ms) để bộ đếm ngược và trạng thái giả lập hoạt động mượt mà
+        setInterval(() => {
+            if (isSimTimeActive) {
+                // Tự động đẩy thời gian giả lập tiến lên 1 giây sau mỗi giây thực tế
+                simulatedTime = new Date(simulatedTime.getTime() + 1000);
+                
+                // Đồng bộ cập nhật lại giao diện người chọn thời gian giả lập
+                const offset = simulatedTime.getTimezoneOffset() * 60000;
+                const localISOTime = (new Date(simulatedTime - offset)).toISOString().slice(0, 16);
+                document.getElementById('sim-time-picker').value = localISOTime;
+                document.getElementById('sim-status-label').innerText = `Giả lập: ${simulatedTime.toLocaleString('vi-VN')}`;
+            }
+            runDataUpdateCycle();
+        }, 1000);
+    </script>
+</body>
+</html>
