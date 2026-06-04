@@ -146,7 +146,7 @@
                     <i id="global-sync-icon" class="fa-solid fa-cloud-arrow-down animate-bounce text-sm"></i>
                     <span id="global-sync-text">Đồng bộ tất cả tỉ số thực tế (AI)</span>
                 </button>
-                <div id="global-sync-status" class="hidden text-center text-[10px] font-bold text-indigo-500 bg-indigo-500/10 rounded-xl py-2 px-3 border border-indigo-500/20 transition-all duration-350">
+                <div id="global-sync-status" class="hidden text-center text-[10px] font-bold text-indigo-500 bg-indigo-500/10 rounded-xl py-2.5 px-3 border border-indigo-500/20 transition-all duration-350">
                     Sẵn sàng cập nhật từ Google Search...
                 </div>
             </div>
@@ -283,6 +283,26 @@
         <!-- PANEL 4: TIỆN ÍCH & TRÌNH ĐIỀU KHIỂN HỆ THỐNG -->
         <div id="panel-utils" class="hidden space-y-4">
             
+            <!-- SECURE GEMINI API CONFIGURATION (FOR MOBILE PHONE RUNTIME) -->
+            <div class="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 rounded-2xl p-4 shadow-sm space-y-3">
+                <div class="flex items-center justify-between text-indigo-500">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-key text-lg"></i>
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider">Cấu hình Google Gemini API</h3>
+                    </div>
+                    <span class="text-[8px] bg-indigo-500 text-white font-black px-1.5 py-0.5 rounded">TÙY CHỌN</span>
+                </div>
+                <p class="text-[10px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold">
+                    Khi mở app trên điện thoại (PWA), hãy dán **Gemini API Key** của bạn để tính năng đồng bộ tự động hoạt động trơn tru. 
+                    <a href="https://aistudio.google.com/" target="_blank" class="text-indigo-500 hover:underline font-black">Lấy Key miễn phí tại đây ↗</a>
+                </p>
+                <div class="space-y-1.5">
+                    <input type="password" id="gemini-api-key-input" onkeyup="saveGeminiKey()" placeholder="Nhập API Key của bạn (AIzaSy...)" 
+                        class="w-full p-2.5 text-xs bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono">
+                    <p id="gemini-key-status" class="text-[9px] font-bold text-gray-400">Chưa cấu hình (Hệ thống sẽ chạy thử ở Canvas)</p>
+                </div>
+            </div>
+
             <!-- PWA INSTALL MANUAL BUTTON IN UTILS -->
             <div class="bg-white dark:bg-darkCard rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-gray-800 space-y-3">
                 <div class="flex items-center space-x-2.5 text-green-600 dark:text-green-500">
@@ -748,7 +768,7 @@
             { id: 66, home: "New Zealand", homeFlag: "🇳🇿", away: "Bỉ", awayFlag: "🇧🇪", group: "G", time: "27/06 10:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV5" },
             // Day 28/06
             { id: 67, home: "Croatia", homeFlag: "🇭🇷", away: "Ghana", awayFlag: "🇬🇭", group: "L", time: "28/06 04:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV2" },
-            { id: 68, home: "Panama", homeFlag: "🇵🇦", away: "Anh", awayFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", group: "L", time: "28/06 04:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
+            { id: 68, home: "Panama", homeFlag: "🇵🇦", away: "Anh", awayFlag: "🏴󠁧󠁢󠁥󠁮ijk", group: "L", time: "28/06 04:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
             { id: 70, home: "Colombia", homeFlag: "🇨🇴", away: "Bồ Đào Nha", awayFlag: "🇵🇹", group: "K", time: "28/06 06:30", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
             { id: 69, home: "CHDC Congo", homeFlag: "🇨🇩", away: "Uzbekistan", awayFlag: "🇺🇿", group: "K", time: "28/06 06:30", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV5" },
             { id: 71, home: "Algeria", homeFlag: "🇩🇿", away: "Áo", awayFlag: "🇦🇹", group: "J", time: "28/06 09:00", stage: "Vòng bảng", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV2" },
@@ -802,13 +822,13 @@
         ];
 
         // Core dynamic arrays and states
-        let matchesData = JSON.parse(localStorage.getItem('wc_2026_matches_real')) || staticMatchesData.map(m => ({
+        let matchesData = JSON.parse(localStorage.getItem('wc_2026_matches_real_v2')) || staticMatchesData.map(m => ({
             ...m,
             homeScore: null,
             awayScore: null
         }));
 
-        let knockoutMatchesData = JSON.parse(localStorage.getItem('wc_2026_ko_real')) || baseKnockoutMatches.map(m => ({
+        let knockoutMatchesData = JSON.parse(localStorage.getItem('wc_2026_ko_real_v2')) || baseKnockoutMatches.map(m => ({
             ...m,
             homeScore: null,
             awayScore: null,
@@ -838,8 +858,43 @@
             }));
         });
 
+        // Retrieves user key or falls back to Canvas environment placeholder
+        function getGeminiApiKey() {
+            return localStorage.getItem('user_gemini_api_key') || "";
+        }
+
+        // Saves user API key securely inside local storage
+        function saveGeminiKey() {
+            const key = document.getElementById('gemini-api-key-input').value.trim();
+            localStorage.setItem('user_gemini_api_key', key);
+            updateApiKeyStatusLabel();
+        }
+
+        function updateApiKeyStatusLabel() {
+            const key = getGeminiApiKey();
+            const statusLabel = document.getElementById('gemini-key-status');
+            if (key) {
+                statusLabel.innerText = "✅ Đã cấu hình khóa API tùy chỉnh!";
+                statusLabel.className = "text-[9px] font-bold text-green-500";
+            } else {
+                statusLabel.innerText = "ℹ️ Chưa cấu hình khóa. Sẽ tự dùng phím hệ thống nếu chạy trong Canvas.";
+                statusLabel.className = "text-[9px] font-bold text-gray-400";
+            }
+        }
+
         function getActiveTime() {
             return isSimTimeActive ? simulatedTime : new Date();
+        }
+
+        function sanitizeAndParseJson(rawText) {
+            try {
+                // Loại bỏ bọc thẻ markdown ```json và ``` nếu có
+                let cleanText = rawText.replace(/```json/gi, "").replace(/```/g, "").trim();
+                return JSON.parse(cleanText);
+            } catch (err) {
+                console.error("Lỗi parse JSON thô:", rawText);
+                throw new Error("Không thể chuyển đổi định dạng phản hồi từ AI.");
+            }
         }
 
         async function syncAllScoresWithAI() {
@@ -858,8 +913,8 @@
             syncStatusEl.classList.add('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
             syncStatusEl.classList.remove('hidden');
 
-            const systemPrompt = "Bạn là trợ lý dữ liệu thể thao World Cup 2026. Nhiệm vụ của bạn là sử dụng Google Search để tìm kiếm kết quả tỷ số thực tế của tất cả các trận đấu World Cup 2026 đã diễn ra tính đến ngày hôm nay. Trả về mảng dữ liệu JSON có cấu trúc cực kỳ chính xác.";
-            const userQuery = `Hãy tra cứu kết quả thực tế của tất cả các trận đấu bóng đá thuộc giải World Cup 2026 đã thi đấu tính đến hôm nay. Chỉ trả về các trận đấu đã thực sự kết thúc và có tỉ số chính xác. Trả về dưới dạng một mảng JSON chứa các đối tượng có cấu trúc chính xác: [ { "id": 1, "homeScore": 2, "awayScore": 1 }, { "id": 2, "homeScore": 0, "awayScore": 0 } ]. Chỉ chứa các trận có tỉ số thực tế, không bịa đặt, không chứa thêm chữ giải thích nào ngoài mã JSON.`;
+            const systemPrompt = "Bạn là trợ lý dữ liệu thể thao World Cup 2026. Nhiệm vụ của bạn là sử dụng Google Search để tìm kiếm kết quả tỷ số thực tế của tất cả các trận đấu World Cup 2026 đã diễn ra tính đến ngày hôm nay. Trả về mảng dữ liệu JSON chính xác mà không thêm bất kỳ văn bản giải thích nào xung quanh.";
+            const userQuery = `Hãy tra cứu kết quả thực tế của tất cả các trận đấu bóng đá thuộc giải World Cup 2026 đã thi đấu tính đến hôm nay. Chỉ trả về các trận đấu đã thực sự kết thúc và có tỉ số chính xác. Trả về dưới dạng một mảng JSON chứa các đối tượng có cấu trúc chính xác: [ { "id": 1, "homeScore": 2, "awayScore": 1 }, { "id": 2, "homeScore": 0, "awayScore": 0 } ]. Không chứa thêm chữ giải thích nào ngoài mã JSON.`;
 
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
@@ -884,9 +939,8 @@
                 }
             };
 
-            const apiKey = ""; 
-            // Đã fix: Thay đổi tên model từ gemini-3-flash-preview sang gemini-2.5-flash-preview-09-2025 chuẩn môi trường Sandbox
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const apiKey = getGeminiApiKey();
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -895,11 +949,18 @@
                     body: JSON.stringify(payload)
                 });
                 
+                if (!response.ok) {
+                    if (response.status === 400 || response.status === 403) {
+                        throw new Error("LỖI_KHÓA_API");
+                    }
+                    throw new Error("Kết nối API thất bại.");
+                }
+
                 const result = await response.json();
                 const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
                 
                 if (jsonText) {
-                    const scoresArray = JSON.parse(jsonText);
+                    const scoresArray = sanitizeAndParseJson(jsonText);
                     
                     if (Array.isArray(scoresArray) && scoresArray.length > 0) {
                         let updatedCount = 0;
@@ -917,8 +978,8 @@
                         });
 
                         // Save updated data
-                        localStorage.setItem('wc_2026_matches_real', JSON.stringify(matchesData));
-                        localStorage.setItem('wc_2026_ko_real', JSON.stringify(knockoutMatchesData));
+                        localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
+                        localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
 
                         syncStatusEl.innerText = `✅ Đã đồng bộ thành công kết quả thực tế của ${updatedCount} trận đấu từ Google Search!`;
                         syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
@@ -935,7 +996,11 @@
                 }
             } catch (err) {
                 console.error(err);
-                syncStatusEl.innerText = "❌ Lỗi kết nối máy chủ Google Search. Vui lòng thử lại sau hoặc nhập thủ công!";
+                if (err.message === "LỖI_KHÓA_API") {
+                    syncStatusEl.innerHTML = "❌ Lỗi xác thực khóa API trên điện thoại. Hãy cấu hình <b>Gemini API Key</b> tùy chỉnh tại tab <b>Giả lập</b> để khắc phục triệt để!";
+                } else {
+                    syncStatusEl.innerText = "❌ Lỗi kết nối Google Search hoặc phân tích dữ liệu. Vui lòng thử lại sau!";
+                }
                 syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
                 syncStatusEl.classList.add('bg-red-500/10', 'text-red-500', 'border-red-500/20');
             } finally {
@@ -1468,9 +1533,9 @@
                 }
 
                 if (isGroup) {
-                    localStorage.setItem('wc_2026_matches_real', JSON.stringify(matchesData));
+                    localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
                 } else {
-                    localStorage.setItem('wc_2026_ko_real', JSON.stringify(knockoutMatchesData));
+                    localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
                 }
 
                 showToastStatus("Đã lưu tỷ số thực tế!");
@@ -1495,6 +1560,7 @@
             syncStatusEl.innerText = "🔍 Đang tìm kiếm kết quả thực tế từ Google...";
             syncStatusEl.classList.remove('hidden', 'bg-red-500/10', 'text-red-500', 'border-red-500/20');
             syncStatusEl.classList.add('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+            syncStatusEl.classList.remove('hidden');
             syncBtn.disabled = true;
 
             const systemPrompt = "Bạn là trợ lý dữ liệu thể thao World Cup 2026. Nhiệm vụ của bạn là tìm kiếm kết quả chính xác, thực tế của trận đấu được yêu cầu bằng Google Search. Phải trả về JSON chính xác theo cấu trúc được yêu cầu, không thêm văn bản giải thích nào khác.";
@@ -1521,9 +1587,8 @@
                 }
             };
 
-            const apiKey = ""; 
-            // Đã fix: Thay đổi tên model từ gemini-3-flash-preview sang gemini-2.5-flash-preview-09-2025 chuẩn môi trường Sandbox
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const apiKey = getGeminiApiKey();
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -1532,11 +1597,18 @@
                     body: JSON.stringify(payload)
                 });
                 
+                if (!response.ok) {
+                    if (response.status === 400 || response.status === 403) {
+                        throw new Error("LỖI_KHÓA_API");
+                    }
+                    throw new Error("Kết nối API thất bại.");
+                }
+
                 const result = await response.json();
                 const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
                 
                 if (jsonText) {
-                    const data = JSON.parse(jsonText);
+                    const data = sanitizeAndParseJson(jsonText);
                     if (data.isPlayed && data.homeScore !== null && data.awayScore !== null) {
                         const isGroup = selectedMatchId <= 72;
                         const list = isGroup ? matchesData : knockoutMatchesData;
@@ -1546,9 +1618,9 @@
                             target.awayScore = data.awayScore;
 
                             if (isGroup) {
-                                localStorage.setItem('wc_2026_matches_real', JSON.stringify(matchesData));
+                                localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
                             } else {
-                                localStorage.setItem('wc_2026_ko_real', JSON.stringify(knockoutMatchesData));
+                                localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
                             }
 
                             document.getElementById('input-home-score').value = data.homeScore;
@@ -1567,7 +1639,11 @@
                 }
             } catch (err) {
                 console.error(err);
-                syncStatusEl.innerText = "❌ Lỗi kết nối Google Search. Hãy thử nhập tỉ số thủ công!";
+                if (err.message === "LỖI_KHÓA_API") {
+                    syncStatusEl.innerHTML = "❌ Lỗi xác thực. Bạn đang chạy ngoài Canvas? Hãy nhập <b>API Key</b> ở tab <b>Giả lập</b> để kết nối máy chủ!";
+                } else {
+                    syncStatusEl.innerText = "❌ Lỗi kết nối Google Search. Hãy nhập tỉ số thủ công!";
+                }
                 syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
                 syncStatusEl.classList.add('bg-red-500/10', 'text-red-500', 'border-red-500/20');
             } finally {
@@ -1759,6 +1835,13 @@
             document.getElementById('modal-stadium').innerText = match.stadium;
             document.getElementById('modal-tv').innerText = match.tv;
         }
+
+        // Initialize key values and setup view updates
+        const savedKey = getGeminiApiKey();
+        if (savedKey) {
+            document.getElementById('gemini-api-key-input').value = savedKey;
+        }
+        updateApiKeyStatusLabel();
 
         resetSimTimePickerUI();
         runDataUpdateCycle();
