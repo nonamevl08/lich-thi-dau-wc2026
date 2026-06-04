@@ -12,9 +12,9 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#14532d">
     
-    <!-- Dynamic PWA App Icon (Sleek Golden Cup SVG Logo) -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'><rect width='512' height='512' rx='120' fill='%2314532d'/><circle cx='256' cy='256' r='200' fill='none' stroke='%2322c55e' stroke-width='6' opacity='0.2'/><text x='256' y='160' font-family='sans-serif' font-size='70' font-weight='900' fill='%2322c55e' text-anchor='middle'>2026</text><text x='256' y='320' font-family='sans-serif' font-size='130' text-anchor='middle'>🏆</text><text x='256' y='440' font-family='sans-serif' font-size='42' font-weight='bold' fill='white' text-anchor='middle'>WORLD CUP</text></svg>">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'><rect width='512' height='512' rx='120' fill='%2314532d'/><circle cx='256' cy='256' r='200' fill='none' stroke='%2322c55e' stroke-width='6' opacity='0.2'/><text x='256' y='160' font-family='sans-serif' font-size='70' font-weight='900' fill='%2322c55e' text-anchor='middle'>2026</text><text x='256' y='320' font-family='sans-serif' font-size='130' text-anchor='middle'>🏆</text><text x='256' y='440' font-family='sans-serif' font-size='42' font-weight='bold' fill='white' text-anchor='middle'>WORLD CUP</text></svg>">
+    <!-- Dynamic PWA App Icon using official brand identity -->
+    <link rel="apple-touch-icon" href="image_6aef43.png">
+    <link rel="icon" type="image/png" href="image_6aef43.png">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -439,8 +439,8 @@
 
             <div class="flex items-center space-x-4 p-3 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-150 dark:border-gray-800/80 mb-5">
                 <!-- App Icon inside Modal -->
-                <div class="w-14 h-14 rounded-2xl shadow-md overflow-hidden bg-green-950 flex-shrink-0 flex items-center justify-center text-3xl select-none">
-                    🏆
+                <div class="w-14 h-14 rounded-2xl shadow-md overflow-hidden bg-black flex-shrink-0 flex items-center justify-center select-none">
+                    <img src="image_6aef43.png" alt="World Cup 2026 Icon" class="w-full h-full object-cover">
                 </div>
                 <div>
                     <h4 class="font-extrabold text-xs text-gray-800 dark:text-white leading-tight">World Cup 2026 Pro</h4>
@@ -523,8 +523,7 @@
     <script>
         let deferredPrompt = null;
 
-        // Tự động tạo và đính kèm Web App Manifest dạng inline
-        const appIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" rx="120" fill="#14532d"/><circle cx="256" cy="256" r="200" fill="none" stroke="#22c55e" stroke-width="6" opacity="0.2"/><text x="256" y="160" font-family="sans-serif" font-size="70" font-weight="900" fill="#22c55e" text-anchor="middle">2026</text><text x="256" y="320" font-family="sans-serif" font-size="130" text-anchor="middle">🏆</text><text x="256" y="440" font-family="sans-serif" font-size="42" font-weight="bold" fill="white" text-anchor="middle">WORLD CUP</text></svg>`;
+        // Tự động tạo và đính kèm Web App Manifest dạng inline dùng logo chính thức
         const manifestObj = {
             "name": "Lịch Thi Đấu World Cup 2026 - Báo Nhân Dân",
             "short_name": "World Cup 2026",
@@ -535,9 +534,9 @@
             "theme_color": "#14532d",
             "icons": [
                 {
-                    "src": `data:image/svg+xml;utf8,${encodeURIComponent(appIconSvg)}`,
+                    "src": "image_6aef43.png",
                     "sizes": "192x192 512x512",
-                    "type": "image/svg+xml",
+                    "type": "image/png",
                     "purpose": "any maskable"
                 }
             ]
@@ -557,7 +556,6 @@
                     self.skipWaiting();
                 });
                 self.addEventListener('fetch', (e) => {
-                    // Cho phép tải qua mạng bình thường nhưng vẫn giữ nguyên cấu trúc PWA
                     e.respondWith(fetch(e.request).catch(() => new Response("Đang ngoại tuyến")));
                 });
             `;
@@ -570,16 +568,13 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            // Hiển thị Banner cài đặt ở phía trên cùng màn hình
             const isDismissed = localStorage.getItem('pwa_banner_dismissed_vn') === 'true';
             if (!isDismissed) {
                 document.getElementById('pwa-install-banner').classList.remove('hidden');
             }
-            // Mở cấu trúc nút cài đặt của Android trong hộp thoại hướng dẫn
             document.getElementById('pwa-android-section').classList.remove('hidden');
         });
 
-        // Kiểm tra thiết bị và hiển thị banner ban đầu nếu là iOS Safari chưa cài đặt
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
         
@@ -890,7 +885,8 @@
             };
 
             const apiKey = ""; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            // Đã fix: Thay đổi tên model từ gemini-3-flash-preview sang gemini-2.5-flash-preview-09-2025 chuẩn môi trường Sandbox
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -996,24 +992,20 @@
             };
         }
 
-        // Calculations for automatic bracket advancement
         function getKnockoutQualifiedMap() {
             const map = {};
             const thirdPlaces = [];
 
-            // Đếm số trận đã hoàn thành thực tế của từng bảng đấu
             const groupCompletedCount = {};
             Object.keys(groupsData).forEach(g => {
                 groupCompletedCount[g] = matchesData.filter(m => m.group === g && m.homeScore !== null && m.awayScore !== null).length;
             });
 
-            // Tổng số trận vòng bảng đã hoàn thành trên toàn giải đấu
             const totalCompletedMatches = Object.values(groupCompletedCount).reduce((a, b) => a + b, 0);
 
             Object.keys(groupStandings).forEach(g => {
                 const list = groupStandings[g];
                 
-                // CHỈ xác định Nhất & Nhì bảng khi cả 6 trận của bảng đó đã đá xong thực tế
                 if (groupCompletedCount[g] === 6) {
                     map[`Nhất bảng ${g}`] = list[0] ? { name: list[0].name, flag: list[0].flag } : null;
                     map[`Nhì bảng ${g}`] = list[1] ? { name: list[1].name, flag: list[1].flag } : null;
@@ -1033,9 +1025,7 @@
                 }
             });
 
-            // CHỈ xác định 8 đội tuyển hạng 3 tốt nhất khi cả 72 trận vòng bảng đã đá xong hoàn toàn
             if (totalCompletedMatches === 72) {
-                // Sắp xếp các đội tuyển hạng 3 theo thứ tự ưu tiên
                 thirdPlaces.sort((a, b) => b.pts !== a.pts ? b.pts - a.pts : b.gd - a.gd);
 
                 map['Thứ 3 bảng A/B/C/D/F'] = thirdPlaces[0] || null;
@@ -1060,52 +1050,10 @@
             return map;
         }
 
-        function getMatchState(matchId) {
-            const isGroup = matchId <= 72;
-            const match = isGroup ? matchesData.find(m => m.id === matchId) : knockoutMatchesData.find(m => m.id === matchId);
-            if (!match) return null;
-
-            let homeTeamName = isGroup ? match.home : match.home || match.homePlaceholder;
-            let awayTeamName = isGroup ? match.away : match.away || match.awayPlaceholder;
-            
-            // Nếu chưa có đội cụ thể cho vòng knockout, không hiển thị cờ giả lập
-            let homeFlag = isGroup ? match.homeFlag : (match.home ? match.homeFlag : "");
-            let awayFlag = isGroup ? match.awayFlag : (match.away ? match.awayFlag : "");
-
-            const now = getActiveTime();
-            const matchTime = parseMatchTime(match.time);
-            const endTime = new Date(matchTime.getTime() + (105 * 60 * 1000)); 
-
-            let status = 'scheduled';
-            if (match.homeScore !== null && match.awayScore !== null) {
-                status = 'finished';
-            } else {
-                if (now >= matchTime && now < endTime) {
-                    status = 'live';
-                }
-            }
-
-            return {
-                id: matchId,
-                homeTeam: { name: homeTeamName, flag: homeFlag },
-                awayTeam: { name: awayTeamName, flag: awayFlag },
-                status: status,
-                homeScore: match.homeScore,
-                awayScore: match.awayScore,
-                elapsed: status === 'live' ? `${Math.floor((now - matchTime) / 60000)}'` : null,
-                time: match.time,
-                stage: match.stage,
-                group: match.group || 'Knockout',
-                stadium: match.stadium,
-                tv: match.tv
-            };
-        }
-
         function resolveBracketTeams() {
             const map = getKnockoutQualifiedMap();
 
             knockoutMatchesData.forEach(match => {
-                // Điền thông tin cho vòng 32 đội dựa trên sơ đồ liên kết
                 if (match.id >= 73 && match.id <= 88) {
                     if (map[match.homePlaceholder]) {
                         match.home = map[match.homePlaceholder].name;
@@ -1124,7 +1072,6 @@
                     }
                 }
 
-                // Điền thông tin cho các vòng tiếp theo (Thắng Trận X)
                 const resolvePlaceholder = (ph) => {
                     if (ph.startsWith("Thắng Trận")) {
                         const prevId = parseInt(ph.replace("Thắng Trận ", ""));
@@ -1177,7 +1124,6 @@
             });
         }
 
-        // Re-calculate the table points
         function recalculateGroupStandings() {
             Object.keys(groupStandings).forEach(g => {
                 groupStandings[g].forEach(team => {
@@ -1492,7 +1438,6 @@
             renderKnockoutMatches();
         }
 
-        // Run UI cycle updates
         function runDataUpdateCycle() {
             recalculateGroupStandings();
             renderMatches();
@@ -1503,7 +1448,6 @@
             updateModalIfOpen();
         }
 
-        // SAVE REAL DATA SCORE (MANUALLY)
         function saveManualScore() {
             if (!selectedMatchId) return;
 
@@ -1516,7 +1460,6 @@
 
             if (match) {
                 if (homeInpVal === "" || awayInpVal === "") {
-                    // Reset to unplayed
                     match.homeScore = null;
                     match.awayScore = null;
                 } else {
@@ -1536,7 +1479,6 @@
             }
         }
 
-        // SYNC SCORES WITH GOOGLE SEARCH POWERED BY GEMINI AI
         async function syncScoreWithAI() {
             if (!selectedMatchId) return;
             const match = getMatchState(selectedMatchId);
@@ -1579,8 +1521,9 @@
                 }
             };
 
-            const apiKey = ""; // Canvas handles API Key mapping internally
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            const apiKey = ""; 
+            // Đã fix: Thay đổi tên model từ gemini-3-flash-preview sang gemini-2.5-flash-preview-09-2025 chuẩn môi trường Sandbox
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -1595,7 +1538,6 @@
                 if (jsonText) {
                     const data = JSON.parse(jsonText);
                     if (data.isPlayed && data.homeScore !== null && data.awayScore !== null) {
-                        // Apply to storage
                         const isGroup = selectedMatchId <= 72;
                         const list = isGroup ? matchesData : knockoutMatchesData;
                         const target = list.find(m => m.id === selectedMatchId);
@@ -1633,7 +1575,6 @@
             }
         }
 
-        // Utility functions for UI actions
         function showToastStatus(msg, isErr = false) {
             const statusEl = document.getElementById('sync-status');
             statusEl.innerText = msg;
@@ -1822,13 +1763,9 @@
         resetSimTimePickerUI();
         runDataUpdateCycle();
 
-        // Thay đổi chu kỳ cập nhật thành 1 giây (1000ms) để bộ đếm ngược và trạng thái giả lập hoạt động mượt mà
         setInterval(() => {
             if (isSimTimeActive) {
-                // Tự động đẩy thời gian giả lập tiến lên 1 giây sau mỗi giây thực tế
                 simulatedTime = new Date(simulatedTime.getTime() + 1000);
-                
-                // Đồng bộ cập nhật lại giao diện người chọn thời gian giả lập
                 const offset = simulatedTime.getTimezoneOffset() * 60000;
                 const localISOTime = (new Date(simulatedTime - offset)).toISOString().slice(0, 16);
                 document.getElementById('sim-time-picker').value = localISOTime;
