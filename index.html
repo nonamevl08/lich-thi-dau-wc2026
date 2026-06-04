@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lịch Thi Đấu World Cup 2026 - Dữ liệu Thực tế</title>
+    
+    <!-- PWA & Mobile Web App Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="World Cup 2026">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#14532d">
+    
+    <!-- Dynamic PWA App Icon (Sleek Golden Cup SVG Logo) -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'><rect width='512' height='512' rx='120' fill='%2314532d'/><circle cx='256' cy='256' r='200' fill='none' stroke='%2322c55e' stroke-width='6' opacity='0.2'/><text x='256' y='160' font-family='sans-serif' font-size='70' font-weight='900' fill='%2322c55e' text-anchor='middle'>2026</text><text x='256' y='320' font-family='sans-serif' font-size='130' text-anchor='middle'>🏆</text><text x='256' y='440' font-family='sans-serif' font-size='42' font-weight='bold' fill='white' text-anchor='middle'>WORLD CUP</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'><rect width='512' height='512' rx='120' fill='%2314532d'/><circle cx='256' cy='256' r='200' fill='none' stroke='%2322c55e' stroke-width='6' opacity='0.2'/><text x='256' y='160' font-family='sans-serif' font-size='70' font-weight='900' fill='%2322c55e' text-anchor='middle'>2026</text><text x='256' y='320' font-family='sans-serif' font-size='130' text-anchor='middle'>🏆</text><text x='256' y='440' font-family='sans-serif' font-size='42' font-weight='bold' fill='white' text-anchor='middle'>WORLD CUP</text></svg>">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -54,12 +66,27 @@
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-darkBg dark:text-gray-100 transition-colors duration-300 min-h-screen pb-24">
 
+    <!-- PWA INSTALL BANNER (TOP ALERT) -->
+    <div id="pwa-install-banner" class="hidden bg-gradient-to-r from-green-850 to-emerald-950 border-b border-green-500/20 text-white px-4 py-2.5 flex items-center justify-between text-xs transition-all duration-300">
+        <div class="flex items-center space-x-3">
+            <span class="text-xl">📱</span>
+            <div>
+                <p class="font-extrabold text-green-400">Trải nghiệm mượt mà như App!</p>
+                <p class="text-[9px] text-gray-300 font-semibold">Thêm nhanh vào màn hình chính điện thoại</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2">
+            <button onclick="showInstallInstructions()" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg font-black text-[10px] uppercase shadow active:scale-95 transition-all">Thêm ngay</button>
+            <button onclick="dismissInstallBanner()" class="text-gray-400 hover:text-white px-1 text-sm"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    </div>
+
     <header class="sticky top-0 z-50 bg-white/90 dark:bg-darkBg/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 px-4 py-3 flex items-center justify-between shadow-sm">
         <div class="flex items-center space-x-2">
             <span class="text-2xl">🏆</span>
             <div>
                 <h1 class="text-sm font-extrabold tracking-tight leading-none text-green-600 dark:text-green-500">WORLD CUP 2026</h1>
-                <p class="text-[9px] text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase">Dữ liệu từ Báo Nhân Dân</p>
+                <p class="text-[9px] text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase">Dữ liệu Báo Nhân Dân - Thực Tế</p>
             </div>
         </div>
         
@@ -255,6 +282,22 @@
 
         <!-- PANEL 4: TIỆN ÍCH & TRÌNH ĐIỀU KHIỂN HỆ THỐNG -->
         <div id="panel-utils" class="hidden space-y-4">
+            
+            <!-- PWA INSTALL MANUAL BUTTON IN UTILS -->
+            <div class="bg-white dark:bg-darkCard rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-gray-800 space-y-3">
+                <div class="flex items-center space-x-2.5 text-green-600 dark:text-green-500">
+                    <i class="fa-solid fa-mobile-screen-button text-lg animate-pulse"></i>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider">Cài đặt Ứng dụng di động</h3>
+                </div>
+                <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                    Đưa toàn bộ lịch thi đấu 104 trận World Cup 2026 ra màn hình chính để mở nhanh tức thì bằng 1 chạm, đầy đủ Logo chuyên nghiệp như ứng dụng tải từ App Store hay CH Play.
+                </p>
+                <button onclick="showInstallInstructions()" class="w-full py-2.5 bg-green-500 hover:bg-green-600 text-white font-extrabold text-xs rounded-xl transition-all shadow flex items-center justify-center space-x-1.5 active:scale-95">
+                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                    <span>Tải App về Màn hình chính</span>
+                </button>
+            </div>
+
             <h2 class="text-base font-bold">Giả Lập Thời Gian Thử Nghiệm</h2>
             <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
                 World Cup 2026 sẽ chính thức khởi tranh từ ngày <b>12/06/2026</b>. Bạn có thể thay đổi mốc thời gian hệ thống giả lập dưới đây để xem cách ứng dụng chuyển đổi sang trạng thái <b>Trực tiếp (LIVE)</b> tự động dựa trên thời gian biểu.
@@ -379,6 +422,76 @@
         </div>
     </div>
 
+    <!-- PWA INSTALL INSTRUCTIONS DRAWER -->
+    <div id="pwa-instruction-modal" class="hidden fixed inset-0 z-55 bg-black/85 backdrop-blur-md flex items-end justify-center">
+        <div class="absolute inset-0" onclick="closeInstallInstructions()"></div>
+        <div class="relative w-full max-w-md bg-white dark:bg-darkCard rounded-t-3xl p-6 shadow-2xl transition-all duration-300 text-xs text-gray-700 dark:text-gray-200">
+            <div class="w-12 h-1 bg-gray-300 dark:bg-gray-700 rounded-full mx-auto mb-5"></div>
+            
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-black text-green-600 dark:text-green-500 uppercase tracking-wider flex items-center">
+                    <i class="fa-solid fa-circle-down mr-2 text-base"></i> Cài đặt ứng dụng di động
+                </h3>
+                <button onclick="closeInstallInstructions()" class="w-7 h-7 rounded-full bg-gray-150 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="flex items-center space-x-4 p-3 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-150 dark:border-gray-800/80 mb-5">
+                <!-- App Icon inside Modal -->
+                <div class="w-14 h-14 rounded-2xl shadow-md overflow-hidden bg-green-950 flex-shrink-0 flex items-center justify-center text-3xl select-none">
+                    🏆
+                </div>
+                <div>
+                    <h4 class="font-extrabold text-xs text-gray-800 dark:text-white leading-tight">World Cup 2026 Pro</h4>
+                    <p class="text-[10px] text-gray-400 font-bold mt-0.5 uppercase tracking-wide">Ứng dụng di động • PWA Web App</p>
+                    <p class="text-[9px] text-green-500 font-extrabold mt-1 flex items-center"><i class="fa-solid fa-circle-check mr-1 text-[7px]"></i> Bảo mật bởi Google Sandbox</p>
+                </div>
+            </div>
+
+            <!-- DYNAMIC CHROME ANDROID INSTALL BUTTON -->
+            <div id="pwa-android-section" class="hidden space-y-3 mb-4">
+                <p class="text-[11px] text-gray-400 leading-relaxed font-semibold">
+                    Nhấp vào nút bên dưới để cài đặt trực tiếp ứng dụng lên điện thoại Android của bạn:
+                </p>
+                <button id="pwa-native-btn" onclick="triggerNativeInstall()" class="w-full py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-extrabold rounded-xl shadow-md active:scale-95 transition-all flex items-center justify-center space-x-2 text-xs">
+                    <i class="fa-solid fa-download text-sm"></i>
+                    <span>Bắt đầu Cài đặt Ngay</span>
+                </button>
+            </div>
+
+            <!-- IOS SAFARI INSTALL INSTRUCTIONS -->
+            <div id="pwa-ios-section" class="space-y-4 mb-2">
+                <p class="text-[11px] text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+                    Do cơ chế bảo mật của Apple iOS, vui lòng cài đặt thủ công siêu nhanh theo 3 bước sau:
+                </p>
+                
+                <div class="space-y-2.5">
+                    <div class="flex items-start space-x-3 p-2 bg-gray-50 dark:bg-gray-900/30 rounded-xl">
+                        <span class="w-5 h-5 rounded-full bg-green-500/10 text-green-500 font-black flex items-center justify-center text-[10px] flex-shrink-0">1</span>
+                        <p class="text-[11px] font-bold mt-0.5">
+                            Chạm vào nút <span class="bg-gray-200 dark:bg-gray-800 px-1.5 py-0.5 rounded text-gray-800 dark:text-white font-black"><i class="fa-solid fa-share-nodes text-blue-500"></i> Chia sẻ (Share)</span> ở thanh dưới cùng của Safari.
+                        </p>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3 p-2 bg-gray-50 dark:bg-gray-900/30 rounded-xl">
+                        <span class="w-5 h-5 rounded-full bg-green-500/10 text-green-500 font-black flex items-center justify-center text-[10px] flex-shrink-0">2</span>
+                        <p class="text-[11px] font-bold mt-0.5">
+                            Cuộn xuống dưới và chọn mục <span class="bg-gray-200 dark:bg-gray-800 px-1.5 py-0.5 rounded text-gray-800 dark:text-white font-black"><i class="fa-regular fa-square-plus"></i> Thêm vào MH chính (Add to Home Screen)</span>.
+                        </p>
+                    </div>
+
+                    <div class="flex items-start space-x-3 p-2 bg-gray-50 dark:bg-gray-900/30 rounded-xl">
+                        <span class="w-5 h-5 rounded-full bg-green-500/10 text-green-500 font-black flex items-center justify-center text-[10px] flex-shrink-0">3</span>
+                        <p class="text-[11px] font-bold mt-0.5">
+                            Nhấn <span class="text-green-500 font-black uppercase">Thêm (Add)</span> ở góc trên cùng bên phải để hoàn tất cài đặt!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- BOTTOM APP BAR (STICKY NAV FOR MOBILE) -->
     <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-darkBg/95 border-t border-gray-100 dark:border-gray-800 backdrop-blur-md">
         <div class="max-w-md mx-auto px-4 py-2 flex justify-between items-center">
@@ -408,6 +521,102 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        let deferredPrompt = null;
+
+        // Tự động tạo và đính kèm Web App Manifest dạng inline
+        const appIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" rx="120" fill="#14532d"/><circle cx="256" cy="256" r="200" fill="none" stroke="#22c55e" stroke-width="6" opacity="0.2"/><text x="256" y="160" font-family="sans-serif" font-size="70" font-weight="900" fill="#22c55e" text-anchor="middle">2026</text><text x="256" y="320" font-family="sans-serif" font-size="130" text-anchor="middle">🏆</text><text x="256" y="440" font-family="sans-serif" font-size="42" font-weight="bold" fill="white" text-anchor="middle">WORLD CUP</text></svg>`;
+        const manifestObj = {
+            "name": "Lịch Thi Đấu World Cup 2026 - Báo Nhân Dân",
+            "short_name": "World Cup 2026",
+            "start_url": ".",
+            "display": "standalone",
+            "orientation": "portrait",
+            "background_color": "#080c14",
+            "theme_color": "#14532d",
+            "icons": [
+                {
+                    "src": `data:image/svg+xml;utf8,${encodeURIComponent(appIconSvg)}`,
+                    "sizes": "192x192 512x512",
+                    "type": "image/svg+xml",
+                    "purpose": "any maskable"
+                }
+            ]
+        };
+
+        const manifestBlob = new Blob([JSON.stringify(manifestObj)], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        const manifestLink = document.createElement('link');
+        manifestLink.setAttribute('rel', 'manifest');
+        manifestLink.setAttribute('href', manifestURL);
+        document.head.appendChild(manifestLink);
+
+        // Đăng ký Service Worker động bằng Blob URL để lưu trữ và tải mượt mà
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', (e) => {
+                    self.skipWaiting();
+                });
+                self.addEventListener('fetch', (e) => {
+                    // Cho phép tải qua mạng bình thường nhưng vẫn giữ nguyên cấu trúc PWA
+                    e.respondWith(fetch(e.request).catch(() => new Response("Đang ngoại tuyến")));
+                });
+            `;
+            const swBlob = new Blob([swCode], {type: 'application/javascript'});
+            const swURL = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swURL).catch(err => console.log('SW registration skipped', err));
+        }
+
+        // Lắng nghe sự kiện cài đặt từ trình duyệt Chrome Android
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Hiển thị Banner cài đặt ở phía trên cùng màn hình
+            const isDismissed = localStorage.getItem('pwa_banner_dismissed_vn') === 'true';
+            if (!isDismissed) {
+                document.getElementById('pwa-install-banner').classList.remove('hidden');
+            }
+            // Mở cấu trúc nút cài đặt của Android trong hộp thoại hướng dẫn
+            document.getElementById('pwa-android-section').classList.remove('hidden');
+        });
+
+        // Kiểm tra thiết bị và hiển thị banner ban đầu nếu là iOS Safari chưa cài đặt
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        
+        if (isIOS && !isInStandaloneMode) {
+            const isDismissed = localStorage.getItem('pwa_banner_dismissed_vn') === 'true';
+            if (!isDismissed) {
+                document.getElementById('pwa-install-banner').classList.remove('hidden');
+            }
+        }
+
+        function showInstallInstructions() {
+            document.getElementById('pwa-instruction-modal').classList.remove('hidden');
+        }
+
+        function closeInstallInstructions() {
+            document.getElementById('pwa-instruction-modal').classList.add('hidden');
+        }
+
+        function dismissInstallBanner() {
+            document.getElementById('pwa-install-banner').classList.add('hidden');
+            localStorage.setItem('pwa_banner_dismissed_vn', 'true');
+        }
+
+        function triggerNativeInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted install');
+                        dismissInstallBanner();
+                    }
+                    deferredPrompt = null;
+                    closeInstallInstructions();
+                });
+            }
+        }
+
         const groupsData = {
             A: [
                 { name: "Mexico", flag: "🇲🇽" }, { name: "Nam Phi", flag: "🇿🇦" },
