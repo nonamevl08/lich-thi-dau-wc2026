@@ -721,7 +721,7 @@
             { id: 49, home: "Bosnia", homeFlag: "🇧🇦", away: "Qatar", awayFlag: "🇶🇦", group: "B", time: "25/06 02:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV5" },
             { id: 50, home: "Thụy Sỹ", homeFlag: "🇨🇭", away: "Canada", awayFlag: "🇨🇦", group: "B", time: "25/06 02:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV2" },
             { id: 51, home: "Maroc", homeFlag: "🇲🇦", away: "Haiti", awayFlag: "🇭🇹", group: "C", time: "25/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
-            { id: 52, home: "Scotland", homeFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", away: "Brazil", homeFlag: "🇧🇷", group: "C", time: "25/06 05:00", stage: "Vòng bảng", stadium: "Boston Stadium", tv: "VTV2" },
+            { id: 52, home: "Scotland", homeFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", away: "Brazil", awayFlag: "🇧🇷", group: "C", time: "25/06 05:00", stage: "Vòng bảng", stadium: "Boston Stadium", tv: "VTV2" },
             { id: 53, home: "Nam Phi", homeFlag: "🇿🇦", away: "Hàn Quốc", awayFlag: "🇰🇷", group: "A", time: "25/06 08:00", stage: "Vòng bảng", stadium: "Estadio Guadalajara", tv: "VTV5" },
             { id: 54, home: "CH Séc", homeFlag: "🇨🇿", away: "Mexico", awayFlag: "🇲🇽", group: "A", time: "25/06 08:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
             // Day 26/06
@@ -793,12 +793,16 @@
             { id: 104, homePlaceholder: "Thắng Bán Kết 1", awayPlaceholder: "Thắng Bán Kết 2", time: "19/07 06:00", stage: "Chung kết", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" }
         ];
 
-        // Core dynamic arrays and states
-        let matchesData = JSON.parse(localStorage.getItem('wc_2026_matches_real_v2')) || staticMatchesData.map(m => ({
-            ...m,
-            homeScore: null,
-            awayScore: null
-        }));
+        // Core dynamic arrays and states: Ép tải lại Cờ và Tên từ file code chuẩn
+        let storedMatches = JSON.parse(localStorage.getItem('wc_2026_matches_real_v2'));
+        let matchesData = staticMatchesData.map(m => {
+            const stored = storedMatches ? storedMatches.find(sm => sm.id === m.id) : null;
+            return {
+                ...m,
+                homeScore: stored && stored.homeScore !== undefined ? stored.homeScore : null,
+                awayScore: stored && stored.awayScore !== undefined ? stored.awayScore : null
+            };
+        });
 
         let knockoutMatchesData = JSON.parse(localStorage.getItem('wc_2026_ko_real_v2')) || baseKnockoutMatches.map(m => ({
             ...m,
