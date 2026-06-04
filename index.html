@@ -140,14 +140,14 @@
                 </div>
             </div>
 
-            <!-- GLOBAL AI SYNC BUTTON SECTION -->
+            <!-- GLOBAL REST API SYNC BUTTON SECTION -->
             <div class="space-y-2">
-                <button id="btn-global-sync" onclick="syncAllScoresWithAI()" class="w-full py-3 px-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-750 text-white font-extrabold rounded-2xl transition-all shadow-md flex items-center justify-center space-x-2 active:scale-95 text-xs">
+                <button id="btn-global-sync" onclick="syncAllScoresFromAPI()" class="w-full py-3 px-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-750 text-white font-extrabold rounded-2xl transition-all shadow-md flex items-center justify-center space-x-2 active:scale-95 text-xs">
                     <i id="global-sync-icon" class="fa-solid fa-cloud-arrow-down animate-bounce text-sm"></i>
-                    <span id="global-sync-text">Đồng bộ tất cả tỉ số thực tế (AI)</span>
+                    <span id="global-sync-text">Đồng bộ tất cả tỉ số thực tế (API)</span>
                 </button>
                 <div id="global-sync-status" class="hidden text-center text-[10px] font-bold text-indigo-500 bg-indigo-500/10 rounded-xl py-2.5 px-3 border border-indigo-500/20 transition-all duration-350">
-                    Sẵn sàng cập nhật từ Google Search...
+                    Sẵn sàng cập nhật từ máy chủ...
                 </div>
             </div>
 
@@ -283,26 +283,6 @@
         <!-- PANEL 4: TIỆN ÍCH & TRÌNH ĐIỀU KHIỂN HỆ THỐNG -->
         <div id="panel-utils" class="hidden space-y-4">
             
-            <!-- SECURE GEMINI API CONFIGURATION (FOR MOBILE PHONE RUNTIME) -->
-            <div class="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 rounded-2xl p-4 shadow-sm space-y-3">
-                <div class="flex items-center justify-between text-indigo-500">
-                    <div class="flex items-center space-x-2">
-                        <i class="fa-solid fa-key text-lg"></i>
-                        <h3 class="text-xs font-extrabold uppercase tracking-wider">Cấu hình Google Gemini API</h3>
-                    </div>
-                    <span class="text-[8px] bg-indigo-500 text-white font-black px-1.5 py-0.5 rounded">TÙY CHỌN</span>
-                </div>
-                <p class="text-[10px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold">
-                    Khi mở app trên điện thoại (PWA), hãy dán **Gemini API Key** của bạn để tính năng đồng bộ tự động hoạt động trơn tru. 
-                    <a href="https://aistudio.google.com/" target="_blank" class="text-indigo-500 hover:underline font-black">Lấy Key miễn phí tại đây ↗</a>
-                </p>
-                <div class="space-y-1.5">
-                    <input type="password" id="gemini-api-key-input" onkeyup="saveGeminiKey()" placeholder="Nhập API Key của bạn (AIzaSy...)" 
-                        class="w-full p-2.5 text-xs bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono">
-                    <p id="gemini-key-status" class="text-[9px] font-bold text-gray-400">Chưa cấu hình (Hệ thống sẽ chạy thử ở Canvas)</p>
-                </div>
-            </div>
-
             <!-- PWA INSTALL MANUAL BUTTON IN UTILS -->
             <div class="bg-white dark:bg-darkCard rounded-2xl p-4 shadow-sm border border-gray-200 dark:border-gray-800 space-y-3">
                 <div class="flex items-center space-x-2.5 text-green-600 dark:text-green-500">
@@ -410,9 +390,9 @@
                     <i class="fa-solid fa-floppy-disk"></i>
                     <span>Lưu Tỉ Số Thực Tế</span>
                 </button>
-                <button id="btn-sync-ai" onclick="syncScoreWithAI()" class="py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl transition-all shadow-md flex items-center justify-center space-x-1.5">
+                <button id="btn-sync-ai" onclick="syncScoreFromAPI()" class="py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl transition-all shadow-md flex items-center justify-center space-x-1.5">
                     <i class="fa-solid fa-globe"></i>
-                    <span>Đồng Bộ Google AI</span>
+                    <span>Đồng Bộ Từ API</span>
                 </button>
             </div>
             
@@ -542,7 +522,6 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
         let deferredPrompt = null;
-        const apiKey = ""; // Runtime key placeholder from ecosystem
 
         // Tự động tạo và đính kèm Web App Manifest dạng inline dùng logo chính thức
         const manifestObj = {
@@ -859,184 +838,170 @@
             }));
         });
 
-        // Retrieves user key or falls back to Canvas environment placeholder
-        function getGeminiApiKey() {
-            return localStorage.getItem('user_gemini_api_key') || "";
-        }
-
-        // Saves user API key securely inside local storage
-        function saveGeminiKey() {
-            const key = document.getElementById('gemini-api-key-input').value.trim();
-            localStorage.setItem('user_gemini_api_key', key);
-            updateApiKeyStatusLabel();
-        }
-
-        function updateApiKeyStatusLabel() {
-            const key = getGeminiApiKey();
-            const statusLabel = document.getElementById('gemini-key-status');
-            if (key) {
-                statusLabel.innerText = "✅ Đã cấu hình khóa API tùy chỉnh!";
-                statusLabel.className = "text-[9px] font-bold text-green-500";
-            } else {
-                statusLabel.innerText = "ℹ️ Chưa cấu hình khóa. Sẽ tự dùng phím hệ thống nếu chạy trong Canvas.";
-                statusLabel.className = "text-[9px] font-bold text-gray-400";
-            }
-        }
-
         function getActiveTime() {
             return isSimTimeActive ? simulatedTime : new Date();
         }
 
-        function sanitizeAndParseJson(rawText) {
-            try {
-                // Loại bỏ bọc thẻ markdown ```json và ``` nếu có
-                let cleanText = rawText.replace(/```json/gi, "").replace(/```/g, "").trim();
-                return JSON.parse(cleanText);
-            } catch (err) {
-                console.error("Lỗi parse JSON thô:", rawText);
-                throw new Error("Không thể chuyển đổi định dạng phản hồi từ AI.");
-            }
-        }
-
-        // Thực hiện cuộc gọi API chuẩn hóa với Exponential Backoff tự động thử lại 5 lần
-        async function fetchGeminiWithBackoff(payload) {
-            const userKey = getGeminiApiKey();
-            const activeKey = userKey ? userKey : apiKey;
-            
-            // Fix model name to gemini-2.5-flash-preview-09-2025 as mandated for sandbox runtime
-            const modelName = "gemini-2.5-flash-preview-09-2025";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${activeKey}`;
-            
-            const delays = [1000, 2000, 4000, 8000, 16000];
-            let lastError = null;
-            
-            for (let attempt = 0; attempt <= 5; attempt++) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if (response.status === 400 || response.status === 403) {
-                        throw new Error("LỖI_KHÓA_API");
-                    }
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP_ERROR_${response.status}`);
-                    }
-                    
-                    const result = await response.json();
-                    return result;
-                } catch (err) {
-                    lastError = err;
-                    if (err.message === "LỖI_KHÓA_API") {
-                        throw err; // Dừng lập tức nếu lỗi xác thực khóa
-                    }
-                    if (attempt < 5) {
-                        // Chờ độ trễ tăng dần trước khi thử lại
-                        await new Promise(resolve => setTimeout(resolve, delays[attempt]));
-                    }
-                }
-            }
-            throw lastError;
-        }
-
-        async function syncAllScoresWithAI() {
+        async function syncAllScoresFromAPI() {
             const syncBtn = document.getElementById('btn-global-sync');
             const syncIcon = document.getElementById('global-sync-icon');
             const syncText = document.getElementById('global-sync-text');
             const syncStatusEl = document.getElementById('global-sync-status');
 
-            // Set loading state UI
             syncBtn.disabled = true;
             syncBtn.classList.add('opacity-75', 'cursor-not-allowed');
             syncIcon.className = "fa-solid fa-circle-notch animate-spin text-sm";
-            syncText.innerText = "Đang đồng bộ toàn bộ giải đấu...";
-            syncStatusEl.innerText = "🔍 Đang tìm kiếm kết quả thi đấu World Cup 2026 chính xác từ Google Search...";
+            syncText.innerText = "Đang đồng bộ từ World Cup API...";
+            syncStatusEl.innerText = "🔍 Đang lấy dữ liệu từ hệ thống API worldcup26.ir (qua Proxy)...";
             syncStatusEl.classList.remove('hidden', 'bg-green-500/10', 'text-green-500', 'border-green-500/20', 'bg-red-500/10', 'text-red-500', 'border-red-500/20');
             syncStatusEl.classList.add('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
             syncStatusEl.classList.remove('hidden');
 
-            const systemPrompt = "Bạn là trợ lý dữ liệu thể thao World Cup 2026. Nhiệm vụ của bạn là sử dụng Google Search để tìm kiếm kết quả tỷ số thực tế của tất cả các trận đấu World Cup 2026 đã diễn ra tính đến ngày hôm nay. Trả về mảng dữ liệu JSON chính xác mà không thêm bất kỳ văn bản giải thích nào xung quanh.";
-            const userQuery = `Hãy tra cứu kết quả thực tế của tất cả các trận đấu bóng đá thuộc giải World Cup 2026 đã thi đấu tính đến hôm nay. Chỉ trả về các trận đấu đã thực sự kết thúc và có tỉ số chính xác. Trả về dưới dạng một mảng JSON chứa các đối tượng có cấu trúc chính xác: [ { "id": 1, "homeScore": 2, "awayScore": 1 }, { "id": 2, "homeScore": 0, "awayScore": 0 } ]. Không chứa thêm chữ giải thích nào ngoài mã JSON.`;
+            try {
+                // Sử dụng CORS Proxy để khắc phục lỗi "Failed to fetch" trên trình duyệt
+                const targetUrl = 'https://worldcup26.ir/get/games';
+                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
+                const response = await fetch(proxyUrl);
+                
+                if (!response.ok) throw new Error("API_ERROR");
+                let data = await response.json();
+                
+                // Hỗ trợ nhiều định dạng trả về khác nhau từ API REST
+                let games = Array.isArray(data) ? data : (data.data || data.games);
+                
+                if (!games || !Array.isArray(games)) {
+                    throw new Error("INVALID_FORMAT");
+                }
 
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                tools: [{ "google_search": {} }],
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                },
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "ARRAY",
-                        items: {
-                            type: "OBJECT",
-                            properties: {
-                                id: { type: "INTEGER" },
-                                homeScore: { type: "INTEGER" },
-                                awayScore: { type: "INTEGER" }
-                            },
-                            required: ["id", "homeScore", "awayScore"]
+                let updatedCount = 0;
+                const now = getActiveTime();
+                
+                games.forEach(apiGame => {
+                    const matchId = apiGame.id || apiGame.match_id || apiGame.matchId;
+                    
+                    if (matchId) {
+                        let target = matchesData.find(m => m.id == matchId) || knockoutMatchesData.find(m => m.id == matchId);
+                        
+                        if (target) {
+                            // CHỈ CẬP NHẬT NẾU TRẬN ĐẤU ĐÃ BẮT ĐẦU HOẶC KẾT THÚC DỰA TRÊN THỜI GIAN
+                            const matchTime = parseMatchTime(target.time);
+                            
+                            if (now >= matchTime) {
+                                let hScore = apiGame.home_score ?? apiGame.homeTeamScore ?? apiGame.homeScore ?? apiGame.home_team?.goals;
+                                let aScore = apiGame.away_score ?? apiGame.awayTeamScore ?? apiGame.awayScore ?? apiGame.away_team?.goals;
+
+                                if (hScore !== undefined && hScore !== null && aScore !== undefined && aScore !== null) {
+                                    target.homeScore = parseInt(hScore);
+                                    target.awayScore = parseInt(aScore);
+                                    updatedCount++;
+                                }
+                            }
                         }
                     }
-                }
-            };
+                });
 
-            try {
-                const result = await fetchGeminiWithBackoff(payload);
-                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
+                localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
+
+                syncStatusEl.innerText = `✅ Đã đồng bộ thành công kết quả ${updatedCount} trận đấu đã diễn ra từ máy chủ!`;
+                syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                syncStatusEl.classList.add('bg-green-500/10', 'text-green-500', 'border-green-500/20');
                 
-                if (jsonText) {
-                    const scoresArray = sanitizeAndParseJson(jsonText);
-                    
-                    if (Array.isArray(scoresArray) && scoresArray.length > 0) {
-                        let updatedCount = 0;
-                        
-                        scoresArray.forEach(item => {
-                            const isGroup = item.id <= 72;
-                            const list = isGroup ? matchesData : knockoutMatchesData;
-                            const target = list.find(m => m.id === item.id);
-                            
-                            if (target) {
-                                target.homeScore = item.homeScore;
-                                target.awayScore = item.awayScore;
-                                updatedCount++;
-                            }
-                        });
-
-                        // Save updated data
-                        localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
-                        localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
-
-                        syncStatusEl.innerText = `✅ Đã đồng bộ thành công kết quả thực tế của ${updatedCount} trận đấu từ Google Search!`;
-                        syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-                        syncStatusEl.classList.add('bg-green-500/10', 'text-green-500', 'border-green-500/20');
-                        
-                        runDataUpdateCycle();
-                    } else {
-                        syncStatusEl.innerText = "ℹ️ Không tìm thấy trận đấu mới nào đã diễn ra thực tế để cập nhật tỉ số.";
-                        syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-                        syncStatusEl.classList.add('bg-amber-500/10', 'text-amber-500', 'border-amber-500/20');
-                    }
-                } else {
-                    throw new Error("Không thể phân tích phản hồi của AI.");
-                }
+                runDataUpdateCycle();
+                
             } catch (err) {
                 console.error(err);
-                if (err.message === "LỖI_KHÓA_API") {
-                    syncStatusEl.innerHTML = "❌ Lỗi xác thực khóa API trên điện thoại. Hãy cấu hình <b>Gemini API Key</b> tùy chỉnh tại tab <b>Giả lập</b> để khắc phục triệt để!";
-                } else {
-                    syncStatusEl.innerText = "❌ Lỗi kết nối Google Search hoặc không có dữ liệu thực tế tại thời điểm này. Vui lòng thử lại sau!";
-                }
+                syncStatusEl.innerText = "❌ Lỗi kết nối đến World Cup API (CORS/Máy chủ). Vui lòng thử lại sau!";
                 syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
                 syncStatusEl.classList.add('bg-red-500/10', 'text-red-500', 'border-red-500/20');
             } finally {
                 syncBtn.disabled = false;
                 syncBtn.classList.remove('opacity-75', 'cursor-not-allowed');
                 syncIcon.className = "fa-solid fa-cloud-arrow-down animate-bounce text-sm";
-                syncText.innerText = "Đồng bộ tất cả tỉ số thực tế (AI)";
+                syncText.innerText = "Đồng bộ tất cả tỉ số thực tế (API)";
+            }
+        }
+
+        async function syncScoreFromAPI() {
+            if (!selectedMatchId) return;
+            const match = getMatchState(selectedMatchId);
+            if (!match) return;
+
+            const syncStatusEl = document.getElementById('sync-status');
+            const syncBtn = document.getElementById('btn-sync-ai');
+
+            syncStatusEl.innerText = "🔍 Đang lấy kết quả trận đấu từ API (qua Proxy)...";
+            syncStatusEl.classList.remove('hidden', 'bg-red-500/10', 'text-red-500', 'border-red-500/20');
+            syncStatusEl.classList.add('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+            syncStatusEl.classList.remove('hidden');
+            syncBtn.disabled = true;
+
+            try {
+                // Sử dụng CORS Proxy để khắc phục lỗi "Failed to fetch" trên trình duyệt
+                const targetUrl = 'https://worldcup26.ir/get/games';
+                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
+                const response = await fetch(proxyUrl);
+                
+                if (!response.ok) throw new Error("API_ERROR");
+                let data = await response.json();
+                
+                let games = Array.isArray(data) ? data : (data.data || data.games);
+                if (!games || !Array.isArray(games)) throw new Error("INVALID_FORMAT");
+
+                const apiGame = games.find(g => (g.id == selectedMatchId || g.match_id == selectedMatchId || g.matchId == selectedMatchId));
+
+                if (apiGame) {
+                    const now = getActiveTime();
+                    const matchTime = parseMatchTime(match.time);
+                    
+                    if (now < matchTime) {
+                         syncStatusEl.innerText = "ℹ️ Trận đấu này chưa diễn ra nên không thể lấy tỉ số!";
+                         syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                         syncStatusEl.classList.add('bg-amber-500/10', 'text-amber-500', 'border-amber-500/20');
+                    } else {
+                        let hScore = apiGame.home_score ?? apiGame.homeTeamScore ?? apiGame.homeScore ?? apiGame.home_team?.goals;
+                        let aScore = apiGame.away_score ?? apiGame.awayTeamScore ?? apiGame.awayScore ?? apiGame.away_team?.goals;
+
+                        if (hScore !== undefined && hScore !== null && aScore !== undefined && aScore !== null) {
+                            const isGroup = selectedMatchId <= 72;
+                            const list = isGroup ? matchesData : knockoutMatchesData;
+                            const target = list.find(m => m.id === selectedMatchId);
+                            if (target) {
+                                target.homeScore = parseInt(hScore);
+                                target.awayScore = parseInt(aScore);
+
+                                if (isGroup) {
+                                    localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
+                                } else {
+                                    localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
+                                }
+
+                                document.getElementById('input-home-score').value = target.homeScore;
+                                document.getElementById('input-away-score').value = target.awayScore;
+
+                                syncStatusEl.innerText = `✅ Đã đồng bộ tỉ số trực tiếp: ${target.homeScore} - ${target.awayScore}`;
+                                syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                                syncStatusEl.classList.add('bg-green-500/10', 'text-green-500', 'border-green-500/20');
+                                runDataUpdateCycle();
+                            }
+                        } else {
+                             syncStatusEl.innerText = "ℹ️ Trận đấu này chưa có tỉ số trên máy chủ API!";
+                             syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                             syncStatusEl.classList.add('bg-amber-500/10', 'text-amber-500', 'border-amber-500/20');
+                        }
+                    }
+                } else {
+                    syncStatusEl.innerText = "ℹ️ Không tìm thấy ID trận đấu trong hệ thống API!";
+                    syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                    syncStatusEl.classList.add('bg-amber-500/10', 'text-amber-500', 'border-amber-500/20');
+                }
+            } catch (err) {
+                console.error(err);
+                syncStatusEl.innerText = "❌ Lỗi kết nối máy chủ API (CORS). Hãy nhập tỉ số thủ công!";
+                syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
+                syncStatusEl.classList.add('bg-red-500/10', 'text-red-500', 'border-red-500/20');
+            } finally {
+                syncBtn.disabled = false;
             }
         }
 
@@ -1573,97 +1538,6 @@
             }
         }
 
-        async function syncScoreWithAI() {
-            if (!selectedMatchId) return;
-            const match = getMatchState(selectedMatchId);
-            if (!match) return;
-
-            if (!match.homeTeam.name || !match.awayTeam.name || match.homeTeam.name.includes("Nhất") || match.homeTeam.name.includes("Nhì") || match.homeTeam.name.includes("Thắng")) {
-                showToastStatus("Chưa xác định được cặp đấu cụ thể để đồng bộ!", true);
-                return;
-            }
-
-            const syncStatusEl = document.getElementById('sync-status');
-            const syncBtn = document.getElementById('btn-sync-ai');
-
-            syncStatusEl.innerText = "🔍 Đang tìm kiếm kết quả thực tế từ Google...";
-            syncStatusEl.classList.remove('hidden', 'bg-red-500/10', 'text-red-500', 'border-red-500/20');
-            syncStatusEl.classList.add('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-            syncStatusEl.classList.remove('hidden');
-            syncBtn.disabled = true;
-
-            const systemPrompt = "Bạn là trợ lý dữ liệu thể thao World Cup 2026. Nhiệm vụ của bạn là tìm kiếm kết quả chính xác, thực tế của trận đấu được yêu cầu bằng Google Search. Phải trả về JSON chính xác theo cấu trúc được yêu cầu, không thêm văn bản giải thích nào khác.";
-            const userQuery = `Hãy tìm kết quả tỷ số thực tế chính xác của trận đấu bóng đá World Cup 2026 giữa ${match.homeTeam.name} và ${match.awayTeam.name} diễn ra vào ngày ${match.time}. Nếu trận đấu chưa diễn ra trong thực tế, hãy phản hồi trạng thái chưa diễn ra với isPlayed=false. Trả về định dạng JSON: { "status": "finished" | "live" | "scheduled", "homeScore": number | null, "awayScore": number | null, "isPlayed": boolean }`;
-
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                tools: [{ "google_search": {} }],
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                },
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                            status: { type: "STRING" },
-                            homeScore: { type: "INTEGER", nullable: true },
-                            awayScore: { type: "INTEGER", nullable: true },
-                            isPlayed: { type: "BOOLEAN" }
-                        },
-                        required: ["status", "isPlayed"]
-                    }
-                }
-            };
-
-            try {
-                const result = await fetchGeminiWithBackoff(payload);
-                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                
-                if (jsonText) {
-                    const data = sanitizeAndParseJson(jsonText);
-                    if (data.isPlayed && data.homeScore !== null && data.awayScore !== null) {
-                        const isGroup = selectedMatchId <= 72;
-                        const list = isGroup ? matchesData : knockoutMatchesData;
-                        const target = list.find(m => m.id === selectedMatchId);
-                        if (target) {
-                            target.homeScore = data.homeScore;
-                            target.awayScore = data.awayScore;
-
-                            if (isGroup) {
-                                localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
-                            } else {
-                                localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
-                            }
-
-                            document.getElementById('input-home-score').value = data.homeScore;
-                            document.getElementById('input-away-score').value = data.awayScore;
-
-                            syncStatusEl.innerText = `✅ Đã đồng bộ tỉ số từ Google: ${match.homeTeam.name} ${data.homeScore} - ${data.awayScore} ${match.awayTeam.name}`;
-                            runDataUpdateCycle();
-                        }
-                    } else {
-                        syncStatusEl.innerText = "ℹ️ Google báo trận đấu này chưa đá hoặc chưa có tỉ số thực tế!";
-                        syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-                        syncStatusEl.classList.add('bg-amber-500/10', 'text-amber-500', 'border-amber-500/20');
-                    }
-                } else {
-                    throw new Error("Invalid response format");
-                }
-            } catch (err) {
-                console.error(err);
-                if (err.message === "LỖI_KHÓA_API") {
-                    syncStatusEl.innerHTML = "❌ Lỗi xác thực. Bạn đang chạy ngoài Canvas? Hãy nhập <b>API Key</b> ở tab <b>Giả lập</b> để kết nối máy chủ!";
-                } else {
-                    syncStatusEl.innerText = "❌ Lỗi kết nối Google Search. Hãy nhập tỉ số thủ công!";
-                }
-                syncStatusEl.classList.remove('bg-indigo-500/10', 'text-indigo-500', 'border-indigo-500/20');
-                syncStatusEl.classList.add('bg-red-500/10', 'text-red-500', 'border-red-500/20');
-            } finally {
-                syncBtn.disabled = false;
-            }
-        }
-
         function showToastStatus(msg, isErr = false) {
             const statusEl = document.getElementById('sync-status');
             statusEl.innerText = msg;
@@ -1849,13 +1723,7 @@
             document.getElementById('modal-tv').innerText = match.tv;
         }
 
-        // Initialize key values and setup view updates
-        const savedKey = getGeminiApiKey();
-        if (savedKey) {
-            document.getElementById('gemini-api-key-input').value = savedKey;
-        }
-        updateApiKeyStatusLabel();
-
+        // Initialize and setup view updates
         resetSimTimePickerUI();
         runDataUpdateCycle();
 
