@@ -64,7 +64,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 dark:bg-darkBg dark:text-gray-100 transition-colors duration-300 min-h-screen pb-24">
+<body class="bg-gray-50 text-gray-900 dark:bg-darkBg dark:text-gray-100 transition-colors duration-300 min-h-screen pb-28">
 
     <!-- PWA INSTALL BANNER (TOP ALERT) -->
     <div id="pwa-install-banner" class="hidden bg-gradient-to-r from-green-850 to-emerald-950 border-b border-green-500/20 text-white px-4 py-2.5 flex items-center justify-between text-xs transition-all duration-300">
@@ -327,7 +327,7 @@
         <!-- Close overlay -->
         <div class="absolute inset-0" onclick="closeMatchModal()"></div>
         <!-- Modal body -->
-        <div class="relative w-full max-w-md bg-white dark:bg-darkCard rounded-t-3xl p-5 shadow-2xl transition-all duration-300 transform translate-y-0 text-xs">
+        <div class="relative w-full max-w-md bg-white dark:bg-darkCard rounded-t-3xl px-5 pt-5 pb-14 shadow-2xl transition-all duration-300 transform translate-y-0 text-xs">
             <div class="w-12 h-1 bg-gray-300 dark:bg-gray-700 rounded-full mx-auto mb-4"></div>
             
             <div class="flex justify-between items-center mb-3">
@@ -362,7 +362,7 @@
                 </div>
             </div>
 
-            <!-- Info list -->
+            <!-- Info list with detailed live channels information -->
             <div class="space-y-2 mt-2 border-t border-gray-100 dark:border-gray-800 pt-3">
                 <div class="flex justify-between items-center py-1 border-b border-gray-50 dark:border-gray-800/50">
                     <span class="text-gray-400">Vòng đấu:</span>
@@ -376,9 +376,9 @@
                     <span class="text-gray-400">Địa điểm:</span>
                     <span id="modal-stadium" class="font-bold text-gray-700 dark:text-gray-200 text-right truncate pl-4">Estadio Azteca, Mexico City</span>
                 </div>
-                <div class="flex justify-between items-center py-1">
+                <div class="flex justify-between items-start py-1 pb-8">
                     <span class="text-gray-400">Trực tiếp:</span>
-                    <span id="modal-tv" class="font-bold text-red-500 uppercase tracking-wider">VTV3</span>
+                    <span id="modal-tv" class="font-bold text-red-500 uppercase tracking-wider text-right pl-4">VTV3, VTV6, VTV9, VTV10</span>
                 </div>
             </div>
         </div>
@@ -454,28 +454,28 @@
         </div>
     </div>
 
-    <!-- BOTTOM APP BAR (STICKY NAV FOR MOBILE) -->
-    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-darkBg/95 border-t border-gray-100 dark:border-gray-800 backdrop-blur-md">
-        <div class="max-w-md mx-auto px-4 py-2 flex justify-between items-center">
+    <!-- BOTTOM APP BAR (STICKY NAV FOR MOBILE) - FIXED TEXT OVERFLOW & SPACING -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-darkBg/95 border-t border-gray-100 dark:border-gray-800 backdrop-blur-md pb-safe">
+        <div class="max-w-md mx-auto px-2 py-3 flex justify-around items-center">
             
-            <button onclick="switchTab('matches', this)" class="nav-btn flex flex-col items-center space-y-0.5 text-gray-400 hover:text-green-500 transition-all nav-active">
-                <i class="fa-solid fa-calendar-days text-lg transition-transform"></i>
-                <span class="text-[9px] font-bold">Lịch đấu</span>
+            <button onclick="switchTab('matches', this)" class="nav-btn flex flex-col items-center space-y-1 text-gray-400 hover:text-green-500 transition-all nav-active flex-1 min-w-0">
+                <i class="fa-solid fa-calendar-days text-base transition-transform"></i>
+                <span class="text-[9px] font-extrabold whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">Lịch đấu</span>
             </button>
             
-            <button onclick="switchTab('standings', this)" class="nav-btn flex flex-col items-center space-y-0.5 text-gray-400 hover:text-green-500 transition-all">
-                <i class="fa-solid fa-list-ol text-lg transition-transform"></i>
-                <span class="text-[9px] font-bold">Bảng đấu</span>
+            <button onclick="switchTab('standings', this)" class="nav-btn flex flex-col items-center space-y-1 text-gray-400 hover:text-green-500 transition-all flex-1 min-w-0">
+                <i class="fa-solid fa-list-ol text-base transition-transform"></i>
+                <span class="text-[9px] font-extrabold whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">Bảng đấu</span>
             </button>
             
-            <button onclick="switchTab('bracket', this)" class="nav-btn flex flex-col items-center space-y-0.5 text-gray-400 hover:text-green-500 transition-all">
-                <i class="fa-solid fa-sitemap text-lg transition-transform"></i>
-                <span class="text-[9px] font-bold">Knockout</span>
+            <button onclick="switchTab('bracket', this)" class="nav-btn flex flex-col items-center space-y-1 text-gray-400 hover:text-green-500 transition-all flex-1 min-w-0">
+                <i class="fa-solid fa-sitemap text-base transition-transform"></i>
+                <span class="text-[9px] font-extrabold whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">Knockout</span>
             </button>
             
-            <button onclick="switchTab('utils', this)" class="nav-btn flex flex-col items-center space-y-0.5 text-gray-400 hover:text-green-500 transition-all">
-                <i class="fa-solid fa-gear text-lg transition-transform"></i>
-                <span class="text-[9px] font-bold">Cài đặt app</span>
+            <button onclick="switchTab('utils', this)" class="nav-btn flex flex-col items-center space-y-1 text-gray-400 hover:text-green-500 transition-all flex-1 min-w-0">
+                <i class="fa-solid fa-gear text-base transition-transform"></i>
+                <span class="text-[9px] font-extrabold whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">Cài đặt app</span>
             </button>
             
         </div>
@@ -641,140 +641,140 @@
 
         const staticMatchesData = [
             // Day 12/06
-            { id: 1, home: "Mexico", homeFlag: "🇲🇽", away: "Nam Phi", awayFlag: "🇿🇦", group: "A", time: "12/06 02:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
-            { id: 2, home: "Hàn Quốc", homeFlag: "🇰🇷", away: "CH Séc", awayFlag: "🇨🇿", group: "A", time: "12/06 09:00", stage: "Vòng bảng", stadium: "Estadio Guadalajara", tv: "VTV2" },
+            { id: 1, home: "Mexico", homeFlag: "🇲🇽", away: "Nam Phi", awayFlag: "🇿🇦", group: "A", time: "12/06 02:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 2, home: "Hàn Quốc", homeFlag: "🇰🇷", away: "CH Séc", awayFlag: "🇨🇿", group: "A", time: "12/06 09:00", stage: "Vòng bảng", stadium: "Estadio Guadalajara", tv: "VTV3, VTV6, VTV9" },
             // Day 13/06
-            { id: 3, home: "Canada", homeFlag: "🇨🇦", away: "Bosnia", awayFlag: "🇧🇦", group: "B", time: "13/06 02:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV5" },
-            { id: 4, home: "Mỹ", homeFlag: "🇺🇸", away: "Paraguay", awayFlag: "🇵🇾", group: "D", time: "13/06 08:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3" },
+            { id: 3, home: "Canada", homeFlag: "🇨🇦", away: "Bosnia", awayFlag: "🇧🇦", group: "B", time: "13/06 02:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 4, home: "Mỹ", homeFlag: "🇺🇸", away: "Paraguay", awayFlag: "🇵🇾", group: "D", time: "13/06 08:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3, VTV6, VTV9" },
             // Day 14/06
-            { id: 5, home: "Qatar", homeFlag: "🇶🇦", away: "Thụy Sỹ", awayFlag: "🇨🇭", group: "B", time: "14/06 02:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV2" },
-            { id: 6, home: "Brazil", homeFlag: "🇧🇷", away: "Maroc", awayFlag: "🇲🇦", group: "C", time: "14/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
-            { id: 7, home: "Haiti", homeFlag: "🇭🇹", away: "Scotland", awayFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", group: "C", time: "14/06 08:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV2" },
-            { id: 8, home: "Australia", homeFlag: "🇦🇺", away: "Thổ Nhĩ Kỳ", awayFlag: "🇹🇷", group: "D", time: "14/06 11:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV5" },
+            { id: 5, home: "Qatar", homeFlag: "🇶🇦", away: "Thụy Sỹ", awayFlag: "🇨🇭", group: "B", time: "14/06 02:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 6, home: "Brazil", homeFlag: "🇧🇷", away: "Maroc", awayFlag: "🇲🇦", group: "C", time: "14/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9" },
+            { id: 7, home: "Haiti", homeFlag: "🇭🇹", away: "Scotland", awayFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", group: "C", time: "14/06 08:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV3, VTV6, VTV9" },
+            { id: 8, home: "Australia", homeFlag: "🇦🇺", away: "Thổ Nhĩ Kỳ", awayFlag: "🇹🇷", group: "D", time: "14/06 11:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV3, VTV6" },
             // Day 15/06
-            { id: 9, home: "Đức", homeFlag: "🇩🇪", away: "Curacao", awayFlag: "🇨🇼", group: "E", time: "15/06 00:00", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV5" },
-            { id: 10, home: "Hà Lan", homeFlag: "🇳🇱", away: "Nhật Bản", awayFlag: "🇯🇵", group: "F", time: "15/06 03:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
-            { id: 11, home: "Bờ Biển Ngà", homeFlag: "🇨🇮", away: "Ecuador", awayFlag: "🇪🇨", group: "E", time: "15/06 06:00", stage: "Vòng bảng", stadium: "Philadelphia Stadium", tv: "VTV2" },
-            { id: 12, home: "Thụy Điển", homeFlag: "🇸🇪", away: "Tunisia", awayFlag: "🇹🇳", group: "F", time: "15/06 09:00", stage: "Vòng bảng", stadium: "Estadio Monterrey", tv: "VTV5" },
-            { id: 13, home: "Tây Ban Nha", homeFlag: "🇪🇸", away: "Cabo Verde", awayFlag: "🇨🇻", group: "H", time: "15/06 23:00", stage: "Vòng bảng", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV3" },
+            { id: 9, home: "Đức", homeFlag: "🇩🇪", away: "Curacao", awayFlag: "🇨🇼", group: "E", time: "15/06 00:00", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 10, home: "Hà Lan", homeFlag: "🇳🇱", away: "Nhật Bản", awayFlag: "🇯🇵", group: "F", time: "15/06 03:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 11, home: "Bờ Biển Ngà", homeFlag: "🇨🇮", away: "Ecuador", awayFlag: "🇪🇨", group: "E", time: "15/06 06:00", stage: "Vòng bảng", stadium: "Philadelphia Stadium", tv: "VTV3, VTV6, VTV9" },
+            { id: 12, home: "Thụy Điển", homeFlag: "🇸🇪", away: "Tunisia", awayFlag: "🇹🇳", group: "F", time: "15/06 09:00", stage: "Vòng bảng", stadium: "Estadio Monterrey", tv: "VTV3, VTV6, VTV9" },
+            { id: 13, home: "Tây Ban Nha", homeFlag: "🇪🇸", away: "Cabo Verde", awayFlag: "🇨🇻", group: "H", time: "15/06 23:00", stage: "Vòng bảng", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV3, VTV6, VTV9, VTV10" },
             // Day 16/06
-            { id: 14, home: "Bỉ", homeFlag: "🇧🇪", away: "Ai Cập", awayFlag: "🇪🇬", group: "G", time: "16/06 02:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV2" },
-            { id: 15, home: "Saudi Arabia", homeFlag: "🇸🇦", away: "Uruguay", awayFlag: "🇺🇾", group: "H", time: "16/06 05:00", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3" },
-            { id: 16, home: "Iran", homeFlag: "🇮🇷", away: "New Zealand", awayFlag: "🇳🇿", group: "G", time: "16/06 08:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV5" },
+            { id: 14, home: "Bỉ", homeFlag: "🇧🇪", away: "Ai Cập", awayFlag: "🇪🇬", group: "G", time: "16/06 02:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 15, home: "Saudi Arabia", homeFlag: "🇸🇦", away: "Uruguay", awayFlag: "🇺🇾", group: "H", time: "16/06 05:00", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3, VTV6, VTV9" },
+            { id: 16, home: "Iran", homeFlag: "🇮🇷", away: "New Zealand", awayFlag: "🇳🇿", group: "G", time: "16/06 08:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3, VTV6, VTV9" },
             // Day 17/06
-            { id: 17, home: "Pháp", homeFlag: "🇫🇷", away: "Senegal", awayFlag: "🇸🇳", group: "I", time: "17/06 02:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
-            { id: 18, home: "Iraq", homeFlag: "🇮🇶", away: "Na Uy", awayFlag: "🇳🇴", group: "I", time: "17/06 05:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV2" },
-            { id: 19, home: "Argentina", homeFlag: "🇦🇷", away: "Algeria", awayFlag: "🇩🇿", group: "J", time: "17/06 08:00", stage: "Vòng bảng", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV3" },
-            { id: 20, home: "Áo", homeFlag: "🇦🇹", away: "Jordan", awayFlag: "🇯🇴", group: "J", time: "17/06 11:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV5" },
+            { id: 17, home: "Pháp", homeFlag: "🇫🇷", away: "Senegal", awayFlag: "🇸🇳", group: "I", time: "17/06 02:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 18, home: "Iraq", homeFlag: "🇮🇶", away: "Na Uy", awayFlag: "🇳🇴", group: "I", time: "17/06 05:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV3, VTV6, VTV9" },
+            { id: 19, home: "Argentina", homeFlag: "🇦🇷", away: "Algeria", awayFlag: "🇩🇿", group: "J", time: "17/06 08:00", stage: "Vòng bảng", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV3, VTV6, VTV9" },
+            { id: 20, home: "Áo", homeFlag: "🇦🇹", away: "Jordan", awayFlag: "🇯🇴", group: "J", time: "17/06 11:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV3, VTV6" },
             // Day 18/06
-            { id: 21, home: "Bồ Đào Nha", homeFlag: "🇵🇹", away: "CHDC Congo", awayFlag: "🇨🇩", group: "K", time: "18/06 00:00", stage: "Vòng bảng", stadium: "NRG Stadium, Houston", tv: "VTV3" },
-            { id: 22, home: "Anh", homeFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", away: "Croatia", awayFlag: "🇭🇷", group: "L", time: "18/06 03:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV2" },
-            { id: 23, home: "Ghana", homeFlag: "🇬🇭", away: "Panama", awayFlag: "🇵🇦", group: "L", time: "18/06 06:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV5" },
-            { id: 24, home: "Uzbekistan", homeFlag: "🇺🇿", away: "Colombia", awayFlag: "🇨🇴", group: "K", time: "18/06 09:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
-            { id: 25, home: "CH Séc", homeFlag: "🇨🇿", away: "Nam Phi", awayFlag: "🇿🇦", group: "A", time: "18/06 23:00", stage: "Vòng bảng", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV2" },
+            { id: 21, home: "Bồ Đào Nha", homeFlag: "🇵🇹", away: "CHDC Congo", awayFlag: "🇨🇩", group: "K", time: "18/06 00:00", stage: "Vòng bảng", stadium: "NRG Stadium, Houston", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 22, home: "Anh", homeFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", away: "Croatia", awayFlag: "🇭🇷", group: "L", time: "18/06 03:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 23, home: "Ghana", homeFlag: "🇬🇭", away: "Panama", awayFlag: "🇵🇦", group: "L", time: "18/06 06:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV3, VTV6, VTV9" },
+            { id: 24, home: "Uzbekistan", homeFlag: "🇺🇿", away: "Colombia", awayFlag: "🇨🇴", group: "K", time: "18/06 09:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3, VTV6, VTV9" },
+            { id: 25, home: "CH Séc", homeFlag: "🇨🇿", away: "Nam Phi", awayFlag: "🇿🇦", group: "A", time: "18/06 23:00", stage: "Vòng bảng", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV3, VTV6, VTV9, VTV10" },
             // Day 19/06
-            { id: 26, home: "Thụy Sỹ", homeFlag: "🇨🇭", away: "Bosnia", awayFlag: "🇧🇦", group: "B", time: "19/06 02:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV5" },
-            { id: 27, home: "Canada", homeFlag: "🇨🇦", away: "Qatar", awayFlag: "🇶🇦", group: "B", time: "19/06 05:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV3" },
-            { id: 28, home: "Mexico", homeFlag: "🇲🇽", away: "Hàn Quốc", awayFlag: "🇰🇷", group: "A", time: "19/06 08:00", stage: "Vòng bảng", stadium: "Estadio Guadalajara", tv: "VTV3" },
+            { id: 26, home: "Thụy Sỹ", homeFlag: "🇨🇭", away: "Bosnia", awayFlag: "🇧🇦", group: "B", time: "19/06 02:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 27, home: "Canada", homeFlag: "🇨🇦", away: "Qatar", awayFlag: "🇶🇦", group: "B", time: "19/06 05:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV3, VTV6, VTV9" },
+            { id: 28, home: "Mexico", homeFlag: "🇲🇽", away: "Hàn Quốc", awayFlag: "🇰🇷", group: "A", time: "19/06 08:00", stage: "Vòng bảng", stadium: "Estadio Guadalajara", tv: "VTV3, VTV6, VTV9" },
             // Day 20/06
-            { id: 29, home: "Mỹ", homeFlag: "🇺🇸", away: "Australia", awayFlag: "🇦🇺", group: "D", time: "20/06 02:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV3" },
-            { id: 30, home: "Scotland", homeFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", away: "Maroc", awayFlag: "🇲🇦", group: "C", time: "20/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV2" },
-            { id: 31, home: "Brazil", homeFlag: "🇧🇷", away: "Haiti", awayFlag: "🇭🇹", group: "C", time: "20/06 07:30", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3" },
-            { id: 32, home: "Thổ Nhĩ Kỳ", homeFlag: "🇹🇷", away: "Paraguay", awayFlag: "🇵🇾", group: "D", time: "20/06 10:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV5" },
+            { id: 29, home: "Mỹ", homeFlag: "🇺🇸", away: "Australia", awayFlag: "🇦🇺", group: "D", time: "20/06 02:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 30, home: "Scotland", homeFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", away: "Maroc", awayFlag: "🇲🇦", group: "C", time: "20/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9" },
+            { id: 31, home: "Brazil", homeFlag: "🇧🇷", away: "Haiti", awayFlag: "🇭🇹", group: "C", time: "20/06 07:30", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3, VTV6, VTV9" },
+            { id: 32, home: "Thổ Nhĩ Kỳ", homeFlag: "🇹🇷", away: "Paraguay", awayFlag: "🇵🇾", group: "D", time: "20/06 10:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV3, VTV6, VTV9" },
             // Day 21/06
-            { id: 33, home: "Hà Lan", homeFlag: "🇳🇱", away: "Thụy Điển", awayFlag: "🇸🇪", group: "F", time: "21/06 00:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
-            { id: 34, home: "Đức", homeFlag: "🇩🇪", away: "Bờ Biển Ngà", awayFlag: "🇨🇮", group: "E", time: "21/06 03:00", stage: "Vòng bảng", stadium: "NRG Stadium, Houston", tv: "VTV5" },
-            { id: 35, home: "Ecuador", homeFlag: "🇪🇨", away: "Curacao", awayFlag: "🇨🇼", group: "E", time: "21/06 07:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV2" },
-            { id: 36, home: "Tunisia", homeFlag: "🇹🇳", away: "Nhật Bản", awayFlag: "🇯🇵", group: "F", time: "21/06 11:00", stage: "Vòng bảng", stadium: "Estadio Monterrey", tv: "VTV5" },
-            { id: 37, home: "Tây Ban Nha", homeFlag: "🇪🇸", away: "Saudi Arabia", awayFlag: "🇸🇦", group: "H", time: "21/06 23:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
+            { id: 33, home: "Hà Lan", homeFlag: "🇳🇱", away: "Thụy Điển", awayFlag: "🇸🇪", group: "F", time: "21/06 00:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 34, home: "Đức", homeFlag: "🇩🇪", away: "Bờ Biển Ngà", awayFlag: "🇨🇮", group: "E", time: "21/06 03:00", stage: "Vòng bảng", stadium: "NRG Stadium, Houston", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 35, home: "Ecuador", homeFlag: "🇪🇨", away: "Curacao", awayFlag: "🇨🇼", group: "E", time: "21/06 07:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV3, VTV6, VTV9" },
+            { id: 36, home: "Tunisia", homeFlag: "🇹🇳", away: "Nhật Bản", awayFlag: "🇯🇵", group: "F", time: "21/06 11:00", stage: "Vòng bảng", stadium: "Estadio Monterrey", tv: "VTV3, VTV6" },
+            { id: 37, home: "Tây Ban Nha", homeFlag: "🇪🇸", away: "Saudi Arabia", awayFlag: "🇸🇦", group: "H", time: "21/06 23:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9, VTV10" },
             // Day 22/06
-            { id: 38, home: "Bỉ", homeFlag: "🇧🇪", away: "Iran", awayFlag: "🇮🇷", group: "G", time: "22/06 02:00", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV2" },
-            { id: 39, home: "Uruguay", homeFlag: "🇺🇾", away: "Cabo Verde", awayFlag: "🇨🇻", group: "H", time: "22/06 05:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3" },
-            { id: 40, home: "New Zealand", homeFlag: "🇳🇿", away: "Ai Cập", awayFlag: "🇪🇬", group: "G", time: "22/06 08:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV5" },
+            { id: 38, home: "Bỉ", homeFlag: "🇧🇪", away: "Iran", awayFlag: "🇮🇷", group: "G", time: "22/06 02:00", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 39, home: "Uruguay", homeFlag: "🇺🇾", away: "Cabo Verde", awayFlag: "🇨🇻", group: "H", time: "22/06 05:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3, VTV6, VTV9" },
+            { id: 40, home: "New Zealand", homeFlag: "🇳🇿", away: "Ai Cập", awayFlag: "🇪🇬", group: "G", time: "22/06 08:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV3, VTV6, VTV9" },
             // Day 23/06
-            { id: 41, home: "Argentina", homeFlag: "🇦🇷", away: "Áo", awayFlag: "🇦🇹", group: "J", time: "23/06 00:00", stage: "Vòng bảng", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV3" },
-            { id: 42, home: "Pháp", homeFlag: "🇫🇷", away: "Iraq", awayFlag: "🇮🇶", group: "I", time: "23/06 04:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV2" },
-            { id: 43, home: "Na Uy", homeFlag: "🇳🇴", away: "Senegal", awayFlag: "🇸🇳", group: "I", time: "23/06 07:00", stage: "Vòng bảng", stadium: "Philadelphia Stadium", tv: "VTV5" },
-            { id: 44, home: "Jordan", homeFlag: "🇯🇴", away: "Algeria", awayFlag: "🇩🇿", group: "J", time: "23/06 10:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV3" },
+            { id: 41, home: "Argentina", homeFlag: "🇦🇷", away: "Áo", awayFlag: "🇦🇹", group: "J", time: "23/06 00:00", stage: "Vòng bảng", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 42, home: "Pháp", homeFlag: "🇫🇷", away: "Iraq", awayFlag: "🇮🇶", group: "I", time: "23/06 04:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV3, VTV6, VTV9" },
+            { id: 43, home: "Na Uy", homeFlag: "🇳🇴", away: "Senegal", awayFlag: "🇸🇳", group: "I", time: "23/06 07:00", stage: "Vòng bảng", stadium: "Philadelphia Stadium", tv: "VTV3, VTV6, VTV10" },
+            { id: 44, home: "Jordan", homeFlag: "🇯🇴", away: "Algeria", awayFlag: "🇩🇿", group: "J", time: "23/06 10:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV3, VTV6, VTV9" },
             // Day 24/06
-            { id: 45, home: "Bồ Đào Nha", homeFlag: "🇵🇹", away: "Uzbekistan", awayFlag: "🇺🇿", group: "K", time: "24/06 00:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
-            { id: 46, home: "Anh", homeFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", away: "Croatia", awayFlag: "🇭🇷", group: "L", time: "24/06 03:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV2" },
-            { id: 47, home: "Panama", homeFlag: "🇵🇦", away: "Croatia", awayFlag: "🇭🇷", group: "L", time: "24/06 06:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV5" },
-            { id: 48, home: "Colombia", homeFlag: "🇨🇴", away: "CHDC Congo", awayFlag: "🇨🇩", group: "K", time: "24/06 09:00", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV3" },
+            { id: 45, home: "Bồ Đào Nha", homeFlag: "🇵🇹", away: "Uzbekistan", awayFlag: "🇺🇿", group: "K", time: "24/06 00:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 46, home: "Anh", homeFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", away: "Croatia", awayFlag: "🇭🇷", group: "L", time: "24/06 03:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 47, home: "Panama", homeFlag: "🇵🇦", away: "Croatia", awayFlag: "🇭🇷", group: "L", time: "24/06 06:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV3, VTV6, VTV9" },
+            { id: 48, home: "Colombia", homeFlag: "🇨🇴", away: "CHDC Congo", awayFlag: "🇨🇩", group: "K", time: "24/06 09:00", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV3, VTV6, VTV9" },
             // Day 25/06
-            { id: 49, home: "Bosnia", homeFlag: "🇧🇦", away: "Qatar", awayFlag: "🇶🇦", group: "B", time: "25/06 02:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV5" },
-            { id: 50, home: "Thụy Sỹ", homeFlag: "🇨🇭", away: "Canada", awayFlag: "🇨🇦", group: "B", time: "25/06 02:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV2" },
-            { id: 51, home: "Maroc", homeFlag: "🇲🇦", away: "Haiti", awayFlag: "🇭🇹", group: "C", time: "25/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
-            { id: 52, home: "Scotland", homeFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", away: "Brazil", awayFlag: "🇧🇷", group: "C", time: "25/06 05:00", stage: "Vòng bảng", stadium: "Boston Stadium", tv: "VTV2" },
-            { id: 53, home: "Nam Phi", homeFlag: "🇿🇦", away: "Hàn Quốc", awayFlag: "🇰🇷", group: "A", time: "25/06 08:00", stage: "Vòng bảng", stadium: "Estadio Guadalajara", tv: "VTV5" },
-            { id: 54, home: "CH Séc", homeFlag: "🇨🇿", away: "Mexico", awayFlag: "🇲🇽", group: "A", time: "25/06 08:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
+            { id: 49, home: "Bosnia", homeFlag: "🇧🇦", away: "Qatar", awayFlag: "🇶🇦", group: "B", time: "25/06 02:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV3, VTV6, VTV10" },
+            { id: 50, home: "Thụy Sỹ", homeFlag: "🇨🇭", away: "Canada", awayFlag: "🇨🇦", group: "B", time: "25/06 02:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV3, VTV6, VTV10" },
+            { id: 51, home: "Maroc", homeFlag: "🇲🇦", away: "Haiti", awayFlag: "🇭🇹", group: "C", time: "25/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV2, VTV10" },
+            { id: 52, home: "Scotland", homeFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", away: "Brazil", awayFlag: "🇧🇷", group: "C", time: "25/06 05:00", stage: "Vòng bảng", stadium: "Boston Stadium", tv: "VTV3, VTV6, VTV9" },
+            { id: 53, home: "Nam Phi", homeFlag: "🇿🇦", away: "Hàn Quốc", awayFlag: "🇰🇷", group: "A", time: "25/06 08:00", stage: "Vòng bảng", stadium: "Estadio Guadalajara", tv: "VTV2" },
+            { id: 54, home: "CH Séc", homeFlag: "🇨🇿", away: "Mexico", awayFlag: "🇲🇽", group: "A", time: "25/06 08:00", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3, VTV6, VTV9" },
             // Day 26/06
-            { id: 55, home: "Curacao", homeFlag: "🇨🇼", away: "Bờ Biển Ngà", awayFlag: "🇨🇮", group: "E", time: "26/06 03:00", stage: "Vòng bảng", stadium: "Philadelphia Stadium", tv: "VTV5" },
-            { id: 56, home: "Ecuador", homeFlag: "🇪🇨", away: "Đức", awayFlag: "🇩🇪", group: "E", time: "26/06 03:00", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV3" },
-            { id: 57, home: "Tunisia", homeFlag: "🇹🇳", away: "Hà Lan", awayFlag: "🇳🇱", group: "F", time: "26/06 06:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV2" },
-            { id: 58, home: "Nhật Bản", homeFlag: "🇯🇵", away: "Thụy Điển", awayFlag: "🇸🇪", group: "F", time: "26/06 06:00", stage: "Vòng bảng", stadium: "Estadio Monterrey", tv: "VTV5" },
-            { id: 59, home: "Thổ Nhĩ Kỳ", homeFlag: "🇹🇷", away: "Mỹ", awayFlag: "🇺🇸", group: "D", time: "26/06 09:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3" },
+            { id: 55, home: "Curacao", homeFlag: "🇨🇼", away: "Bờ Biển Ngà", awayFlag: "🇨🇮", group: "E", time: "26/06 03:00", stage: "Vòng bảng", stadium: "Philadelphia Stadium", tv: "VTV2, VTV10" },
+            { id: 56, home: "Ecuador", homeFlag: "🇪🇨", away: "Đức", awayFlag: "🇩🇪", group: "E", time: "26/06 03:00", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV3, VTV6, VTV9" },
+            { id: 57, home: "Tunisia", homeFlag: "🇹🇳", away: "Hà Lan", awayFlag: "🇳🇱", group: "F", time: "26/06 06:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3, VTV6" },
+            { id: 58, home: "Nhật Bản", homeFlag: "🇯🇵", away: "Thụy Điển", awayFlag: "🇸🇪", group: "F", time: "26/06 06:00", stage: "Vòng bảng", stadium: "Estadio Monterrey", tv: "VTV2, VTV9" },
+            { id: 59, home: "Thổ Nhĩ Kỳ", homeFlag: "🇹🇷", away: "Mỹ", awayFlag: "🇺🇸", group: "D", time: "26/06 09:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3, VTV6, VTV9" },
             { id: 60, home: "Paraguay", homeFlag: "🇵🇾", away: "Australia", awayFlag: "🇦🇺", group: "D", time: "26/06 09:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV2" },
             // Day 27/06
-            { id: 61, home: "Na Uy", homeFlag: "🇳🇴", away: "Pháp", awayFlag: "🇫🇷", group: "I", time: "27/06 02:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
-            { id: 62, home: "Senegal", homeFlag: "🇸🇳", away: "Iraq", awayFlag: "🇮🇶", group: "I", time: "27/06 02:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV2" },
-            { id: 63, home: "Cabo Verde", homeFlag: "🇨🇻", away: "Saudi Arabia", awayFlag: "🇸🇦", group: "H", time: "27/06 07:00", stage: "Vòng bảng", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV5" },
-            { id: 64, home: "Uruguay", homeFlag: "🇺🇾", away: "Tây Ban Nha", awayFlag: "🇪🇸", group: "H", time: "27/06 07:00", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3" },
-            { id: 65, home: "Ai Cập", homeFlag: "🇪🇬", away: "Iran", awayFlag: "🇮🇷", group: "G", time: "27/06 10:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV2" },
-            { id: 66, home: "New Zealand", homeFlag: "🇳🇿", away: "Bỉ", awayFlag: "🇧🇪", group: "G", time: "27/06 10:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV5" },
+            { id: 61, home: "Na Uy", homeFlag: "🇳🇴", away: "Pháp", awayFlag: "🇫🇷", group: "I", time: "27/06 02:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9" },
+            { id: 62, home: "Senegal", homeFlag: "🇸🇳", away: "Iraq", awayFlag: "🇮🇶", group: "I", time: "27/06 02:00", stage: "Vòng bảng", stadium: "Gillette Stadium, Boston", tv: "VTV2, VTV10" },
+            { id: 63, home: "Cabo Verde", homeFlag: "🇨🇻", away: "Saudi Arabia", awayFlag: "🇸🇦", group: "H", time: "27/06 07:00", stage: "Vòng bảng", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV2" },
+            { id: 64, home: "Uruguay", homeFlag: "🇺🇾", away: "Tây Ban Nha", awayFlag: "🇪🇸", group: "H", time: "27/06 07:00", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3, VTV6, VTV9" },
+            { id: 65, home: "Ai Cập", homeFlag: "🇪🇬", away: "Iran", awayFlag: "🇮🇷", group: "G", time: "27/06 10:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV2, VTV9" },
+            { id: 66, home: "New Zealand", homeFlag: "🇳🇿", away: "Bỉ", awayFlag: "🇧🇪", group: "G", time: "27/06 10:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV3, VTV6" },
             // Day 28/06
-            { id: 67, home: "Croatia", homeFlag: "🇭🇷", away: "Ghana", awayFlag: "🇬🇭", group: "L", time: "28/06 04:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV2" },
-            { id: 68, home: "Panama", homeFlag: "🇵🇦", away: "Anh", awayFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", group: "L", time: "28/06 04:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
-            { id: 70, home: "Colombia", homeFlag: "🇨🇴", away: "Bồ Đào Nha", awayFlag: "🇵🇹", group: "K", time: "28/06 06:30", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
-            { id: 69, home: "CHDC Congo", homeFlag: "🇨🇩", away: "Uzbekistan", awayFlag: "🇺🇿", group: "K", time: "28/06 06:30", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV5" },
+            { id: 67, home: "Croatia", homeFlag: "🇭🇷", away: "Ghana", awayFlag: "🇬🇭", group: "L", time: "28/06 04:00", stage: "Vòng bảng", stadium: "BMO Field, Toronto", tv: "VTV3, VTV6, VTV9" },
+            { id: 68, home: "Panama", homeFlag: "🇵🇦", away: "Anh", awayFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", group: "L", time: "28/06 04:00", stage: "Vòng bảng", stadium: "AT&T Stadium, Dallas", tv: "VTV2, VTV10" },
+            { id: 70, home: "Colombia", homeFlag: "🇨🇴", away: "Bồ Đào Nha", awayFlag: "🇵🇹", group: "K", time: "28/06 06:30", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV7, VTV9" },
+            { id: 69, home: "CHDC Congo", homeFlag: "🇨🇩", away: "Uzbekistan", awayFlag: "🇺🇿", group: "K", time: "28/06 06:30", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV6, VTV10" },
             { id: 71, home: "Algeria", homeFlag: "🇩🇿", away: "Áo", awayFlag: "🇦🇹", group: "J", time: "28/06 09:00", stage: "Vòng bảng", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV2" },
-            { id: 72, home: "Jordan", homeFlag: "🇯🇴", away: "Argentina", awayFlag: "🇦🇷", group: "J", time: "28/06 09:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3" }
+            { id: 72, home: "Jordan", homeFlag: "🇯🇴", away: "Argentina", awayFlag: "🇦🇷", group: "J", time: "28/06 09:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3, VTV6, VTV9" }
         ];
 
         const baseKnockoutMatches = [
             // Round of 32
-            { id: 73, homePlaceholder: "Nhì bảng A", awayPlaceholder: "Nhì bảng B", time: "29/06 02:00", stage: "Vòng 32 đội", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
-            { id: 74, homePlaceholder: "Nhất bảng C", awayPlaceholder: "Nhì bảng F", time: "30/06 00:00", stage: "Vòng 32 đội", stadium: "SoFi Stadium, Los Angeles", tv: "VTV2" },
-            { id: 75, homePlaceholder: "Nhất bảng E", awayPlaceholder: "Thứ 3 bảng A/B/C/D/F", time: "30/06 03:30", stage: "Vòng 32 đội", stadium: "BC Place, Vancouver", tv: "VTV5" },
-            { id: 76, homePlaceholder: "Nhất bảng F", awayPlaceholder: "Nhì bảng C", time: "30/06 08:00", stage: "Vòng 32 đội", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
-            { id: 77, homePlaceholder: "Nhì bảng E", awayPlaceholder: "Nhì bảng I", time: "01/07 00:00", stage: "Vòng 32 đội", stadium: "BMO Field, Toronto", tv: "VTV2" },
-            { id: 78, homePlaceholder: "Nhất bảng I", awayPlaceholder: "Thứ 3 bảng C/D/F/G/H", time: "01/07 02:00", stage: "Vòng 32 đội", stadium: "Houston Stadium, Texas", tv: "VTV5" },
-            { id: 79, homePlaceholder: "Nhất bảng A", awayPlaceholder: "Thứ 3 bảng C/E/F/H/I", time: "01/07 08:00", stage: "Vòng 32 đội", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
-            { id: 80, homePlaceholder: "Nhất bảng L", awayPlaceholder: "Thứ 3 bảng E/H/I/J/K", time: "01/07 23:00", stage: "Vòng 32 đội", stadium: "Gillette Stadium, Boston", tv: "VTV2" },
-            { id: 81, homePlaceholder: "Nhất bảng G", awayPlaceholder: "Thứ 3 bảng A/E/H/I/J", time: "02/07 03:00", stage: "Vòng 32 đội", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV5" },
-            { id: 82, homePlaceholder: "Nhất bảng D", awayPlaceholder: "Thứ 3 bảng B/E/F/I/J", time: "02/07 07:00", stage: "Vòng 32 đội", stadium: "Hard Rock Stadium, Miami", tv: "VTV3" },
-            { id: 83, homePlaceholder: "Nhất bảng H", awayPlaceholder: "Nhì bảng J", time: "03/07 02:00", stage: "Vòng 32 đội", stadium: "Levi's Stadium, San Francisco", tv: "VTV5" },
-            { id: 84, homePlaceholder: "Nhì bảng K", awayPlaceholder: "Nhì bảng L", time: "03/07 06:00", stage: "Vòng 32 đội", stadium: "Lumen Field, Seattle", tv: "VTV2" },
-            { id: 85, homePlaceholder: "Nhất bảng B", awayPlaceholder: "Thứ 3 bảng E/F/G/I/J", time: "03/07 10:00", stage: "Vòng 32 đội", stadium: "Estadio Guadalajara", tv: "VTV3" },
-            { id: 86, homePlaceholder: "Nhì bảng D", awayPlaceholder: "Nhì bảng G", time: "04/07 01:00", stage: "Vòng 32 đội", stadium: "Philadelphia Stadium", tv: "VTV2" },
-            { id: 87, homePlaceholder: "Nhất bảng J", awayPlaceholder: "Nhì bảng H", time: "04/07 05:00", stage: "Vòng 32 đội", stadium: "Estadio Monterrey", tv: "VTV3" },
-            { id: 88, homePlaceholder: "Nhất bảng K", awayPlaceholder: "Thứ 3 bảng D/E/I/J/L", time: "04/07 09:30", stage: "Vòng 32 đội", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV5" },
+            { id: 73, homePlaceholder: "Nhì bảng A", awayPlaceholder: "Nhì bảng B", time: "29/06 02:00", stage: "Vòng 32 đội", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV10" },
+            { id: 74, homePlaceholder: "Nhất bảng C", awayPlaceholder: "Nhì bảng F", time: "30/06 00:00", stage: "Vòng 32 đội", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3, VTV6, VTV9" },
+            { id: 75, homePlaceholder: "Nhất bảng E", awayPlaceholder: "Thứ 3 bảng A/B/C/D/F", time: "30/06 03:30", stage: "Vòng 32 đội", stadium: "BC Place, Vancouver", tv: "VTV3, VTV6, VTV10" },
+            { id: 76, homePlaceholder: "Nhất bảng F", awayPlaceholder: "Nhì bảng C", time: "30/06 08:00", stage: "Vòng 32 đội", stadium: "AT&T Stadium, Dallas", tv: "VTV3, VTV6, VTV9" },
+            { id: 77, homePlaceholder: "Nhì bảng E", awayPlaceholder: "Nhì bảng I", time: "01/07 00:00", stage: "Vòng 32 đội", stadium: "BMO Field, Toronto", tv: "VTV3, VTV6, VTV10" },
+            { id: 78, homePlaceholder: "Nhất bảng I", awayPlaceholder: "Thứ 3 bảng C/D/F/G/H", time: "01/07 02:00", stage: "Vòng 32 đội", stadium: "Houston Stadium, Texas", tv: "VTV3, VTV6, VTV9" },
+            { id: 79, homePlaceholder: "Nhất bảng A", awayPlaceholder: "Thứ 3 bảng C/E/F/H/I", time: "01/07 08:00", stage: "Vòng 32 đội", stadium: "Estadio Azteca, Mexico City", tv: "VTV3, VTV6, VTV9" },
+            { id: 80, homePlaceholder: "Nhất bảng L", awayPlaceholder: "Thứ 3 bảng E/H/I/J/K", time: "01/07 23:00", stage: "Vòng 32 đội", stadium: "Gillette Stadium, Boston", tv: "VTV3, VTV6, VTV10" },
+            { id: 81, homePlaceholder: "Nhất bảng G", awayPlaceholder: "Thứ 3 bảng A/E/H/I/J", time: "02/07 03:00", stage: "Vòng 32 đội", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV3, VTV6, VTV10" },
+            { id: 82, homePlaceholder: "Nhất bảng D", awayPlaceholder: "Thứ 3 bảng B/E/F/I/J", time: "02/07 07:00", stage: "Vòng 32 đội", stadium: "Hard Rock Stadium, Miami", tv: "VTV3, VTV6, VTV9" },
+            { id: 83, homePlaceholder: "Nhất bảng H", awayPlaceholder: "Nhì bảng J", time: "03/07 02:00", stage: "Vòng 32 đội", stadium: "Levi's Stadium, San Francisco", tv: "VTV3, VTV6, VTV9" },
+            { id: 84, homePlaceholder: "Nhì bảng K", awayPlaceholder: "Nhì bảng L", time: "03/07 06:00", stage: "Vòng 32 đội", stadium: "Lumen Field, Seattle", tv: "VTV3, VTV6, VTV10" },
+            { id: 85, homePlaceholder: "Nhất bảng B", awayPlaceholder: "Thứ 3 bảng E/F/G/I/J", time: "03/07 10:00", stage: "Vòng 32 đội", stadium: "Estadio Guadalajara", tv: "VTV3, VTV6, VTV9" },
+            { id: 86, homePlaceholder: "Nhì bảng D", awayPlaceholder: "Nhì bảng G", time: "04/07 01:00", stage: "Vòng 32 đội", stadium: "Philadelphia Stadium", tv: "VTV3, VTV6, VTV10" },
+            { id: 87, homePlaceholder: "Nhất bảng J", awayPlaceholder: "Nhì bảng H", time: "04/07 05:00", stage: "Vòng 32 đội", stadium: "Estadio Monterrey", tv: "VTV3, VTV6, VTV9" },
+            { id: 88, homePlaceholder: "Nhất bảng K", awayPlaceholder: "Thứ 3 bảng D/E/I/J/L", time: "04/07 09:30", stage: "Vòng 32 đội", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV3, VTV6, VTV9" },
 
             // Round of 16
-            { id: 89, homePlaceholder: "Thắng Trận 73", awayPlaceholder: "Thắng Trận 75", time: "05/07 00:00", stage: "Vòng 16 đội", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" },
-            { id: 90, homePlaceholder: "Thắng Trận 74", awayPlaceholder: "Thắng Trận 77", time: "05/07 04:00", stage: "Vòng 16 đội", stadium: "SoFi Stadium, Los Angeles", tv: "VTV2" },
-            { id: 91, homePlaceholder: "Thắng Trận 76", awayPlaceholder: "Thắng Trận 78", time: "06/07 03:00", stage: "Vòng 16 đội", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
-            { id: 92, homePlaceholder: "Thắng Trận 79", awayPlaceholder: "Thắng Trận 80", time: "06/07 07:00", stage: "Vòng 16 đội", stadium: "BC Place, Vancouver", tv: "VTV2" },
-            { id: 93, homePlaceholder: "Thắng Trận 83", awayPlaceholder: "Thắng Trận 84", time: "07/07 02:00", stage: "Vòng 16 đội", stadium: "Estadio Azteca, Mexico City", tv: "VTV3" },
-            { id: 94, homePlaceholder: "Thắng Trận 81", awayPlaceholder: "Thắng Trận 82", time: "07/07 07:00", stage: "Vòng 16 đội", stadium: "BMO Field, Toronto", tv: "VTV5" },
-            { id: 95, homePlaceholder: "Thắng Trận 86", awayPlaceholder: "Thắng Trận 88", time: "07/07 23:00", stage: "Vòng 16 đội", stadium: "Houston Stadium, Texas", tv: "VTV2" },
-            { id: 96, homePlaceholder: "Thắng Trận 85", awayPlaceholder: "Thắng Trận 87", time: "08/07 03:00", stage: "Vòng 16 đội", stadium: "Hard Rock Stadium, Miami", tv: "VTV3" },
+            { id: 89, homePlaceholder: "Thắng Trận 73", awayPlaceholder: "Thắng Trận 75", time: "05/07 00:00", stage: "Vòng 16 đội", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9" },
+            { id: 90, homePlaceholder: "Thắng Trận 74", awayPlaceholder: "Thắng Trận 77", time: "05/07 04:00", stage: "Vòng 16 đội", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3, VTV6, VTV9" },
+            { id: 91, homePlaceholder: "Thắng Trận 76", awayPlaceholder: "Thắng Trận 78", time: "06/07 03:00", stage: "Vòng 16 đội", stadium: "AT&T Stadium, Dallas", tv: "VTV3, VTV6, VTV10" },
+            { id: 92, homePlaceholder: "Thắng Trận 79", awayPlaceholder: "Thắng Trận 80", time: "06/07 07:00", stage: "Vòng 16 đội", stadium: "BC Place, Vancouver", tv: "VTV3, VTV6, VTV9" },
+            { id: 93, homePlaceholder: "Thắng Trận 83", awayPlaceholder: "Thắng Trận 84", time: "07/07 02:00", stage: "Vòng 16 đội", stadium: "Estadio Azteca, Mexico City", tv: "VTV3, VTV6, VTV10" },
+            { id: 94, homePlaceholder: "Thắng Trận 81", awayPlaceholder: "Thắng Trận 82", time: "07/07 07:00", stage: "Vòng 16 đội", stadium: "BMO Field, Toronto", tv: "VTV3, VTV6, VTV9" },
+            { id: 95, homePlaceholder: "Thắng Trận 86", awayPlaceholder: "Thắng Trận 88", time: "07/07 23:00", stage: "Vòng 16 đội", stadium: "Houston Stadium, Texas", tv: "VTV3, VTV6, VTV9" },
+            { id: 96, homePlaceholder: "Thắng Trận 85", awayPlaceholder: "Thắng Trận 87", time: "08/07 03:00", stage: "Vòng 16 đội", stadium: "Hard Rock Stadium, Miami", tv: "VTV3, VTV6, VTV9" },
 
             // Quarterfinals
-            { id: 97, homePlaceholder: "Thắng Trận 89", awayPlaceholder: "Thắng Trận 90", time: "10/07 03:00", stage: "Tứ kết", stadium: "Gillette Stadium, Boston", tv: "VTV3" },
-            { id: 98, homePlaceholder: "Thắng Trận 91", awayPlaceholder: "Thắng Trận 92", time: "11/07 02:00", stage: "Tứ kết", stadium: "Levi's Stadium, San Francisco", tv: "VTV3" },
-            { id: 99, homePlaceholder: "Thắng Trận 93", awayPlaceholder: "Thắng Trận 94", time: "12/07 04:00", stage: "Tứ kết", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV3" },
-            { id: 100, homePlaceholder: "Thắng Trận 95", awayPlaceholder: "Thắng Trận 100", time: "12/07 08:00", stage: "Tứ kết", stadium: "Lumen Field, Seattle", tv: "VTV3" },
+            { id: 97, homePlaceholder: "Thắng Trận 89", awayPlaceholder: "Thắng Trận 90", time: "10/07 03:00", stage: "Tứ kết", stadium: "Gillette Stadium, Boston", tv: "VTV3, VTV6, VTV9" },
+            { id: 98, homePlaceholder: "Thắng Trận 91", awayPlaceholder: "Thắng Trận 92", time: "11/07 02:00", stage: "Tứ kết", stadium: "Levi's Stadium, San Francisco", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 99, homePlaceholder: "Thắng Trận 93", awayPlaceholder: "Thắng Trận 94", time: "12/07 04:00", stage: "Tứ kết", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV3, VTV6, VTV10" },
+            { id: 100, homePlaceholder: "Thắng Trận 95", awayPlaceholder: "Thắng Trận 100", time: "12/07 08:00", stage: "Tứ kết", stadium: "Lumen Field, Seattle", tv: "VTV3, VTV6, VTV9" },
 
             // Semifinals
-            { id: 101, homePlaceholder: "Thắng Trận 97", awayPlaceholder: "Thắng Trận 98", time: "15/07 02:00", stage: "Bán kết", stadium: "AT&T Stadium, Dallas", tv: "VTV3" },
-            { id: 102, homePlaceholder: "Thắng Trận 99", awayPlaceholder: "Thắng Trận 100", time: "16/07 02:00", stage: "Bán kết", stadium: "Atlanta Stadium, Georgia", tv: "VTV3" },
+            { id: 101, homePlaceholder: "Thắng Trận 97", awayPlaceholder: "Thắng Trận 98", time: "15/07 02:00", stage: "Bán kết", stadium: "AT&T Stadium, Dallas", tv: "VTV3, VTV6, VTV9" },
+            { id: 102, homePlaceholder: "Thắng Trận 99", awayPlaceholder: "Thắng Trận 100", time: "16/07 02:00", stage: "Bán kết", stadium: "Atlanta Stadium, Georgia", tv: "VTV3, VTV6, VTV9" },
 
             // Third Place
-            { id: 103, homePlaceholder: "Thua Bán Kết 1", awayPlaceholder: "Thua Bán Kết 2", time: "18/07 03:00", stage: "Tranh hạng ba", stadium: "Hard Rock Stadium, Miami", tv: "VTV3" },
+            { id: 103, homePlaceholder: "Thua Bán Kết 1", awayPlaceholder: "Thua Bán Kết 2", time: "18/07 03:00", stage: "Tranh hạng ba", stadium: "Hard Rock Stadium, Miami", tv: "VTV3, VTV6, VTV9, VTV10" },
 
             // Final
-            { id: 104, homePlaceholder: "Thắng Bán Kết 1", awayPlaceholder: "Thắng Bán Kết 2", time: "19/07 06:00", stage: "Chung kết", stadium: "MetLife Stadium, New Jersey", tv: "VTV3" }
+            { id: 104, homePlaceholder: "Thắng Bán Kết 1", awayPlaceholder: "Thắng Bán Kết 2", time: "19/07 06:00", stage: "Chung kết", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9, VTV10" }
         ];
 
         // Core dynamic arrays and states: Ép tải lại Cờ và Tên từ file code chuẩn
@@ -840,7 +840,6 @@
 
         // Hệ thống Fetch qua proxy mạng chống chặn CORS trong iframe Sandbox
         async function robustFetch(targetUrl) {
-            // Định cấu hình các Proxy: Sử dụng các dịch vụ có độ phản hồi cao với Sandbox null origin
             const proxyConfigs = [
                 {
                     url: (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
@@ -1311,7 +1310,7 @@
                     const awayFlagHTML = match.awayTeam.flag ? `<span class="text-base">${match.awayTeam.flag}</span>` : `<span class="text-gray-400 dark:text-gray-600 text-xs w-4 text-center"><i class="fa-solid fa-circle-question"></i></span>`;
 
                     card.innerHTML = `
-                        <div class="flex items-center space-x-3 w-[70%]">
+                        <div class="flex items-center space-x-3 w-[65%]">
                             <button onclick="toggleFavorite(${match.id}, event)" class="text-gray-300 dark:text-gray-700 hover:text-yellow-500 transition-colors">
                                 <i class="${isFav ? 'fa-solid text-yellow-500' : 'fa-regular'} fa-star text-sm"></i>
                             </button>
@@ -1328,9 +1327,9 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col items-end space-y-1 w-[30%]">
+                        <div class="flex flex-col items-end space-y-1 w-[35%]">
                             ${scoreHTML}
-                            <span class="text-[8px] text-gray-400 dark:text-gray-500 font-extrabold uppercase tracking-wider">${subInfo} • ${match.tv.split(',')[0]}</span>
+                            <span class="text-[8px] text-gray-400 dark:text-gray-500 font-extrabold uppercase tracking-wider text-right w-full truncate" title="${match.tv}">${subInfo} • ${match.tv}</span>
                         </div>
                     `;
 
@@ -1442,7 +1441,7 @@
                 const awayFlagHTML = match.awayTeam.flag ? `<span class="text-base">${match.awayTeam.flag}</span>` : `<span class="text-gray-400 dark:text-gray-600 text-xs w-4 text-center"><i class="fa-solid fa-circle-question"></i></span>`;
 
                 card.innerHTML = `
-                    <div class="flex items-center space-x-3 w-[70%]">
+                    <div class="flex items-center space-x-3 w-[65%]">
                         <button onclick="toggleFavorite(${match.id}, event)" class="text-gray-300 dark:text-gray-700 hover:text-yellow-500 transition-colors">
                             <i class="${isFav ? 'fa-solid text-yellow-500' : 'fa-regular'} fa-star text-xs"></i>
                         </button>
@@ -1459,9 +1458,9 @@
                         </div>
                     </div>
 
-                    <div class="flex flex-col items-end space-y-1 w-[30%]">
+                    <div class="flex flex-col items-end space-y-1 w-[35%]">
                         ${scoreHTML}
-                        <span class="text-[8px] text-gray-400 dark:text-gray-500 font-extrabold uppercase tracking-wider">Trận ${match.id} • ${match.tv.split(',')[0]}</span>
+                        <span class="text-[8px] text-gray-400 dark:text-gray-500 font-extrabold uppercase tracking-wider text-right w-full truncate" title="${match.tv}">Trận ${match.id} • ${match.tv}</span>
                     </div>
                 `;
 
@@ -1637,6 +1636,8 @@
             document.getElementById('modal-stage').innerText = match.stage;
             document.getElementById('modal-time').innerText = `${match.time.split(' ')[1]}, ngày ${match.time.split(' ')[0]}/2026`;
             document.getElementById('modal-stadium').innerText = match.stadium;
+            
+            // Cập nhật trường trực tiếp hiển thị đầy đủ thông tin các kênh phát sóng
             document.getElementById('modal-tv').innerText = match.tv;
         }
 
