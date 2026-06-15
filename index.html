@@ -574,20 +574,60 @@
             }
         }
 
-        // Ánh xạ ngôn ngữ tự động cho API Fixture toàn cầu (Bổ sung chuẩn tên FIFA)
-        const teamTranslationMap = {
-            "Mexico": "Mexico", "South Africa": "Nam Phi", "South Korea": "Hàn Quốc", "Korea Republic": "Hàn Quốc", "Czechia": "CH Séc", "Czech Republic": "CH Séc",
-            "Canada": "Canada", "Bosnia and Herzegovina": "Bosnia", "Bosnia": "Bosnia", "Qatar": "Qatar", "Switzerland": "Thụy Sỹ",
-            "Brazil": "Brazil", "Morocco": "Maroc", "Haiti": "Haiti", "Scotland": "Scotland", "United States": "Mỹ", "USA": "Mỹ",
-            "Paraguay": "Paraguay", "Australia": "Australia", "Turkey": "Thổ Nhĩ Kỳ", "Germany": "Đức", "Curaçao": "Curacao", "Curacao": "Curacao", "Curazao": "Curacao",
-            "Ivory Coast": "Bờ Biển Ngà", "Côte d'Ivoire": "Bờ Biển Ngà", "Cote-d'Ivoire": "Bờ Biển Ngà", "Ecuador": "Ecuador", "Netherlands": "Hà Lan", "Japan": "Nhật Bản", "Sweden": "Thụy Điển",
-            "Tunisia": "Tunisia", "Belgium": "Bỉ", "Egypt": "Ai Cập", "Iran": "Iran", "IR Iran": "Iran", "New Zealand": "New Zealand", "Spain": "Tây Ban Nha",
-            "Cape Verde": "Cabo Verde", "Cabo Verde": "Cabo Verde", "Saudi Arabia": "Saudi Arabia", "Uruguay": "Uruguay", "France": "Pháp",
-            "Senegal": "Senegal", "Iraq": "Iraq", "Norway": "Na Uy", "Argentina": "Argentina", "Algeria": "Algeria", "Austria": "Áo",
-            "Jordan": "Jordan", "Portugal": "Bồ Đào Nha", "DR Congo": "CHDC Congo", "Congo DR": "CHDC Congo", "Uzbekistan": "Uzbekistan", "Colombia": "Colombia",
-            "England": "Anh", "Croatia": "Croatia", "Ghana": "Ghana", "Panama": "Panama"
-        };
+// Ánh xạ ngôn ngữ tự động cho API Fixture toàn cầu (Đã chuẩn hóa theo danh sách của bạn)
+const teamTranslationMap = {
+    // Đội tuyển có chỉnh sửa chuẩn kí tự theo danh sách
+    "Türkiye": "Thổ Nhĩ Kỳ", 
 
+    // Toàn bộ các đội còn lại trong danh sách của bạn
+    "Mexico": "Mexico", 
+    "Korea Republic": "Hàn Quốc", "South Korea": "Hàn Quốc",
+    "Canada": "Canada", 
+    "USA": "Mỹ", "United States": "Mỹ",
+    "Qatar": "Qatar", 
+    "Brazil": "Brazil", 
+    "Haiti": "Haiti", 
+    "Australia": "Australia", 
+    "Germany": "Đức", 
+    "Netherlands": "Hà Lan", 
+    "Côte d'Ivoire": "Bờ Biển Ngà", "Ivory Coast": "Bờ Biển Ngà", "Cote-d'Ivoire": "Bờ Biển Ngà",
+    "Sweden": "Thụy Điển", 
+    "Spain": "Tây Ban Nha", 
+    "Belgium": "Bỉ", 
+    "Saudi Arabia": "Saudi Arabia", 
+    "IR Iran": "Iran", "Iran": "Iran",
+    "France": "Pháp", 
+    "Iraq": "Iraq", 
+    "Argentina": "Argentina", 
+    "Austria": "Áo", 
+    "Portugal": "Bồ Đào Nha", 
+    "England": "Anh", 
+    "Ghana": "Ghana", 
+    "Uzbekistan": "Uzbekistan", 
+    "Czechia": "CH Séc", "Czech Republic": "CH Séc",
+    "Switzerland": "Thụy Sỹ", 
+    "Scotland": "Scotland", 
+    "Ecuador": "Ecuador", 
+    "Tunisia": "Tunisia", 
+    "Uruguay": "Uruguay", 
+    "New Zealand": "New Zealand", 
+    "Norway": "Na Uy", 
+    "Jordan": "Jordan", 
+    "Panama": "Panama", 
+    "Colombia": "Colombia", 
+    "Bosnia and Herzegovina": "Bosnia", "Bosnia": "Bosnia",
+    "Morocco": "Maroc", 
+    "South Africa": "Nam Phi", 
+    "Curaçao": "Curacao", "Curacao": "Curacao", "Curazao": "Curacao",
+    "Japan": "Nhật Bản", 
+    "Paraguay": "Paraguay", 
+    "Senegal": "Senegal", 
+    "Cabo Verde": "Cabo Verde", "Cape Verde": "Cabo Verde",
+    "Egypt": "Ai Cập", 
+    "Croatia": "Croatia", 
+    "Congo DR": "CHDC Congo", "DR Congo": "CHDC Congo",
+    "Algeria": "Algeria"
+};
         const groupsData = {
             A: [
                 { name: "Mexico", flag: "🇲🇽" }, { name: "Nam Phi", flag: "🇿🇦" },
