@@ -383,6 +383,11 @@
                         <span>Lưu tỷ số mới</span>
                     </button>
                 </div>
+                
+                <!-- Notice when manually editing score is locked because of official API data -->
+                <div id="api-locked-notice" class="hidden mt-3 text-center text-[10px] text-green-600 dark:text-green-400 bg-green-500/10 px-3 py-1.5 rounded-xl border border-green-500/20 font-bold max-w-[250px] mx-auto animate-pulse">
+                    <i class="fa-solid fa-circle-check mr-1.5"></i> Kết quả chính thức từ máy chủ API
+                </div>
             </div>
 
             <!-- Info list with detailed live channels information -->
@@ -741,7 +746,7 @@ const teamTranslationMap = {
             { id: 28, home: "Mexico", homeFlag: "🇲🇽", away: "Hàn Quốc", awayFlag: "🇰🇷", group: "A", time: "19/06 08:00", stage: "Vòng bảng", stadium: "Estadio Guadalajara", tv: "VTV3, VTV6, VTV9" },
             // Day 20/06
             { id: 29, home: "Mỹ", homeFlag: "🇺🇸", away: "Australia", awayFlag: "🇦🇺", group: "D", time: "20/06 02:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV3, VTV6, VTV9, VTV10" },
-            { id: 30, home: "Scotland", homeFlag: "🏴󠁧󠁢󠁣󠁴󠁿", away: "Maroc", awayFlag: "🇲🇦", group: "C", time: "20/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9" },
+            { id: 30, home: "Scotland", homeFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", away: "Maroc", awayFlag: "🇲🇦", group: "C", time: "20/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9" },
             { id: 31, home: "Brazil", homeFlag: "🇧🇷", away: "Haiti", awayFlag: "🇭🇹", group: "C", time: "20/06 07:30", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3, VTV6, VTV9" },
             { id: 32, home: "Thổ Nhĩ Kỳ", homeFlag: "🇹🇷", away: "Paraguay", awayFlag: "🇵🇾", group: "D", time: "20/06 10:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV3, VTV6, VTV9" },
             // Day 21/06
@@ -847,7 +852,8 @@ const teamTranslationMap = {
             return {
                 ...m,
                 homeScore: stored && stored.homeScore !== undefined ? stored.homeScore : null,
-                awayScore: stored && stored.awayScore !== undefined ? stored.awayScore : null
+                awayScore: stored && stored.awayScore !== undefined ? stored.awayScore : null,
+                isApiSynced: stored && stored.isApiSynced !== undefined ? stored.isApiSynced : false
             };
         });
 
@@ -858,6 +864,7 @@ const teamTranslationMap = {
                 ...m,
                 homeScore: stored && stored.homeScore !== undefined ? stored.homeScore : null,
                 awayScore: stored && stored.awayScore !== undefined ? stored.awayScore : null,
+                isApiSynced: stored && stored.isApiSynced !== undefined ? stored.isApiSynced : false,
                 home: stored && stored.home ? stored.home : "",
                 away: stored && stored.away ? stored.away : "",
                 homeFlag: stored && stored.homeFlag ? stored.homeFlag : "",
@@ -1018,6 +1025,7 @@ const teamTranslationMap = {
                                 const isReversed = (localMatch.home !== (teamTranslationMap[apiMatch.HomeTeam] || apiMatch.HomeTeam));
                                 localMatch.homeScore = isReversed ? parseInt(apiMatch.AwayTeamScore) : parseInt(apiMatch.HomeTeamScore);
                                 localMatch.awayScore = isReversed ? parseInt(apiMatch.HomeTeamScore) : parseInt(apiMatch.AwayTeamScore);
+                                localMatch.isApiSynced = true; // Đánh dấu đã đồng bộ từ máy chủ chính thức
                                 updatedCount++;
                             } else {
                                 missingDataCount++; // Tìm thấy trận nhưng API chưa update điểm số
@@ -1103,6 +1111,7 @@ const teamTranslationMap = {
                 status: status,
                 homeScore: match.homeScore,
                 awayScore: match.awayScore,
+                isApiSynced: match.isApiSynced || false,
                 elapsed: null, // Không hiển thị số phút tính tĩnh để tránh sai lệch bù giờ/nghỉ giữa hiệp
                 time: match.time,
                 stage: match.stage,
@@ -1722,8 +1731,8 @@ const teamTranslationMap = {
             const inputHome = homeInput.value.trim() !== '' ? parseInt(homeInput.value) : null;
             const inputAway = awayInput.value.trim() !== '' ? parseInt(awayInput.value) : null;
 
-            // Nếu giá trị có thay đổi so với giá trị đã lưu thực tế hiện thời -> Hiện nút Lưu
-            if (inputHome !== match.homeScore || inputAway !== match.awayScore) {
+            // Nếu giá trị có thay đổi so với giá trị đã lưu thực tế hiện thời -> Hiện nút Lưu (Nếu không bị khóa bởi API)
+            if (!match.isApiSynced && (inputHome !== match.homeScore || inputAway !== match.awayScore)) {
                 saveBtnContainer.classList.remove('hidden');
             } else {
                 saveBtnContainer.classList.add('hidden');
@@ -1774,16 +1783,31 @@ const teamTranslationMap = {
             const homeInput = document.getElementById('input-home-score');
             const awayInput = document.getElementById('input-away-score');
             const saveBtnContainer = document.getElementById('save-score-container');
+            const apiNotice = document.getElementById('api-locked-notice');
 
-            // Ẩn nút lưu mới mở
+            // Ẩn các nút lưu và thông báo lúc mới mở modal
             saveBtnContainer.classList.add('hidden');
+            apiNotice.classList.add('hidden');
 
-            // Xử lý nạp dữ liệu và khóa/mở khóa ô nhập tỷ số trực tiếp
             const now = getActiveTime();
             const matchTime = parseMatchTime(match.time);
 
-            if (now >= matchTime) {
-                // Đang hoặc đã đá -> Cho phép bấm trực tiếp vào ô tỷ số để sửa
+            if (match.isApiSynced) {
+                // Đã đồng bộ từ API chính thức -> Khóa cứng, không cho bấm thay đổi
+                homeInput.setAttribute('disabled', 'true');
+                awayInput.setAttribute('disabled', 'true');
+                
+                homeInput.value = match.homeScore !== null ? match.homeScore : '';
+                awayInput.value = match.awayScore !== null ? match.awayScore : '';
+
+                // Hiển thị thông báo kết quả chính thức từ API
+                apiNotice.classList.remove('hidden');
+
+                // Định dạng hiển thị vô hiệu hóa có thẩm mỹ
+                homeInput.className = "score-input w-12 h-12 text-center text-xl font-black bg-gray-150/80 dark:bg-gray-800/80 border border-gray-300 dark:border-gray-700 rounded-xl cursor-not-allowed select-none transition-all text-gray-500 dark:text-gray-400";
+                awayInput.className = "score-input w-12 h-12 text-center text-xl font-black bg-gray-150/80 dark:bg-gray-800/80 border border-gray-300 dark:border-gray-700 rounded-xl cursor-not-allowed select-none transition-all text-gray-500 dark:text-gray-400";
+            } else if (now >= matchTime) {
+                // Đang hoặc đã đá và CHƯA có dữ liệu API -> Cho phép bấm trực tiếp vào ô tỷ số để sửa thủ công
                 homeInput.removeAttribute('disabled');
                 awayInput.removeAttribute('disabled');
                 
