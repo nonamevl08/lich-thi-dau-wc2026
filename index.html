@@ -62,6 +62,15 @@
             transform: translateY(-2px);
             color: #22c55e;
         }
+        /* Style cho input score trong modal */
+        .score-input::-webkit-outer-spin-button,
+        .score-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .score-input {
+            -moz-appearance: textfield;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-darkBg dark:text-gray-100 transition-colors duration-300 min-h-screen pb-28">
@@ -348,11 +357,17 @@
                     <!-- Score / VS Display -->
                     <div class="flex flex-col items-center">
                         <div class="flex items-center space-x-1">
-                            <div id="modal-home-score" class="w-12 h-12 flex items-center justify-center text-xl font-black bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">-</div>
+                            <!-- Clickable home score input -->
+                            <input type="number" id="input-home-score" min="0" placeholder="-" oninput="onScoreInputChange()"
+                                class="score-input w-12 h-12 text-center text-xl font-black bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                            
                             <span class="text-gray-400 text-xl font-bold">:</span>
-                            <div id="modal-away-score" class="w-12 h-12 flex items-center justify-center text-xl font-black bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">-</div>
+                            
+                            <!-- Clickable away score input -->
+                            <input type="number" id="input-away-score" min="0" placeholder="-" oninput="onScoreInputChange()"
+                                class="score-input w-12 h-12 text-center text-xl font-black bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
                         </div>
-                        <span id="modal-status" class="text-[9px] text-gray-400 font-bold uppercase mt-2.5 tracking-wider px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800">Chưa diễn ra</span>
+                        <span id="modal-status" class="text-[9px] font-bold uppercase mt-2.5 tracking-wider px-2 py-0.5 rounded">Chưa diễn ra</span>
                     </div>
                     <!-- Away -->
                     <div class="flex flex-col items-center space-y-1.5 text-center w-28">
@@ -360,10 +375,18 @@
                         <span id="modal-away-name" class="font-extrabold text-xs tracking-tight truncate w-full text-gray-800 dark:text-white">Nam Phi</span>
                     </div>
                 </div>
+                
+                <!-- Dynamic save button showing only when inputs changed on played matches -->
+                <div id="save-score-container" class="hidden mt-3 flex justify-center">
+                    <button onclick="saveManualScore()" class="px-5 py-2 bg-green-500 hover:bg-green-600 text-white font-extrabold rounded-xl transition-all shadow-md text-xs flex items-center space-x-1.5 active:scale-95">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Lưu tỷ số mới</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Info list with detailed live channels information -->
-            <div class="space-y-2 mt-2 border-t border-gray-100 dark:border-gray-800 pt-3">
+            <div class="space-y-2 mt-3 border-t border-gray-100 dark:border-gray-800 pt-3">
                 <div class="flex justify-between items-center py-1 border-b border-gray-50 dark:border-gray-800/50">
                     <span class="text-gray-400">Vòng đấu:</span>
                     <span id="modal-stage" class="font-bold text-gray-700 dark:text-gray-200">Vòng bảng</span>
@@ -487,7 +510,7 @@
 
         // Tự động tạo và đính kèm Web App Manifest dạng inline dùng logo chính thức
         const manifestObj = {
-            "name": "Lịch Thi Đấu World Cup 2026 - Báo Nhân Dân",
+            "name": "Lịch Thi Đấu World Cup 2026",
             "short_name": "World Cup 2026",
             "start_url": ".",
             "display": "standalone",
@@ -718,7 +741,7 @@ const teamTranslationMap = {
             { id: 28, home: "Mexico", homeFlag: "🇲🇽", away: "Hàn Quốc", awayFlag: "🇰🇷", group: "A", time: "19/06 08:00", stage: "Vòng bảng", stadium: "Estadio Guadalajara", tv: "VTV3, VTV6, VTV9" },
             // Day 20/06
             { id: 29, home: "Mỹ", homeFlag: "🇺🇸", away: "Australia", awayFlag: "🇦🇺", group: "D", time: "20/06 02:00", stage: "Vòng bảng", stadium: "Lumen Field, Seattle", tv: "VTV3, VTV6, VTV9, VTV10" },
-            { id: 30, home: "Scotland", homeFlag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", away: "Maroc", awayFlag: "🇲🇦", group: "C", time: "20/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9" },
+            { id: 30, home: "Scotland", homeFlag: "🏴󠁧󠁢󠁣󠁴󠁿", away: "Maroc", awayFlag: "🇲🇦", group: "C", time: "20/06 05:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9" },
             { id: 31, home: "Brazil", homeFlag: "🇧🇷", away: "Haiti", awayFlag: "🇭🇹", group: "C", time: "20/06 07:30", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3, VTV6, VTV9" },
             { id: 32, home: "Thổ Nhĩ Kỳ", homeFlag: "🇹🇷", away: "Paraguay", awayFlag: "🇵🇾", group: "D", time: "20/06 10:00", stage: "Vòng bảng", stadium: "BC Place, Vancouver", tv: "VTV3, VTV6, VTV9" },
             // Day 21/06
@@ -726,7 +749,7 @@ const teamTranslationMap = {
             { id: 34, home: "Đức", homeFlag: "🇩🇪", away: "Bờ Biển Ngà", awayFlag: "🇨🇮", group: "E", time: "21/06 03:00", stage: "Vòng bảng", stadium: "NRG Stadium, Houston", tv: "VTV3, VTV6, VTV9, VTV10" },
             { id: 35, home: "Ecuador", homeFlag: "🇪🇨", away: "Curacao", awayFlag: "🇨🇼", group: "E", time: "21/06 07:00", stage: "Vòng bảng", stadium: "Levi's Stadium, San Francisco", tv: "VTV3, VTV6, VTV9" },
             { id: 36, home: "Tunisia", homeFlag: "🇹🇳", away: "Nhật Bản", awayFlag: "🇯🇵", group: "F", time: "21/06 11:00", stage: "Vòng bảng", stadium: "Estadio Monterrey", tv: "VTV3, VTV6" },
-            { id: 37, home: "Tây Ban Nha", homeFlag: "🇪🇸", away: "Saudi Arabia", awayFlag: "🇸🇦", group: "H", time: "21/06 23:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9, VTV10" },
+            { id: 37, home: "Tây Ban Nha", homeFlag: "🇪🇸", away: "Cabo Verde", awayFlag: "🇨🇻", group: "H", time: "21/06 23:00", stage: "Vòng bảng", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9, VTV10" },
             // Day 22/06
             { id: 38, home: "Bỉ", homeFlag: "🇧🇪", away: "Iran", awayFlag: "🇮🇷", group: "G", time: "22/06 02:00", stage: "Vòng bảng", stadium: "Hard Rock Stadium, Miami", tv: "VTV3, VTV6, VTV9, VTV10" },
             { id: 39, home: "Uruguay", homeFlag: "🇺🇾", away: "Cabo Verde", awayFlag: "🇨🇻", group: "H", time: "22/06 05:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3, VTV6, VTV9" },
@@ -768,7 +791,7 @@ const teamTranslationMap = {
             { id: 70, home: "Colombia", homeFlag: "🇨🇴", away: "Bồ Đào Nha", awayFlag: "🇵🇹", group: "K", time: "28/06 06:30", stage: "Vòng bảng", stadium: "Estadio Azteca, Mexico City", tv: "VTV7, VTV9" },
             { id: 69, home: "CHDC Congo", homeFlag: "🇨🇩", away: "Uzbekistan", awayFlag: "🇺🇿", group: "K", time: "28/06 06:30", stage: "Vòng bảng", stadium: "Houston Stadium, Texas", tv: "VTV6, VTV10" },
             { id: 71, home: "Algeria", homeFlag: "🇩🇿", away: "Áo", awayFlag: "🇦🇹", group: "J", time: "28/06 09:00", stage: "Vòng bảng", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV2" },
-            { id: 72, home: "Jordan", homeFlag: "🇯🇴", away: "Argentina", awayFlag: "🇦🇷", group: "J", time: "28/06 09:00", stage: "Vòng bảng", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3, VTV6, VTV9" }
+            { id: 72, home: "Jordan", homeFlag: "🇯🇴", away: "Argentina", awayFlag: "🇦🇷", group: "J", time: "28/06 09:00", stage: "J", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3, VTV6, VTV9" }
         ];
 
         const baseKnockoutMatches = [
@@ -804,7 +827,7 @@ const teamTranslationMap = {
             { id: 97, homePlaceholder: "Thắng Trận 89", awayPlaceholder: "Thắng Trận 90", time: "10/07 03:00", stage: "Tứ kết", stadium: "Gillette Stadium, Boston", tv: "VTV3, VTV6, VTV9" },
             { id: 98, homePlaceholder: "Thắng Trận 91", awayPlaceholder: "Thắng Trận 92", time: "11/07 02:00", stage: "Tứ kết", stadium: "Levi's Stadium, San Francisco", tv: "VTV3, VTV6, VTV9, VTV10" },
             { id: 99, homePlaceholder: "Thắng Trận 93", awayPlaceholder: "Thắng Trận 94", time: "12/07 04:00", stage: "Tứ kết", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV3, VTV6, VTV10" },
-            { id: 100, homePlaceholder: "Thắng Trận 95", awayPlaceholder: "Thắng Trận 100", time: "12/07 08:00", stage: "Tứ kết", stadium: "Lumen Field, Seattle", tv: "VTV3, VTV6, VTV9" },
+            { id: 100, homePlaceholder: "Thắng Trận 95", awayPlaceholder: "Thắng Trận 96", time: "12/07 08:00", stage: "Tứ kết", stadium: "Lumen Field, Seattle", tv: "VTV3, VTV6, VTV9" },
 
             // Semifinals
             { id: 101, homePlaceholder: "Thắng Trận 97", awayPlaceholder: "Thắng Trận 98", time: "15/07 02:00", stage: "Bán kết", stadium: "AT&T Stadium, Dallas", tv: "VTV3, VTV6, VTV9" },
@@ -817,7 +840,7 @@ const teamTranslationMap = {
             { id: 104, homePlaceholder: "Thắng Bán Kết 1", awayPlaceholder: "Thắng Bán Kết 2", time: "19/07 06:00", stage: "Chung kết", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9, VTV10" }
         ];
 
-        // Core dynamic arrays and states: Ép tải lại Cờ và Tên từ file code chuẩn
+        // Core dynamic arrays and states
         let storedMatches = JSON.parse(localStorage.getItem('wc_2026_matches_real_v2'));
         let matchesData = staticMatchesData.map(m => {
             const stored = storedMatches ? storedMatches.find(sm => sm.id === m.id) : null;
@@ -828,15 +851,19 @@ const teamTranslationMap = {
             };
         });
 
-        let knockoutMatchesData = JSON.parse(localStorage.getItem('wc_2026_ko_real_v2')) || baseKnockoutMatches.map(m => ({
-            ...m,
-            homeScore: null,
-            awayScore: null,
-            home: "",
-            away: "",
-            homeFlag: "",
-            awayFlag: ""
-        }));
+        let storedKnockouts = JSON.parse(localStorage.getItem('wc_2026_ko_real_v2'));
+        let knockoutMatchesData = baseKnockoutMatches.map(m => {
+            const stored = storedKnockouts ? storedKnockouts.find(sk => sk.id === m.id) : null;
+            return {
+                ...m,
+                homeScore: stored && stored.homeScore !== undefined ? stored.homeScore : null,
+                awayScore: stored && stored.awayScore !== undefined ? stored.awayScore : null,
+                home: stored && stored.home ? stored.home : "",
+                away: stored && stored.away ? stored.away : "",
+                homeFlag: stored && stored.homeFlag ? stored.homeFlag : "",
+                awayFlag: stored && stored.awayFlag ? stored.awayFlag : ""
+            };
+        });
 
         let activeKnockoutStage = 'r32';
         let activeTab = 'matches';
@@ -962,7 +989,7 @@ const teamTranslationMap = {
                 const data = await robustFetch(targetUrl);
                 
                 if (data && Array.isArray(data)) {
-                    // Gộp tất cả 104 trận đấu để quét (72 vòng bảng + 32 knockout)
+                    // Gộp tất cả 104 trận đấu để quét
                     const allLocalMatches = [...matchesData, ...knockoutMatchesData];
 
                     allLocalMatches.forEach(localMatch => {
@@ -986,7 +1013,7 @@ const teamTranslationMap = {
                                        (mappedH === localMatch.away && mappedA === localMatch.home);
                             });
 
-                            // Nếu tìm thấy và có tỉ số thì cập nhật
+                            // Ưu tiên ghi đè: Nếu tìm thấy dữ liệu trên API và có tỉ số, luôn ghi đè lên giá trị hiện tại (kể cả giá trị thủ công)
                             if (apiMatch && apiMatch.HomeTeamScore !== null && apiMatch.AwayTeamScore !== null && apiMatch.HomeTeamScore !== undefined) {
                                 const isReversed = (localMatch.home !== (teamTranslationMap[apiMatch.HomeTeam] || apiMatch.HomeTeam));
                                 localMatch.homeScore = isReversed ? parseInt(apiMatch.AwayTeamScore) : parseInt(apiMatch.HomeTeamScore);
@@ -1047,14 +1074,25 @@ const teamTranslationMap = {
 
             const now = getActiveTime();
             const matchTime = parseMatchTime(match.time);
-            const endTime = new Date(matchTime.getTime() + (105 * 60 * 1000)); 
+            const endTime = new Date(matchTime.getTime() + (105 * 60 * 1000)); // 105 phút (90 phút thi đấu chính thức + 15 phút nghỉ)
 
             let status = 'scheduled';
-            if (match.homeScore !== null && match.awayScore !== null) {
-                status = 'finished';
+            if (now >= matchTime && now < endTime) {
+                // Đang trong thời gian lăn bóng (dưới 105 phút kể từ lúc bắt đầu) -> Giữ trạng thái Trực tiếp
+                status = 'live';
+            } else if (now >= endTime) {
+                // Đã quá thời gian thi đấu chính thức
+                if (match.homeScore !== null && match.awayScore !== null) {
+                    status = 'finished'; // Đã đá xong và đã cập nhật tỉ số
+                } else {
+                    status = 'updating'; // Đã đá xong nhưng chưa có tỉ số
+                }
             } else {
-                if (now >= matchTime && now < endTime) {
-                    status = 'live';
+                // Chưa đến giờ thi đấu (Hỗ trợ hiển thị nếu người dùng cố tình test nhập tỉ số trước giờ bóng lăn)
+                if (match.homeScore !== null && match.awayScore !== null) {
+                    status = 'finished';
+                } else {
+                    status = 'scheduled';
                 }
             }
 
@@ -1065,7 +1103,7 @@ const teamTranslationMap = {
                 status: status,
                 homeScore: match.homeScore,
                 awayScore: match.awayScore,
-                elapsed: status === 'live' ? `${Math.floor((now - matchTime) / 60000)}'` : null,
+                elapsed: null, // Không hiển thị số phút tính tĩnh để tránh sai lệch bù giờ/nghỉ giữa hiệp
                 time: match.time,
                 stage: match.stage,
                 group: match.group || 'Knockout',
@@ -1275,7 +1313,7 @@ const teamTranslationMap = {
 
                 if (activeStatusFilter === 'live' && m.status !== 'live') return false;
                 if (activeStatusFilter === 'scheduled' && m.status !== 'scheduled') return false;
-                if (activeStatusFilter === 'finished' && m.status !== 'finished') return false;
+                if (activeStatusFilter === 'finished' && m.status !== 'finished' && m.status !== 'updating') return false;
 
                 return true;
             });
@@ -1339,7 +1377,18 @@ const teamTranslationMap = {
                                     <span>:</span>
                                     <span>${match.awayScore || 0}</span>
                                 </div>
-                                <span class="text-[8px] font-extrabold text-red-500 animate-pulse mt-1"><i class="fa-solid fa-circle text-[6px]"></i> LIVE ${match.elapsed}</span>
+                                <span class="text-[8px] font-extrabold text-red-500 animate-pulse mt-1"><i class="fa-solid fa-circle text-[6px]"></i> LIVE</span>
+                            </div>
+                        `;
+                    } else if (match.status === 'updating') {
+                        scoreHTML = `
+                            <div class="flex flex-col items-center">
+                                <div class="flex items-center space-x-1.5 font-bold text-xs bg-amber-500/10 text-amber-500 px-2.5 py-1 rounded-lg border border-amber-500/20">
+                                    <span>-</span>
+                                    <span>:</span>
+                                    <span>-</span>
+                                </div>
+                                <span class="text-[8px] font-bold text-amber-500 mt-1 uppercase">Đang cập nhật tỉ số</span>
                             </div>
                         `;
                     }
@@ -1456,7 +1505,7 @@ const teamTranslationMap = {
             filteredKnockouts.forEach(match => {
                 const isFav = favoritesList.includes(match.id);
                 const card = document.createElement('div');
-                card.className = "bg-white dark:bg-darkCard rounded-2xl p-4 shadow-sm border border-gray-150 dark:border-gray-800 flex items-center justify-between cursor-pointer transition-all active:scale-95";
+                card.className = "bg-white dark:bg-darkCard rounded-2xl p-4 shadow-sm border border-gray-150 dark:border-gray-800 flex items-center justify-between cursor-pointer transition-all active:scale-[0.99] duration-100";
                 card.setAttribute('onclick', `openMatchModal(${match.id})`);
 
                 let scoreHTML = `
@@ -1473,6 +1522,17 @@ const teamTranslationMap = {
                                 <span>:</span>
                                 <span>${match.awayScore}</span>
                             </div>
+                        </div>
+                    `;
+                } else if (match.status === 'updating') {
+                    scoreHTML = `
+                        <div class="flex flex-col items-center">
+                            <div class="flex items-center space-x-1.5 font-bold text-xs bg-amber-500/10 text-amber-500 px-2.5 py-1 rounded-lg border border-amber-500/20">
+                                <span>-</span>
+                                <span>:</span>
+                                <span>-</span>
+                            </div>
+                            <span class="text-[8px] font-bold text-amber-500 mt-1 uppercase">Đang cập nhật tỉ số</span>
                         </div>
                     `;
                 }
@@ -1527,7 +1587,8 @@ const teamTranslationMap = {
             renderKnockoutMatches();
             updateFavCount();
             startCountdown();
-            updateModalIfOpen();
+            // Chỉ cập nhật trạng thái text trong modal để tránh làm mất trạng thái focus/nhập liệu dở dang của ô input
+            updateModalStatusTextOnly();
         }
 
         function startCountdown() {
@@ -1647,6 +1708,50 @@ const teamTranslationMap = {
             selectedMatchId = null;
         }
 
+        // Theo dõi sự thay đổi trong các ô nhập tỷ số trực tiếp để ẩn hiện nút Lưu
+        function onScoreInputChange() {
+            if (!selectedMatchId) return;
+            const saveBtnContainer = document.getElementById('save-score-container');
+            const homeInput = document.getElementById('input-home-score');
+            const awayInput = document.getElementById('input-away-score');
+
+            const match = getMatchState(selectedMatchId);
+            if (!match) return;
+
+            // Chuyển đổi giá trị sang kiểu so sánh chuẩn
+            const inputHome = homeInput.value.trim() !== '' ? parseInt(homeInput.value) : null;
+            const inputAway = awayInput.value.trim() !== '' ? parseInt(awayInput.value) : null;
+
+            // Nếu giá trị có thay đổi so với giá trị đã lưu thực tế hiện thời -> Hiện nút Lưu
+            if (inputHome !== match.homeScore || inputAway !== match.awayScore) {
+                saveBtnContainer.classList.remove('hidden');
+            } else {
+                saveBtnContainer.classList.add('hidden');
+            }
+        }
+
+        // Chỉ cập nhật văn bản và nhãn Trực tiếp/Kết thúc/Chưa diễn ra mà không nạp lại ô input
+        function updateModalStatusTextOnly() {
+            if (!selectedMatchId) return;
+            const match = getMatchState(selectedMatchId);
+            if (!match) return;
+
+            const statusEl = document.getElementById('modal-status');
+            if (match.status === 'live') {
+                statusEl.innerText = "TRỰC TIẾP";
+                statusEl.className = "text-[9px] text-red-500 font-extrabold animate-pulse uppercase mt-1.5 tracking-wider px-2 py-0.5 rounded bg-red-500/10";
+            } else if (match.status === 'finished') {
+                statusEl.innerText = "KẾT THÚC";
+                statusEl.className = "text-[9px] text-green-500 font-extrabold uppercase mt-1.5 tracking-wider px-2 py-0.5 rounded bg-green-500/10";
+            } else if (match.status === 'updating') {
+                statusEl.innerText = "ĐANG CẬP NHẬT TỈ SỐ";
+                statusEl.className = "text-[9px] text-amber-500 font-extrabold uppercase mt-1.5 tracking-wider px-2 py-0.5 rounded bg-amber-500/10 animate-pulse";
+            } else {
+                statusEl.innerText = "CHƯA DIỄN RA";
+                statusEl.className = "text-[9px] text-gray-400 font-bold uppercase mt-1.5 tracking-wider px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800";
+            }
+        }
+
         function updateModalIfOpen() {
             if (!selectedMatchId) return;
             const match = getMatchState(selectedMatchId);
@@ -1658,27 +1763,89 @@ const teamTranslationMap = {
             document.getElementById('modal-away-flag').innerText = match.awayTeam.flag || "🏳️";
             document.getElementById('modal-away-name').innerText = match.awayTeam.name || "Chưa xác định";
 
-            document.getElementById('modal-home-score').innerText = match.homeScore !== null ? match.homeScore : '-';
-            document.getElementById('modal-away-score').innerText = match.awayScore !== null ? match.awayScore : '-';
-
-            const statusEl = document.getElementById('modal-status');
-            if (match.status === 'live') {
-                statusEl.innerText = `TRỰC TIẾP ${match.elapsed}`;
-                statusEl.className = "text-[9px] text-red-500 font-extrabold animate-pulse uppercase mt-1.5 tracking-wider px-2 py-0.5 rounded bg-red-500/10";
-            } else if (match.status === 'finished') {
-                statusEl.innerText = "KẾT THÚC";
-                statusEl.className = "text-[9px] text-green-500 font-extrabold uppercase mt-1.5 tracking-wider px-2 py-0.5 rounded bg-green-500/10";
-            } else {
-                statusEl.innerText = "CHƯA DIỄN RA";
-                statusEl.className = "text-[9px] text-gray-400 font-bold uppercase mt-1.5 tracking-wider px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800";
-            }
+            // Nhãn trạng thái text
+            updateModalStatusTextOnly();
 
             document.getElementById('modal-stage').innerText = match.stage;
             document.getElementById('modal-time').innerText = `${match.time.split(' ')[1]}, ngày ${match.time.split(' ')[0]}/2026`;
             document.getElementById('modal-stadium').innerText = match.stadium;
-            
-            // Cập nhật trường trực tiếp hiển thị đầy đủ thông tin các kênh phát sóng
             document.getElementById('modal-tv').innerText = match.tv;
+
+            const homeInput = document.getElementById('input-home-score');
+            const awayInput = document.getElementById('input-away-score');
+            const saveBtnContainer = document.getElementById('save-score-container');
+
+            // Ẩn nút lưu mới mở
+            saveBtnContainer.classList.add('hidden');
+
+            // Xử lý nạp dữ liệu và khóa/mở khóa ô nhập tỷ số trực tiếp
+            const now = getActiveTime();
+            const matchTime = parseMatchTime(match.time);
+
+            if (now >= matchTime) {
+                // Đang hoặc đã đá -> Cho phép bấm trực tiếp vào ô tỷ số để sửa
+                homeInput.removeAttribute('disabled');
+                awayInput.removeAttribute('disabled');
+                
+                // Nạp giá trị hiện tại vào ô input
+                homeInput.value = match.homeScore !== null ? match.homeScore : '';
+                awayInput.value = match.awayScore !== null ? match.awayScore : '';
+                
+                // Định dạng ô nhập tỷ số cho phép tương tác mượt mà
+                homeInput.className = "score-input w-12 h-12 text-center text-xl font-black bg-white dark:bg-gray-950 border border-green-500/50 dark:border-green-500/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 cursor-text shadow-inner transition-all";
+                awayInput.className = "score-input w-12 h-12 text-center text-xl font-black bg-white dark:bg-gray-950 border border-green-500/50 dark:border-green-500/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 cursor-text shadow-inner transition-all";
+            } else {
+                // Chưa đến giờ thi đấu -> Khóa không cho bấm nhập thủ công
+                homeInput.setAttribute('disabled', 'true');
+                awayInput.setAttribute('disabled', 'true');
+                
+                homeInput.value = '';
+                awayInput.value = '';
+
+                // Định dạng hiển thị vô hiệu hóa
+                homeInput.className = "score-input w-12 h-12 text-center text-xl font-black bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl cursor-not-allowed select-none transition-all";
+                awayInput.className = "score-input w-12 h-12 text-center text-xl font-black bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl cursor-not-allowed select-none transition-all";
+            }
+        }
+
+        // Lưu tỷ số thủ công do người dùng tự nhập trực tiếp từ ô hiển thị
+        function saveManualScore() {
+            if (!selectedMatchId) return;
+            const homeScoreVal = document.getElementById('input-home-score').value.trim();
+            const awayScoreVal = document.getElementById('input-away-score').value.trim();
+
+            if (homeScoreVal === '' || awayScoreVal === '') {
+                // Không lưu nếu một trong hai ô để trống
+                return;
+            }
+
+            const homeScore = parseInt(homeScoreVal);
+            const awayScore = parseInt(awayScoreVal);
+
+            if (isNaN(homeScore) || isNaN(awayScore) || homeScore < 0 || awayScore < 0) {
+                return;
+            }
+
+            const isGroup = selectedMatchId <= 72;
+            if (isGroup) {
+                const match = matchesData.find(m => m.id === selectedMatchId);
+                if (match) {
+                    match.homeScore = homeScore;
+                    match.awayScore = awayScore;
+                    localStorage.setItem('wc_2026_matches_real_v2', JSON.stringify(matchesData));
+                }
+            } else {
+                const match = knockoutMatchesData.find(m => m.id === selectedMatchId);
+                if (match) {
+                    match.homeScore = homeScore;
+                    match.awayScore = awayScore;
+                    localStorage.setItem('wc_2026_ko_real_v2', JSON.stringify(knockoutMatchesData));
+                }
+            }
+
+            // Đồng bộ toàn cục và ẩn nút Lưu sau khi cập nhật thành công
+            document.getElementById('save-score-container').classList.add('hidden');
+            runDataUpdateCycle();
         }
 
         // Khởi động hệ thống
@@ -1687,7 +1854,7 @@ const teamTranslationMap = {
         setInterval(() => {
             startCountdown();
             runDataUpdateCycle();
-        }, 1000);
+        }, 2000); // Thay đổi chu kỳ cập nhật giây của thời gian thực tế phù hợp để tối ưu hiệu năng
     </script>
 </body>
 </html>
