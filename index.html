@@ -800,14 +800,14 @@ const teamTranslationMap = {
         ];
 
         const baseKnockoutMatches = [
-            // Round of 32
+            // Round of 32 (Đã chuẩn hóa giờ 78, 79, 88 theo yêu cầu thực tế)
             { id: 73, homePlaceholder: "Nhì bảng A", awayPlaceholder: "Nhì bảng B", time: "29/06 02:00", stage: "Vòng 32 đội", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV10" },
             { id: 74, homePlaceholder: "Nhất bảng C", awayPlaceholder: "Nhì bảng F", time: "30/06 00:00", stage: "Vòng 32 đội", stadium: "SoFi Stadium, Los Angeles", tv: "VTV3, VTV6, VTV9" },
             { id: 75, homePlaceholder: "Nhất bảng E", awayPlaceholder: "Thứ 3 bảng A/B/C/D/F", time: "30/06 03:30", stage: "Vòng 32 đội", stadium: "BC Place, Vancouver", tv: "VTV3, VTV6, VTV10" },
             { id: 76, homePlaceholder: "Nhất bảng F", awayPlaceholder: "Nhì bảng C", time: "30/06 08:00", stage: "Vòng 32 đội", stadium: "AT&T Stadium, Dallas", tv: "VTV3, VTV6, VTV9" },
             { id: 77, homePlaceholder: "Nhì bảng E", awayPlaceholder: "Nhì bảng I", time: "01/07 00:00", stage: "Vòng 32 đội", stadium: "BMO Field, Toronto", tv: "VTV3, VTV6, VTV10" },
-            { id: 78, homePlaceholder: "Nhất bảng I", awayPlaceholder: "Thứ 3 bảng C/D/F/G/H", time: "01/07 02:00", stage: "Vòng 32 đội", stadium: "Houston Stadium, Texas", tv: "VTV3, VTV6, VTV9" },
-            { id: 79, homePlaceholder: "Nhất bảng A", awayPlaceholder: "Thứ 3 bảng C/E/F/H/I", time: "01/07 08:00", stage: "Vòng 32 đội", stadium: "Estadio Azteca, Mexico City", tv: "VTV3, VTV6, VTV9" },
+            { id: 78, homePlaceholder: "Nhất bảng I", awayPlaceholder: "Thứ 3 bảng C/D/F/G/H", time: "01/07 04:00", stage: "Vòng 32 đội", stadium: "Houston Stadium, Texas", tv: "VTV3, VTV6, VTV9" },
+            { id: 79, homePlaceholder: "Nhất bảng A", awayPlaceholder: "Thứ 3 bảng C/E/F/H/I", time: "01/07 00:00", stage: "Vòng 32 đội", stadium: "Estadio Azteca, Mexico City", tv: "VTV3, VTV6, VTV9" },
             { id: 80, homePlaceholder: "Nhất bảng L", awayPlaceholder: "Thứ 3 bảng E/H/I/J/K", time: "01/07 23:00", stage: "Vòng 32 đội", stadium: "Gillette Stadium, Boston", tv: "VTV3, VTV6, VTV10" },
             { id: 81, homePlaceholder: "Nhất bảng G", awayPlaceholder: "Thứ 3 bảng A/E/H/I/J", time: "02/07 03:00", stage: "Vòng 32 đội", stadium: "Mercedes-Benz Stadium, Atlanta", tv: "VTV3, VTV6, VTV10" },
             { id: 82, homePlaceholder: "Nhất bảng D", awayPlaceholder: "Thứ 3 bảng B/E/F/I/J", time: "02/07 07:00", stage: "Vòng 32 đội", stadium: "Hard Rock Stadium, Miami", tv: "VTV3, VTV6, VTV9" },
@@ -816,7 +816,7 @@ const teamTranslationMap = {
             { id: 85, homePlaceholder: "Nhất bảng B", awayPlaceholder: "Thứ 3 bảng E/F/G/I/J", time: "03/07 10:00", stage: "Vòng 32 đội", stadium: "Estadio Guadalajara", tv: "VTV3, VTV6, VTV9" },
             { id: 86, homePlaceholder: "Nhì bảng D", awayPlaceholder: "Nhì bảng G", time: "04/07 01:00", stage: "Vòng 32 đội", stadium: "Philadelphia Stadium", tv: "VTV3, VTV6, VTV10" },
             { id: 87, homePlaceholder: "Nhất bảng J", awayPlaceholder: "Nhì bảng H", time: "04/07 05:00", stage: "Vòng 32 đội", stadium: "Estadio Monterrey", tv: "VTV3, VTV6, VTV9" },
-            { id: 88, homePlaceholder: "Nhất bảng K", awayPlaceholder: "Thứ 3 bảng D/E/I/J/L", time: "04/07 09:30", stage: "Vòng 32 đội", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV3, VTV6, VTV9" },
+            { id: 88, homePlaceholder: "Nhất bảng K", awayPlaceholder: "Thứ 3 bảng D/E/I/J/L", time: "04/07 08:30", stage: "Vòng 32 đội", stadium: "Arrowhead Stadium, Kansas City", tv: "VTV3, VTV6, VTV9" },
 
             // Round of 16
             { id: 89, homePlaceholder: "Thắng Trận 73", awayPlaceholder: "Thắng Trận 75", time: "05/07 00:00", stage: "Vòng 16 đội", stadium: "MetLife Stadium, New Jersey", tv: "VTV3, VTV6, VTV9" },
@@ -1155,25 +1155,66 @@ const teamTranslationMap = {
             });
 
             if (totalCompletedMatches === 72) {
+                // Sắp xếp lấy 8 đội Hạng 3 ưu tú nhất (Theo thứ tự Điểm số, sau đó là Hiệu số)
                 thirdPlaces.sort((a, b) => b.pts !== a.pts ? b.pts - a.pts : b.gd - a.gd);
 
-                map['Thứ 3 bảng A/B/C/D/F'] = thirdPlaces[0] || null;
-                map['Thứ 3 bảng C/D/F/G/H'] = thirdPlaces[1] || null;
-                map['Thứ 3 bảng C/E/F/H/I'] = thirdPlaces[2] || null;
-                map['Thứ 3 bảng E/H/I/J/K'] = thirdPlaces[3] || null;
-                map['Thứ 3 bảng A/E/H/I/J'] = thirdPlaces[4] || null;
-                map['Thứ 3 bảng B/E/F/I/J'] = thirdPlaces[5] || null;
-                map['Thứ 3 bảng E/F/G/I/J'] = thirdPlaces[6] || null;
-                map['Thứ 3 bảng D/E/I/J/L'] = thirdPlaces[7] || null;
+                // THUẬT TOÁN ĐÃ ĐƯỢC FIX LỖI: Backtracking / DFS Bipartite Matching
+                // Thay vì gán mù quáng theo số thứ tự (index 0 vào trận đầu, 1 vào trận hai...)
+                // Chúng ta phải kiểm tra chặt chẽ xem đội Hạng 3 đó CÓ THUỘC BẢNG mà trận đấu đó YÊU CẦU hay không.
+                const slotsKeys = [
+                    { key: 'Thứ 3 bảng A/B/C/D/F', allowed: ['A','B','C','D','F'] },
+                    { key: 'Thứ 3 bảng C/D/F/G/H', allowed: ['C','D','F','G','H'] },
+                    { key: 'Thứ 3 bảng C/E/F/H/I', allowed: ['C','E','F','H','I'] },
+                    { key: 'Thứ 3 bảng E/H/I/J/K', allowed: ['E','H','I','J','K'] },
+                    { key: 'Thứ 3 bảng A/E/H/I/J', allowed: ['A','E','H','I','J'] },
+                    { key: 'Thứ 3 bảng B/E/F/I/J', allowed: ['B','E','F','I','J'] },
+                    { key: 'Thứ 3 bảng E/F/G/I/J', allowed: ['E','F','G','I','J'] },
+                    { key: 'Thứ 3 bảng D/E/I/J/L', allowed: ['D','E','I','J','L'] }
+                ];
+
+                let assignedMatch = null;
+                
+                // Thuật toán DFS tự động tìm phương án ráp bảng phù hợp nhất
+                function backtrack(slotIdx, current, used) {
+                    if (assignedMatch) return; // Nếu đã tìm thấy 1 cách ráp đúng thì dừng
+                    if (slotIdx === 8) {
+                        assignedMatch = [...current]; // Hoàn tất ráp đủ 8 đội vào 8 slot
+                        return;
+                    }
+                    const slot = slotsKeys[slotIdx];
+                    for (let i = 0; i < 8; i++) {
+                        // Chỉ ráp đội hạng 3 vào slot nếu Slot đó CHO PHÉP tên bảng của đội này
+                        if (!used[i] && slot.allowed.includes(thirdPlaces[i].group)) {
+                            used[i] = true;
+                            current.push({ key: slot.key, team: thirdPlaces[i] });
+                            backtrack(slotIdx + 1, current, used);
+                            current.pop();
+                            used[i] = false;
+                        }
+                    }
+                }
+                
+                // Chạy thuật toán để tìm ánh xạ
+                backtrack(0, [], Array(8).fill(false));
+
+                // Cập nhật map với kết quả ghép đúng luật của FIFA
+                if (assignedMatch) {
+                    assignedMatch.forEach(assignment => {
+                        map[assignment.key] = assignment.team;
+                    });
+                } else {
+                    // Fallback cực hiếm: Trong trường hợp ngoại lệ toán học, gán dự phòng.
+                    slotsKeys.forEach((s, idx) => {
+                         map[s.key] = thirdPlaces[idx] || null;
+                    });
+                }
             } else {
-                map['Thứ 3 bảng A/B/C/D/F'] = null;
-                map['Thứ 3 bảng C/D/F/G/H'] = null;
-                map['Thứ 3 bảng C/E/F/H/I'] = null;
-                map['Thứ 3 bảng E/H/I/J/K'] = null;
-                map['Thứ 3 bảng A/E/H/I/J'] = null;
-                map['Thứ 3 bảng B/E/F/I/J'] = null;
-                map['Thứ 3 bảng E/F/G/I/J'] = null;
-                map['Thứ 3 bảng D/E/I/J/L'] = null;
+                // Xóa trống dữ liệu nếu chưa đá đủ vòng bảng
+                const slotNames = [
+                    'Thứ 3 bảng A/B/C/D/F', 'Thứ 3 bảng C/D/F/G/H', 'Thứ 3 bảng C/E/F/H/I', 'Thứ 3 bảng E/H/I/J/K',
+                    'Thứ 3 bảng A/E/H/I/J', 'Thứ 3 bảng B/E/F/I/J', 'Thứ 3 bảng E/F/G/I/J', 'Thứ 3 bảng D/E/I/J/L'
+                ];
+                slotNames.forEach(name => map[name] = null);
             }
 
             return map;
